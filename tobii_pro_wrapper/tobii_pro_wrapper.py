@@ -30,8 +30,7 @@
 # added. 
 
 # -----Import Required Libraries-----
-import gtk, pygtk
-
+import pyglet
 from psychopy import core as pcore
 from psychopy import monitors, visual, gui, data, event
 from psychopy.iohub import launchHubServer
@@ -161,9 +160,9 @@ class TobiiHelper:
         # if no dimensions given
         if dimensions is None:
             # use current screen dimensions
-            thisWin = gtk.Window()
-            thisScreen = thisWin.get_screen()
-            dimensions = (thisScreen.get_width(), thisScreen.get_height())
+            screen = pyglet.window.get_platform().get_default_display().get_default_screen()
+            dimensions = (screen.width, screen.height)
+            print ("Current screen size is: " + str(dimensions[0]) + "x" + str(dimensions[1]))
         # if dimension not given as tuple
         elif not isinstance(dimensions, tuple):
             raise TypeError("Dimensions must be given as tuple.")

@@ -30,7 +30,7 @@ pip install tobii_research==1.0.1.128
 * [Psychopy](http://psychopy.org/installation.html)
 * [numpy](https://scipy.org/install.html)
 * [scipy](https://scipy.org/install.html)
-* [pygtk](http://www.pygtk.org/downloads.html)
+* [pyglet](https://pyglet.readthedocs.io/en/pyglet-1.3-maintenance/)
 
 ### Installing
 
