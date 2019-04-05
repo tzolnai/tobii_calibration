@@ -208,7 +208,7 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         
         # if it is, proceed
-        print "Subscribing to eyetracker."
+        print ("Subscribing to eyetracker.")
         self.eyetracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, 
                                      self.gazeDataCallback, 
                                      as_dictionary = True)
@@ -222,7 +222,7 @@ class TobiiHelper:
         if self.eyetracker is None:
             raise ValueError("There is no eyetracker.")
         # if it is, proceed
-        print "Unsubscribing from eyetracker"
+        print ("Unsubscribing from eyetracker")
         self.eyetracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, 
                                          self.gazeDataCallback)
         self.tracking = False
@@ -241,7 +241,7 @@ class TobiiHelper:
             raise ValueError('Eyetracker is not connected.')
             
         # if it is , proceed
-        print "Subscribing to time synchronization data"
+        print ("Subscribing to time synchronization data")
         self.eyetracker.subscribe_to(tobii.EYETRACKER_TIME_SYNCHRONIZATION_DATA,
                                      self.timeSyncCallback,
                                      as_dictionary=True)
@@ -251,7 +251,7 @@ class TobiiHelper:
     def stopSyncData(self):
         self.eyetracker.unsubscribe_from(tobii.EYETRACKER_TIME_SYNCHRONIZATION_DATA,
                                         self.timeSyncCallback)
-        print "Unsubscribed from time synchronization data."
+        print ("Unsubscribed from time synchronization data.")
   
     # function for converting positions from trackbox coordinate system (mm) to 
     # normalized active display area coordinates   
@@ -1077,7 +1077,7 @@ class TobiiHelper:
         # clear screen
         calibWin.flip()   
         # print feedback
-        print "Computing and applying calibration."
+        print ("Computing and applying calibration.")
         # compute and apply calibration to get calibration result object    
         calibResult = self.calibration.compute_and_apply()        
         # return calibration result
@@ -1216,7 +1216,7 @@ class TobiiHelper:
         while True:
             
             # create point order form randomized dictionary values
-            pointOrder = redoCalDict.values()
+            pointOrder = list(redoCalDict.values())
             
             # perform calibration 
             calibResult = self.getCalibrationData(calibWin, pointOrder)
@@ -1253,7 +1253,7 @@ class TobiiHelper:
             # Redo calibration for specific points if necessary 
             if not redoCalDict:  # if no points to redo
             # finish calibration
-                print "Calibration successful. Moving on to validation mode."
+                print ("Calibration successful. Moving on to validation mode.")
                 calibMessage.text = ("Calibration was successful.\n\n" + \
                                      "Moving on to validation.")
                 calibMessage.draw()
@@ -1281,7 +1281,7 @@ class TobiiHelper:
                 
                 # iterate through list of redo points and remove data from calibration
                 for newPoint in redoCalDict.values():
-                    print newPoint
+                    print (newPoint)
                     self.calibration.discard_data(newPoint[0], newPoint[1])
     
                 # continue with calibration of remaining points
