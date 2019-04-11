@@ -2,7 +2,7 @@
 
 # Psychopy supported Tobii controller for the new Pro SDK
 
-# Authors: Olivia Guayasamin
+# Authors: Olivia Guayasamin, Tamás Zolnai
 # Date: 8/3/2017
         
 # Requirements: Python 2.7 32 Bit (SDK required)
