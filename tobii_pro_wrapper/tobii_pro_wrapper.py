@@ -371,23 +371,21 @@ class TobiiHelper:
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
             
-        # while tracking
-        while True:
-            # access gaze data dictionary to get gaze position tuples
-            lGazeXYZ = self.gazeData['left_gaze_point_on_display_area']
-            rGazeXYZ = self.gazeData['right_gaze_point_on_display_area']       
-            # get 2D gaze positions for left and right eye
-            xs = (lGazeXYZ[0], rGazeXYZ[0])
-            ys = (lGazeXYZ[1], rGazeXYZ[1])   
-            
-            # if all of the axes have data from at least one eye
-            if all([x != -1.0 for x in xs]) and all([y != -1.0 for y in ys]):
-                # take x and y averages
-                avgGazePos = np.nanmean(xs), np.nanmean(ys)
-            else:
-                # or if no data, hide points by showing off screen
-                avgGazePos = (np.nan, np.nan)
-            return avgGazePos
+        # access gaze data dictionary to get gaze position tuples
+        lGazeXYZ = self.gazeData['left_gaze_point_on_display_area']
+        rGazeXYZ = self.gazeData['right_gaze_point_on_display_area']
+        # get 2D gaze positions for left and right eye
+        xs = (lGazeXYZ[0], rGazeXYZ[0])
+        ys = (lGazeXYZ[1], rGazeXYZ[1])
+
+        # if all of the axes have data from at least one eye
+        if all([x != -1.0 for x in xs]) and all([y != -1.0 for y in ys]):
+            # take x and y averages
+            avgGazePos = np.nanmean(xs), np.nanmean(ys)
+        else:
+            # or if no data, hide points by showing off screen
+            avgGazePos = (np.nan, np.nan)
+        return avgGazePos
 
                 
     # function for finding the avg 3d position of subject's eyes, so that they
@@ -400,43 +398,41 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
-            
-        # while tracking
-        while True:     
-            # access gaze data dictionary to get eye position tuples, 
-            # in trackbox coordinate system
-            lTbXYZ = self.gazeData['left_gaze_origin_in_trackbox_coordinate_system']
-            rTbXYZ = self.gazeData['right_gaze_origin_in_trackbox_coordinate_system']
 
-            # left eye validity
-            lVal = self.gazeData['left_gaze_origin_validity']
-            # right eye validity
-            rVal = self.gazeData['right_gaze_origin_validity']
-                  
-            # if left eye is found by the eyetracker
-            if lVal == 1:
-                # update the left eye positions if the values are reasonable
-                # scale left eye position so that it fits in track box
-                leftTbPos = (-self.tb2PsychoNorm((lTbXYZ[0], 
-                                                  lTbXYZ[1]))[0] * 1.7,
-                              self.tb2PsychoNorm((lTbXYZ[0], 
-                                                  lTbXYZ[1]))[1])
-            else:
-                # hide by drawing in the corner
-                leftTbPos = [0.99, 0.99] 
-                    
-            # if right eye is found by the eyetracker
-            if rVal == 1:
-                # update the right eye positions if the values are reasonable
-                # scale right eye position so that it fits in track box
-                rightTbPos = (-self.tb2PsychoNorm((rTbXYZ[0], rTbXYZ[1]))[0] * 1.7, 
-                               self.tb2PsychoNorm((rTbXYZ[0], 
-                                                   rTbXYZ[1]))[1])
-            else:
-                # hide by drawing in the corner
-                rightTbPos = [0.99, 0.99]        
-            # return values for positio in track box
-            return leftTbPos, rightTbPos
+        # access gaze data dictionary to get eye position tuples,
+        # in trackbox coordinate system
+        lTbXYZ = self.gazeData['left_gaze_origin_in_trackbox_coordinate_system']
+        rTbXYZ = self.gazeData['right_gaze_origin_in_trackbox_coordinate_system']
+
+        # left eye validity
+        lVal = self.gazeData['left_gaze_origin_validity']
+        # right eye validity
+        rVal = self.gazeData['right_gaze_origin_validity']
+
+        # if left eye is found by the eyetracker
+        if lVal == 1:
+            # update the left eye positions if the values are reasonable
+            # scale left eye position so that it fits in track box
+            leftTbPos = (-self.tb2PsychoNorm((lTbXYZ[0],
+                                              lTbXYZ[1]))[0] * 1.7,
+                          self.tb2PsychoNorm((lTbXYZ[0],
+                                              lTbXYZ[1]))[1])
+        else:
+            # hide by drawing in the corner
+            leftTbPos = [0.99, 0.99]
+
+        # if right eye is found by the eyetracker
+        if rVal == 1:
+            # update the right eye positions if the values are reasonable
+            # scale right eye position so that it fits in track box
+            rightTbPos = (-self.tb2PsychoNorm((rTbXYZ[0], rTbXYZ[1]))[0] * 1.7,
+                           self.tb2PsychoNorm((rTbXYZ[0],
+                                               rTbXYZ[1]))[1])
+        else:
+            # hide by drawing in the corner
+            rightTbPos = [0.99, 0.99]
+        # return values for positio in track box
+        return leftTbPos, rightTbPos
              
     
     # x, y, and z dimensions are given in mm from the tracker origin, gives the
@@ -449,28 +445,26 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
+
+        # access gaze data dictionary to get eye position tuples, given in
+        # mm in from eyetracker origin
+        lOriginXYZ = self.gazeData['left_gaze_origin_in_user_coordinate_system']
+        rOriginXYZ = self.gazeData['right_gaze_origin_in_user_coordinate_system']
             
-        # while tracking
-        while True:     
-            # access gaze data dictionary to get eye position tuples, given in 
-            # mm in from eyetracker origin
-            lOriginXYZ = self.gazeData['left_gaze_origin_in_user_coordinate_system']  
-            rOriginXYZ = self.gazeData['right_gaze_origin_in_user_coordinate_system'] 
-                
-            # create arrays with positions of both eyes on x, y, and z axes
-            xs = (lOriginXYZ[0],rOriginXYZ[0])
-            ys = (lOriginXYZ[1],rOriginXYZ[1])
-            zs = (lOriginXYZ[2],rOriginXYZ[2])
-                        
-            # if all of the axes have data from at least one eye
-            if not (np.isnan(xs)).all() or not (np.isnan(ys)).all() or not (np.isnan(zs)).all():     
-                # update the distance if the values are reasonable 
-                avgEyePos = (np.nanmean(xs), np.nanmean(ys), np.nanmean(zs))
-            else:
-                # otherwise set to zero
-                avgEyePos = (0, 0, 0)
-            # return average eye position in mm
-            return avgEyePos
+        # create arrays with positions of both eyes on x, y, and z axes
+        xs = (lOriginXYZ[0],rOriginXYZ[0])
+        ys = (lOriginXYZ[1],rOriginXYZ[1])
+        zs = (lOriginXYZ[2],rOriginXYZ[2])
+
+        # if all of the axes have data from at least one eye
+        if not (np.isnan(xs)).all() or not (np.isnan(ys)).all() or not (np.isnan(zs)).all():
+            # update the distance if the values are reasonable
+            avgEyePos = (np.nanmean(xs), np.nanmean(ys), np.nanmean(zs))
+        else:
+            # otherwise set to zero
+            avgEyePos = (0, 0, 0)
+        # return average eye position in mm
+        return avgEyePos
             
             
     # get average distance of the eyes from the tracker origin, given in cm
@@ -481,22 +475,20 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
-            
-        # while tracking
-        while True:
-            # get eye positions
-            eyeCoors = self.getAvgEyePos()
-           
-            # if eyes were found
-            if sum(eyeCoors) > 0:
-                # calculate the euclidean distance of eyes from tracker origin
-                avgEyeDist = distance.euclidean((eyeCoors[0]/10, 
-                                                 eyeCoors[1]/10,  
-                                                 eyeCoors[2]/10), (0, 0, 0))
-            else: # if eyes were not found, return zero values
-                avgEyeDist = 0
-            # return distance value in cm       
-            return avgEyeDist
+
+        # get eye positions
+        eyeCoors = self.getAvgEyePos()
+
+        # if eyes were found
+        if sum(eyeCoors) > 0:
+            # calculate the euclidean distance of eyes from tracker origin
+            avgEyeDist = distance.euclidean((eyeCoors[0]/10,
+                                             eyeCoors[1]/10,
+                                             eyeCoors[2]/10), (0, 0, 0))
+        else: # if eyes were not found, return zero values
+            avgEyeDist = 0
+        # return distance value in cm
+        return avgEyeDist
             
         
     # get average size of pupils in mm, can easily be rewritten to return
@@ -509,20 +501,18 @@ class TobiiHelper:
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
             
-        # while tracking
-        while True:
-            lPup = self.gazeData['left_pupil_diameter']
-            rPup = self.gazeData['right_pupil_diameter']
-            pupSizes = (lPup, rPup)
+        lPup = self.gazeData['left_pupil_diameter']
+        rPup = self.gazeData['right_pupil_diameter']
+        pupSizes = (lPup, rPup)
+
+        # if pupils were found
+        if lPup != -1 and rPup != -1:
+            avgPupSize = np.nanmean(pupSizes)
+        else: # otherwise return zero
+            avgPupSize = (0.0)
             
-            # if pupils were found
-            if lPup != -1 and rPup != -1:
-                avgPupSize = np.nanmean(pupSizes)
-            else: # otherwise return zero
-                avgPupSize = (0.0)
-                
-            # return pupil size
-            return avgPupSize
+        # return pupil size
+        return avgPupSize
             
     
     # check the validities of right and left eyes, returns as a tuple of 
@@ -534,27 +524,25 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
-           
-        # while tracking
-        while True:
-            # get validity values
-            lVal = self.gazeData['left_gaze_origin_validity']
-            rVal = self.gazeData['right_gaze_origin_validity']
-            # default validity value
-            validities = 0 # neither eye is valid
 
-            # if both eyes are valid, return 3
-            if lVal == 1 and rVal == 1:
-                validities = 3
-            # if just left eye is valid, return 1
-            elif lVal == 1 and rVal == 0:
-                validities = 1
-            # if just right eye is valid, return 2
-            elif lVal == 0 and rVal == 1 : 
-                validities = 2
+        # get validity values
+        lVal = self.gazeData['left_gaze_origin_validity']
+        rVal = self.gazeData['right_gaze_origin_validity']
+        # default validity value
+        validities = 0 # neither eye is valid
 
-            # return validity values
-            return validities
+        # if both eyes are valid, return 3
+        if lVal == 1 and rVal == 1:
+            validities = 3
+        # if just left eye is valid, return 1
+        elif lVal == 1 and rVal == 0:
+            validities = 1
+        # if just right eye is valid, return 2
+        elif lVal == 0 and rVal == 1 :
+            validities = 2
+
+        # return validity values
+        return validities
         
                
 # ----- Functions for running calibration -----
