@@ -227,31 +227,6 @@ class TobiiHelper:
         self.tracking = False
     
         
-# ----- Helper functions -----
-    # function for checking tracker and computer synchronization
-    def timeSyncCallback(self, timeSyncData):
-        self.syncData = timeSyncData
-    
-    
-    # broadcast synchronization data
-    def startSyncData(self):
-        #check that eyetracker is connected
-        if self.eyetracker is None:
-            raise ValueError('Eyetracker is not connected.')
-            
-        # if it is , proceed
-        print ("Subscribing to time synchronization data")
-        self.eyetracker.subscribe_to(tobii.EYETRACKER_TIME_SYNCHRONIZATION_DATA,
-                                     self.timeSyncCallback,
-                                     as_dictionary=True)
-   
-     
-    # stop broadcasting synchronization data    
-    def stopSyncData(self):
-        self.eyetracker.unsubscribe_from(tobii.EYETRACKER_TIME_SYNCHRONIZATION_DATA,
-                                        self.timeSyncCallback)
-        print ("Unsubscribed from time synchronization data.")
-  
     # function for converting positions from trackbox coordinate system (mm) to 
     # normalized active display area coordinates   
     def tb2Ada(self, xyCoor = tuple):
@@ -489,62 +464,7 @@ class TobiiHelper:
             avgEyeDist = 0
         # return distance value in cm
         return avgEyeDist
-            
-        
-    # get average size of pupils in mm, can easily be rewritten to return
-    # pupil size values for both eyes     
-    def getPupilSize(self):
-        
-        # check to see if the eyetracker is connected and turned on
-        if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
-        if self.tracking is False:
-            raise ValueError("The eyetracker is not turned on.")
-            
-        lPup = self.gazeData['left_pupil_diameter']
-        rPup = self.gazeData['right_pupil_diameter']
-        pupSizes = (lPup, rPup)
 
-        # if pupils were found
-        if lPup != -1 and rPup != -1:
-            avgPupSize = np.nanmean(pupSizes)
-        else: # otherwise return zero
-            avgPupSize = (0.0)
-            
-        # return pupil size
-        return avgPupSize
-            
-    
-    # check the validities of right and left eyes, returns as a tuple of 
-    # true/false values
-    def checkEyeValidities(self):
-        
-        # check to see if the eyetracker is connected and turned on
-        if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
-        if self.tracking is False:
-            raise ValueError("The eyetracker is not turned on.")
-
-        # get validity values
-        lVal = self.gazeData['left_gaze_origin_validity']
-        rVal = self.gazeData['right_gaze_origin_validity']
-        # default validity value
-        validities = 0 # neither eye is valid
-
-        # if both eyes are valid, return 3
-        if lVal == 1 and rVal == 1:
-            validities = 3
-        # if just left eye is valid, return 1
-        elif lVal == 1 and rVal == 0:
-            validities = 1
-        # if just right eye is valid, return 2
-        elif lVal == 0 and rVal == 1 :
-            validities = 2
-
-        # return validity values
-        return validities
-        
-               
 # ----- Functions for running calibration -----
     
     # function for drawing representation of the eyes in virtual trackbox
@@ -1289,48 +1209,6 @@ class TobiiHelper:
         pcore.wait(3)
         calibWin.close() 
         return
-     
-# ----- Functions for exporting gaze data  -----
-        
-    # Function for getting all gaze and event data from the current sample 
-    # collected by the eyetracker, returned as a dictionary. Can easily be 
-    # converted into a pandas dataframe. Strongly suggest putting output into 
-    # a psychopy data object, as psychopy.data comes with many convenient 
-    # functions for organizing experiment flow, recording data, and saving 
-    # files. Gaze position is given in px, eye position, distance, and pupil size
-    # given in mm. 
-    def getCurrentData(self):
-        # check gaze Data
-        if not self.tracking:
-            raise ValueError("Data is not being recorded by the eyetracker.")
-        
-        # output file at same frequency as eyetracker
-        timeCur = np.datetime64(dt.datetime.now())
-        timeNow = timeCur
-        timeDelta = np.absolute((timeCur - timeNow)/np.timedelta64(1, 'ms'))
-        
-        # when two data samples are slightly less than the eyetrackers frequency
-        # apart, request data from eyetracker
-        while timeDelta < 7.0:  # change according to eyetracker freq
-            pcore.wait(0.001)
-            timeNow = np.datetime64(dt.datetime.now())
-            timeDelta = np.absolute((timeCur - timeNow)/np.timedelta64(1, 'ms'))
-        
-        # code can easily be modified to get more than averages
-        timeMidnight = np.datetime64(dt.datetime.date(dt.datetime.today()))
-        
-        self.currentData = {}
-        self.currentData['DeviceTimeStamp'] = np.absolute((timeNow - timeMidnight)/np.timedelta64(1, 'ms'))
-        self.currentData['AvgGazePointX'] = self.getAvgGazePos()[0]
-        self.currentData['AvgGazePointY'] = self.getAvgGazePos()[1]            
-        self.currentData['AvgPupilDiam'] = self. getPupilSize()
-        self.currentData['AvgEyePosX'] = self.getAvgEyePos()[0]
-        self.currentData['AvgEyePosY'] = self.getAvgEyePos()[1]             
-        self.currentData['AvgEyePosZ'] = self.getAvgEyePos()[2]
-        self.currentData['AvgEyeDistance'] = self.getAvgEyeDist() * 10
-        self.currentData['EyeValidities'] = self.checkEyeValidities()
-        
-        return self.currentData
   
 
 
