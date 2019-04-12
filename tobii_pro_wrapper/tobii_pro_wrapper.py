@@ -50,9 +50,9 @@ class TobiiHelper:
         
         self.eyetracker = None
         
-        self.adaCoordinates = {}
+        self.adaCoordinates = None
         
-        self.tbCoordinates = {}
+        self.tbCoordinates = None
         
         self.calibration = None
         
@@ -124,6 +124,7 @@ class TobiiHelper:
             
         # get active display area information in mm as a dictionary
         displayArea = self.eyetracker.get_display_area()
+        self.adaCoordinates = {}
         self.adaCoordinates['bottomLeft'] = displayArea.bottom_left
         self.adaCoordinates['bottomRight'] = displayArea.bottom_right
         self.adaCoordinates['topLeft'] = displayArea.top_left
@@ -134,6 +135,7 @@ class TobiiHelper:
         # get track box information in mm, return only the 2d coordinates
         # of the cube side closest to the eyetracker
         trackBox = self.eyetracker.get_track_box()
+        self.tbCoordinates = {}
         self.tbCoordinates['bottomLeft'] = trackBox.front_lower_left
         self.tbCoordinates['bottomRight'] = trackBox.front_lower_right
         self.tbCoordinates['topLeft'] = trackBox.front_upper_left
@@ -236,7 +238,7 @@ class TobiiHelper:
             raise ValueError("No coordinate values have been specified.")
         elif not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
-        elif isinstance(xyCoor, tuple) and len(xyCoor) is not 2: 
+        elif len(xyCoor) is not 2:
             raise ValueError("Wrong number of coordinate dimensions")
         # check tracker box and ada coordinates
         if self.tbCoordinates is None or self.adaCoordinates is None:
@@ -245,15 +247,11 @@ class TobiiHelper:
 
         # get tb and ada values from eyetracker        
         tbDict = self.tbCoordinates
-        tbLowLeft = (tbDict.get('bottomLeft')[0], 
-                     tbDict.get('bottomLeft')[1])
-        adaDict = self.adaCoordinates      
-        adaLowLeft = ((adaDict.get('width')/-2), 
-                       (adaDict.get('height')/-2))
-        
+        adaDict = self.adaCoordinates
+
         # create ratios for x and y coordinates
-        yRatio = tbLowLeft[1]/adaLowLeft[1]
-        xRatio = tbLowLeft[0]/adaLowLeft[0]
+        yRatio = tbDict.get('height')/adaDict.get('height')
+        xRatio = tbDict.get('width')/adaDict.get('width')
        
         # convert and return coordinates
         adaNorm = ((xyCoor[0] * xRatio), (xyCoor[1] * yRatio))
