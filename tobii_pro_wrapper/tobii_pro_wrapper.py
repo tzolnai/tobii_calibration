@@ -229,8 +229,8 @@ class TobiiHelper:
         self.tracking = False
     
         
-    # function for converting positions from trackbox coordinate system (mm) to 
-    # normalized active display area coordinates   
+    # function for converting normalized positions from trackbox coordinate system
+    # to normalized active display area coordinates
     def tb2Ada(self, xyCoor = tuple):
         
         # check argument values
@@ -258,8 +258,8 @@ class TobiiHelper:
         return adaNorm
     
     
-    # function for converting normalized coordinates to normalized coordinates
-    # based on the psychopy window    
+    # function for converting normalized positions from trackbox coordinate system
+    # to normalized coordinates based on the psychopy window
     def tb2PsychoNorm(self, xyCoor = tuple):
         
         # check argument values
@@ -267,10 +267,10 @@ class TobiiHelper:
             raise ValueError("No coordinate values have been specified.")
         elif not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
-        elif isinstance(xyCoor, tuple) and len(xyCoor) is not 2: 
+        elif len(xyCoor) is not 2:
             raise ValueError("Wrong number of coordinate dimensions")
 
-        # convert track box coordinates to adac coordinates
+        # convert track box coordinates to ada coordinates
         adaCoors = self.tb2Ada(xyCoor)
         # correct for psychopy window coordinates
         centerScale = self.tb2Ada((1, 1))
