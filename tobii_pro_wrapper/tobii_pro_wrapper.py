@@ -99,13 +99,17 @@ class TobiiHelper:
         # check to see that eyetracker is connected
         if self.eyetracker is None:
             print("Eyetracker did not connect. Check serial number?")
+            return
         else:
             print("Eyetracker connected successfully.")
+
+        # get track box and active display area coordinates
+        self.__getTrackerSpace()
     
         
     # function for getting trackbox (tb) and active display area (ada)coordinates, returns
     # coordintes in two separate dictionaries with values in mm
-    def getTrackerSpace(self):
+    def __getTrackerSpace(self):
         
         # check to see that eyetracker is connected
         if self.eyetracker is None:

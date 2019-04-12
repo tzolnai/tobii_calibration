@@ -61,10 +61,6 @@ Find and connect to the eyetracker identified by its serial number.
 If no serial number is given, defaults to connecting to the first eyetracker it can find.
 Sets the self.eyetracker attribute.
 
-### getTrackerSpace()
-Gets the trackbox and Active Display Area coordinates for the eyetracker found with
-findTracker. Sets the self.adaCoordinates and self.tbCoordinates attributes.
-
 ### setMonitor(nameString = None, dimensions = None)
 Creates, selects, and calibrates a psychopy.monitor object. You can select a specific
 monitor with **nameString** and set its dimensions with **dimensions**. If no **nameString** or 
@@ -141,10 +137,6 @@ foo.setMonitor(nameString = None, dimensions = None)
 
 # Find eyetrackers and connect
 foo.findTracker(serialString = None)
-
-# Determine the coordinates for the eyetracker's 
-# tracking spaces (trackbox and active display area)
-foo.getTrackerSpace()
 
 # Run a full 5 point calibration routing
 foo.runFullCalibration(numCalibPoints = 5)
