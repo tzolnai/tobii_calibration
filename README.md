@@ -1,4 +1,4 @@
-# tobii_pro_wrapper
+# tobii-calibration
 
 Derivetive code from tobii-pro-wrapper: https://github.com/oguayasa/. This code is work-in-progress,
 if you would like to use these functionalites you can use the original wrapper code.
