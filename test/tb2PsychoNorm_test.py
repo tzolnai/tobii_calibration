@@ -53,21 +53,44 @@ class tb2PsychoNormTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             tobii_helper.tb2PsychoNorm((12, 11))
 
-    def testExampleCall(self):
+    def testNoneNormalizedParam(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2PsychoNorm((12, 11))
-        self.assertAlmostEqual(7.238, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(9.504, adaResult[1], delta = 0.001)
+        with self.assertRaises(ValueError):
+            adaResult = tobii_helper.tb2PsychoNorm((12, 11))
+
+    def testNormalizedCall(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        self.initDisplayArea(tobii_helper)
+        adaResult = tobii_helper.tb2PsychoNorm((0.34, 0.45))
+        self.assertAlmostEqual(-0.100, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(-0.045, adaResult[1], delta = 0.001)
 
     def testRatioOne(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2PsychoNorm((12, 11))
-        self.assertAlmostEqual(11.5, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(10.5, adaResult[1], delta = 0.001)
+        adaResult = tobii_helper.tb2PsychoNorm((0.34, 0.45))
+        self.assertAlmostEqual(-0.159, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(-0.049, adaResult[1], delta = 0.001)
+
+    def testCallWithOnePoint(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        self.initDisplayArea(tobii_helper)
+        adaResult = tobii_helper.tb2PsychoNorm((1.0, 1.0))
+        self.assertAlmostEqual(0.314, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.452, adaResult[1], delta = 0.001)
+
+    def testCallWithZeroPoint(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        self.initDisplayArea(tobii_helper)
+        adaResult = tobii_helper.tb2PsychoNorm((0.0, 0.0))
+        self.assertAlmostEqual(-0.314, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(-0.452, adaResult[1], delta = 0.001)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

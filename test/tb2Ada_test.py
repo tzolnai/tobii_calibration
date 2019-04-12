@@ -53,21 +53,44 @@ class tb2AdaTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             tobii_helper.tb2Ada((12, 11))
 
-    def testExampleCall(self):
+    def testNoneNormalizedParam(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2Ada((12, 11))
-        self.assertAlmostEqual(7.553, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(9.956, adaResult[1], delta = 0.001)
+        with self.assertRaises(ValueError):
+            adaResult = tobii_helper.tb2Ada((12, 11))
+
+    def testNormalizedCall(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        self.initDisplayArea(tobii_helper)
+        adaResult = tobii_helper.tb2Ada((0.34, 0.45))
+        self.assertAlmostEqual(0.213, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.407, adaResult[1], delta = 0.001)
 
     def testRatioOne(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2Ada((12, 11))
-        self.assertAlmostEqual(12.0, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(11.0, adaResult[1], delta = 0.001)
+        adaResult = tobii_helper.tb2Ada((0.34, 0.45))
+        self.assertAlmostEqual(0.34, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.45, adaResult[1], delta = 0.001)
+
+    def testCallWithOnePoint(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        self.initDisplayArea(tobii_helper)
+        adaResult = tobii_helper.tb2Ada((1.0, 1.0))
+        self.assertAlmostEqual(0.629, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.905, adaResult[1], delta = 0.001)
+
+    def testCallWithZeroPoint(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        self.initDisplayArea(tobii_helper)
+        adaResult = tobii_helper.tb2Ada((0.0, 0.0))
+        self.assertAlmostEqual(0.0, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

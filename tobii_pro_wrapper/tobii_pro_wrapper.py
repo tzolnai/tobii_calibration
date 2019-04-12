@@ -239,11 +239,13 @@ class TobiiHelper:
         elif not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
         elif len(xyCoor) is not 2:
-            raise ValueError("Wrong number of coordinate dimensions")
+            raise ValueError("Wrong number of coordinate dimensions.")
+        elif xyCoor[0] > 1.0 or xyCoor[0] < 0.0 or xyCoor[1] > 1.0 or xyCoor[1] < 0.0:
+            raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
         # check tracker box and ada coordinates
         if self.tbCoordinates is None or self.adaCoordinates is None:
             raise ValueError("Missing trackbox coordinates. \n" +\
-                             "Try running getTrackerSpace()")
+                             "Try running getTrackerSpace()!")
 
         # get tb and ada values from eyetracker        
         tbDict = self.tbCoordinates
@@ -268,7 +270,9 @@ class TobiiHelper:
         elif not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
         elif len(xyCoor) is not 2:
-            raise ValueError("Wrong number of coordinate dimensions")
+            raise ValueError("Wrong number of coordinate dimensions.")
+        elif xyCoor[0] > 1.0 or xyCoor[0] < 0.0 or xyCoor[1] > 1.0 or xyCoor[1] < 0.0:
+            raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
 
         # convert track box coordinates to ada coordinates
         adaCoors = self.tb2Ada(xyCoor)
