@@ -6,7 +6,7 @@
 # Olivia Guayasamin (oguayasa@gmail.com) - Initial work as tobii-pro-wrapper (https://github.com/oguayasa/tobii_pro_wrapper)
 # Tamás Zolnai (zolnaitamas2000@gmail.com) - Reworked this module.
 
-# License: Apache License 2.0, see License.txt for more details.
+# License: Apache License 2.0, see LICENSE.txt for more details.
 
 # Summary: Currently provides all functionality for running a FULL CALIBRATION 
 # ROUTINE for 5 and 9 point calibrations, and converting between Tobii

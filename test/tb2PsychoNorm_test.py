@@ -1,7 +1,7 @@
 # Authors:
 # Tamás Zolnai (zolnaitamas2000@gmail.com)
 
-# License: Apache License 2.0, see License.txt for more details.
+# License: Apache License 2.0, see LICENSE.txt for more details.
 
 import unittest
 
