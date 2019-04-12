@@ -11,7 +11,7 @@ along with essential eye-tracking routines, in a TobiiHelper class.
 ### Prerequisites
 Running tobii_pro_wrapper requires all of the following and their dependencies. 
 
-* [Python 3.5] (https://www.python.org/downloads/)
+* [Python 3.5](https://www.python.org/downloads/)
 * [Tobii Pro SDK](https://pypi.org/project/tobii-research/) for Python 3.5
 
 ```
@@ -179,7 +179,7 @@ an e-mail to oguayasa@gmail.com with "CONTRIBUTING to Tobii Wrapper" in the subj
 
 **Olivia Guayasamin** - *Initial work and development* - [oguayasa](https://github.com/oguayasa)
 
-**Tamás Zolnai** - *Reworked this module* - (https://github.com/tzolnai)
+**Tamás Zolnai** - *Reworked this module* - [tzolnai](https://github.com/tzolnai)
 
 ## License
 

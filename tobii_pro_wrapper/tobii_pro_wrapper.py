@@ -2,22 +2,15 @@
 
 # Psychopy supported Tobii controller for the new Pro SDK
 
-# Authors: Olivia Guayasamin, Tamás Zolnai
-# Date: 8/3/2017
-        
-# Requirements: Python 2.7 32 Bit (SDK required)
-# Tobii Pro SDK 1.0 for Python, and all dependencies
-# Psychopy, Psychopy.iohub, and all dependencies
-# numpy, scipy, and win32api
+# Authors:
+# Olivia Guayasamin (oguayasa@gmail.com) - Initial work as tobii-pro-wrapper (https://github.com/oguayasa/tobii_pro_wrapper)
+# Tamás Zolnai (zolnaitamas2000@gmail.com) - Reworked this module.
+
+# License: Apache License 2.0, see License.txt for more details.
 
 # Summary: Currently provides all functionality for running a FULL CALIBRATION 
 # ROUTINE for 5 and 9 point calibrations, and converting between Tobii
-# Trackbox, Tobii ADA, and Psychopy coordinate systems. 
-
-# This code also contains functionality for finding/calibrating the 
-# experimental monitor, connecting to keyboard/mouse devices, selecting and 
-# connecting to a tobii device, getting tobii device parameters, and getting 
-# real time gaze and eye position data from the tobii tracker. 
+# Trackbox, Tobii Active Display Area, and Psychopy coordinate systems.
 
 # Notes: This code is currently designed for working with a tobii eyetracker 
 # installed on the same device as the one for running experiments (laptop set-
