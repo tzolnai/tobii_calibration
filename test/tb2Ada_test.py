@@ -81,7 +81,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.34, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.45, adaResult[1], delta = 0.001)
 
-    def testCallWithOnePoint(self):
+    def testCallWithPointOne(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
@@ -89,13 +89,37 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.629, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.905, adaResult[1], delta = 0.001)
 
-    def testCallWithZeroPoint(self):
+    def testCallWithPointZero(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper.tb2Ada((0.0, 0.0))
         self.assertAlmostEqual(0.0, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
+
+    def testRatioOnePointOne(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
+        adaResult = tobii_helper.tb2Ada((1.0, 1.0))
+        self.assertAlmostEqual(1.0, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(1.0, adaResult[1], delta = 0.001)
+
+    def testRatioOnePointZero(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
+        adaResult = tobii_helper.tb2Ada((0.0, 0.0))
+        self.assertAlmostEqual(0.0, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
+
+    def testRatioOnePointCenter(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initTrackBox(tobii_helper)
+        tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
+        adaResult = tobii_helper.tb2Ada((0.5, 0.5))
+        self.assertAlmostEqual(0.5, adaResult[0], delta = 0.001)
+        self.assertAlmostEqual(0.5, adaResult[1], delta = 0.001)
 
 if __name__ == "__main__":
     unittest.main() # run all tests
