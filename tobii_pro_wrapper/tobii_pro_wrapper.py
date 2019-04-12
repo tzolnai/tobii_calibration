@@ -61,10 +61,6 @@ class TobiiHelper:
         self.win = None
                 
         self.gazeData = {}
-        
-        self.syncData = {}
-        
-        self.currentOutData = {}
           
 # ----- Functions for initialzing the eyetracker and class attributes -----      
     

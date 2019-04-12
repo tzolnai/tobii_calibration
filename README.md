@@ -1,63 +1,39 @@
 # tobii_pro_wrapper
 
-Contains functions for working with with the new Tobii Pro SDK v1.0.1 for Python, 
+Derivetive code from tobii-pro-wrapper: https://github.com/oguayasa/. This code is work-in-progress,
+if you would like to use these functionalites you can use the original wrapper code.
+
+Contains functions for working with with the new Tobii Pro SDK for Python,
 along with essential eye-tracking routines, in a TobiiHelper class.
-
-Pretty much everything you need to connect to a Tobii eyetracker, calibrate the eyetracker,
-get gaze, eye, and time synchronization data from the eyetracker device, and convert the confusing Tobii
-coordinate systems units to units that are psychopy and interpretation friendly.
-
-If you end up using this code in your work, please cite: 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1002691.svg)](https://doi.org/10.5281/zenodo.1002691)
-
 
 ## Getting Started
 
 ### Prerequisites
 Running tobii_pro_wrapper requires all of the following and their dependencies. 
 
-* [Python 2.7](https://www.continuum.io/downloads)
-* [Tobii Pro SDK v1.0](https://www.tobiipro.com/product-listing/tobii-pro-sdk/#Download) for Python 
-
-At the time of this writing, Tobii Pro SDK v1.1 has bugs that prevent some eyetracker models from calibrating. Once 
-this is fixed (I'll keep checking), tobii_pro_wrapper will be updated to work with the newer SDK releases. So to 
-download the previous version, use:
+* [Python 3.5] (https://www.python.org/downloads/)
+* [Tobii Pro SDK](https://pypi.org/project/tobii-research/) for Python 3.5
 
 ```
-pip install tobii_research==1.0.1.128  
+pip install tobii_research
 ```
+You will need PsychoPy for using this module. However there is no standalone PsychoPy
+supporting Python 3.5, so you'll need to use the manual installation (see the link bellow).
+Other dependencies bellow are also used by PsychoPy, so it's likely you'll have them after
+PsychoPy is installed.
 
-* [Psychopy](http://psychopy.org/installation.html)
+* [Psychopy](https://www.psychopy.org/installation.html#manual-install)
 * [numpy](https://scipy.org/install.html)
 * [scipy](https://scipy.org/install.html)
 * [pyglet](https://pyglet.readthedocs.io/en/pyglet-1.3-maintenance/)
 
 ### Installing
 
-**To download without installing Git**, run:
+Download or clone the whole project then go into the folder of it and call setup.py:
 
 ```
-pip install https://github.com/oguayasa/tobii_pro_wrapper/tarball/master
+python setup.py install
 ```
-or 
-```
-pip install https://github.com/oguayasa/tobii_pro_wrapper/zipball/master
-```
-Depending on your device security, you may either need to implement ' --user '
-after the 'install' command and before the github website, or run your command line
-program 'as administrator' and then navigate to your user account, or both. 
-
-```
-pip install --user https://github.com/oguayasa/tobii_pro_wrapper/zipball/master
-```
-**If you already have a working Git installation**, run:
-
-```
-pip install git+user https://github.com/oguayasa/tobii_pro_wrapper.git
-```
-
-*You could also install by downloading the .zip file, and extracting the contents to
-the site-packages folder of your working Python 2.7 installation.*
 
 ## Package Details
 
@@ -67,9 +43,9 @@ A class for a wrapper for the Tobii Pro SDK for Python. Contains the following a
 ```
         self.eyetracker = None
         
-        self.adaCoordinates = {}
+        self.adaCoordinates = None
         
-        self.tbCoordinates = {}
+        self.tbCoordinates = None
         
         self.calibration = None
         
@@ -78,10 +54,6 @@ A class for a wrapper for the Tobii Pro SDK for Python. Contains the following a
         self.win = None
                 
         self.gazeData = {}
-        
-        self.syncData = {}
-        
-        self.currentOutData = {}
 ```
 
 ### findTracker(serialString = None)
@@ -113,23 +85,12 @@ pupil size, and eye validities.
 ### stopGazeData()
 Disconnect from the eyetracker and stops broadcasting gaze data.
 
-### startSyncData()
-Connect to the internal clocks of eyetracker and computer devices,  and uses the **self.sycnData** attribute 
-to broadcast internal clock values.
-
-### stopSyncData()
-Disconnet from eyetracker and stop broadcasting sync data. 
-
 ### tb2Ada(xyCoor = tuple)
 Takes trackbox location coordinates and converts to active display area coordinates. Returns an (x,y)
 coordinate tuple. 
 
 ### tb2PsychoNorm(xyCoor = tuple)
 Takes trackbox location coordinates and converts psychopy window normal units. Returns an (x,y)
-coordinate tuple. 
-
-### ada2PsychoWin(xyCoor = tuple)
-Takes active display area coordinates and converts psychopy window pixel units. Returns an (x,y)
 coordinate tuple. 
 
 ### ada2MonPix(xyCoor = tuple)
@@ -147,14 +108,6 @@ eyes relative to the eyetracker origin as a tuple. Returns position in mm units.
 ### getAvgEyeDist()
 Uses broadcasting **self.gazeData** and **self.getAvgEyePos()** to return average distance of the left and right eyes
 from the eyetracker origin. Retures position in cm units.
-
-### getPupilSize()
-Uses broadcasting **self.gazeData** to return average pupil size of left and right eyes as a tuple. Returns
-pupil diameter in mm units.
-
-### checkEyeValidities()
-Uses broadcasting **self.gazeData** to return the validities of both eyes. Returns integer values of 0, 1, 2, or 3
-depending on if no eyes were found, left eye was found, right eye was found, or both eyes are found respectively.
 
 ### runValidation(pointDict = dict)
 Shows real time gaze position and draws several reference points (**pointDict** is a dictionary with numbered keys
@@ -226,16 +179,11 @@ an e-mail to oguayasa@gmail.com with "CONTRIBUTING to Tobii Wrapper" in the subj
 
 **Olivia Guayasamin** - *Initial work and development* - [oguayasa](https://github.com/oguayasa)
 
-Also see additional [contributors](https://github.com/oguayasa/tobii_pro_wrapper/contributors).
+**Tamás Zolnai** - *Reworked this module* - (https://github.com/tzolnai)
 
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/oguayasa/tobii_pro_wrapper/blob/master/LICENSE.txt) file for details.
 
-## Acknowledgments
-
-* A big thanks to those who create and maintain [Psychopy](http://www.psychopy.org/about/index.html)
-* Inspired by Jan Freyberg's [wrapper](https://github.com/janfreyberg/tobii-psychopy) for the previous Tobii Analytics SDK
-* [Quentin Caudron](https://github.com/QCaudron) for helping this n00b figure out how to develop Python software.
 
 
