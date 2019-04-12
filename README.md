@@ -170,11 +170,6 @@ That's it!
 
 Further examples will be linked below as they are developed.
 
-## Contributing
-
-To report bugs, contribute changes, ask questions, or request additional functionality, please drop
-an e-mail to oguayasa@gmail.com with "CONTRIBUTING to Tobii Wrapper" in the subject line. 
-
 ## Authors
 
 **Olivia Guayasamin** - *Initial work and development* - [oguayasa](https://github.com/oguayasa)
