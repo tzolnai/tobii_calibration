@@ -170,7 +170,7 @@ Further examples will be linked below as they are developed.
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/oguayasa/tobii_pro_wrapper/blob/master/LICENSE.txt) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/tzolnai/tobii_calibration/blob/master/LICENSE.txt) file for details.
 
 
 
