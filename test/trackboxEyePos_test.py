@@ -67,9 +67,9 @@ class trackboxEyePosTest(unittest.TestCase):
         self.initDisplayArea(tobii_helper)
         leftPos, rightPos = tobii_helper.trackboxEyePos()
         self.assertAlmostEqual(0.171, leftPos[0], delta = 0.001)
-        self.assertAlmostEqual(0.054, leftPos[1], delta = 0.001)
+        self.assertAlmostEqual(-0.054, leftPos[1], delta = 0.001)
         self.assertAlmostEqual(0.192, rightPos[0], delta = 0.001)
-        self.assertAlmostEqual(0.099, rightPos[1], delta = 0.001)
+        self.assertAlmostEqual(-0.099, rightPos[1], delta = 0.001)
 
     def testGazeDataWithNoRightEye(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -84,7 +84,7 @@ class trackboxEyePosTest(unittest.TestCase):
         self.initDisplayArea(tobii_helper)
         leftPos, rightPos = tobii_helper.trackboxEyePos()
         self.assertAlmostEqual(0.171, leftPos[0], delta = 0.001)
-        self.assertAlmostEqual(0.054, leftPos[1], delta = 0.001)
+        self.assertAlmostEqual(-0.054, leftPos[1], delta = 0.001)
         self.assertAlmostEqual(0.99, rightPos[0], delta = 0.001)
         self.assertAlmostEqual(0.99, rightPos[1], delta = 0.001)
 
@@ -103,7 +103,7 @@ class trackboxEyePosTest(unittest.TestCase):
         self.assertAlmostEqual(0.99, leftPos[0], delta = 0.001)
         self.assertAlmostEqual(0.99, leftPos[1], delta = 0.001)
         self.assertAlmostEqual(0.171, rightPos[0], delta = 0.001)
-        self.assertAlmostEqual(0.054, rightPos[1], delta = 0.001)
+        self.assertAlmostEqual(-0.054, rightPos[1], delta = 0.001)
 
     def testGazeDataWithNoValidEye(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -135,9 +135,9 @@ class trackboxEyePosTest(unittest.TestCase):
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         leftPos, rightPos = tobii_helper.trackboxEyePos()
         self.assertAlmostEqual(-0.85, leftPos[0], delta = 0.001)
-        self.assertAlmostEqual(0.5, leftPos[1], delta = 0.001)
+        self.assertAlmostEqual(-0.5, leftPos[1], delta = 0.001)
         self.assertAlmostEqual(-0.85, rightPos[0], delta = 0.001)
-        self.assertAlmostEqual(0.5, rightPos[1], delta = 0.001)
+        self.assertAlmostEqual(-0.5, rightPos[1], delta = 0.001)
 
     def testRatioOnePointZero(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -152,9 +152,9 @@ class trackboxEyePosTest(unittest.TestCase):
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         leftPos, rightPos = tobii_helper.trackboxEyePos()
         self.assertAlmostEqual(0.85, leftPos[0], delta = 0.001)
-        self.assertAlmostEqual(-0.5, leftPos[1], delta = 0.001)
+        self.assertAlmostEqual(0.5, leftPos[1], delta = 0.001)
         self.assertAlmostEqual(0.85, rightPos[0], delta = 0.001)
-        self.assertAlmostEqual(-0.5, rightPos[1], delta = 0.001)
+        self.assertAlmostEqual(0.5, rightPos[1], delta = 0.001)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

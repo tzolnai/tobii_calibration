@@ -295,7 +295,7 @@ class TobiiHelper:
         centerScale = self.tb2Ada((1, 1))
         centerShift = ((centerScale[0] / 2), (centerScale[1] / 2))
         psychoNorm = (adaCoors[0] - centerShift[0], 
-                      adaCoors[1] - centerShift[1])
+                      -(adaCoors[1] - centerShift[1]))
         # return coordinates in psychowin 'norm' units
         return psychoNorm
     

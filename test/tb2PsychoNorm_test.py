@@ -71,7 +71,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper.tb2PsychoNorm((0.34, 0.45))
         self.assertAlmostEqual(-0.100, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(-0.045, adaResult[1], delta = 0.001)
+        self.assertAlmostEqual(0.045, adaResult[1], delta = 0.001)
 
     def testRatioOne(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -79,7 +79,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper.tb2PsychoNorm((0.34, 0.45))
         self.assertAlmostEqual(-0.159, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(-0.049, adaResult[1], delta = 0.001)
+        self.assertAlmostEqual(0.049, adaResult[1], delta = 0.001)
 
     def testCallWithPointOne(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -87,7 +87,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper.tb2PsychoNorm((1.0, 1.0))
         self.assertAlmostEqual(0.314, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(0.452, adaResult[1], delta = 0.001)
+        self.assertAlmostEqual(-0.452, adaResult[1], delta = 0.001)
 
     def testCallWithPointZero(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -95,7 +95,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper.tb2PsychoNorm((0.0, 0.0))
         self.assertAlmostEqual(-0.314, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(-0.452, adaResult[1], delta = 0.001)
+        self.assertAlmostEqual(0.452, adaResult[1], delta = 0.001)
 
     def testRatioOnePointOne(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -103,7 +103,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper.tb2PsychoNorm((1.0, 1.0))
         self.assertAlmostEqual(0.5, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(0.5, adaResult[1], delta = 0.001)
+        self.assertAlmostEqual(-0.5, adaResult[1], delta = 0.001)
 
     def testRatioOnePointZero(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -111,7 +111,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper.tb2PsychoNorm((0.0, 0.0))
         self.assertAlmostEqual(-0.5, adaResult[0], delta = 0.001)
-        self.assertAlmostEqual(-0.5, adaResult[1], delta = 0.001)
+        self.assertAlmostEqual(0.5, adaResult[1], delta = 0.001)
 
     def testRatioOnePointCenter(self):
         tobii_helper = wrapper.TobiiHelper()
