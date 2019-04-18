@@ -31,6 +31,7 @@ from psychopy.iohub import launchHubServer
 import datetime as dt
 import numpy as np
 from scipy.spatial import distance
+import numbers
 
 import tobii_research as tobii
 
@@ -53,6 +54,8 @@ class TobiiHelper:
         
         self.win = None
                 
+        self.monitorName = None
+
         self.gazeData = {}
           
 # ----- Functions for initialzing the eyetracker and class attributes -----      
@@ -147,6 +150,8 @@ class TobiiHelper:
         
         # find all connected monitors
         allMonitors = monitors.getAllMonitors()
+        if len(allMonitors) is 0:
+            raise RuntimeError("Can't find any monitor.")
 
         # if there are no eyetrackers
         if len(allMonitors) < 1:
@@ -161,32 +166,49 @@ class TobiiHelper:
         # if dimension not given as tuple
         elif not isinstance(dimensions, tuple):
             raise TypeError("Dimensions must be given as tuple.")
+        elif len(dimensions) is not 2:
+            raise TypeError("Dimensions must be a pair of the screen height and width.")
+        elif not isinstance(dimensions[0], numbers.Number) or not isinstance(dimensions[1], numbers.Number):
+            raise TypeError("The given dimensions tupple should contain numbers.")
+        elif dimensions[0] <= 0 or dimensions[1] <= 0:
+            raise ValueError("Screen width and height must be positive values.")
               
         # if there is not monitor name defined, go to first default monitor
         if nameString is None:
             # create monitor calibration object 
-            thisMon = monitors.Monitor(allMonitors[0]) 
-            print ("Current monitor name is: " + allMonitors[0])
+            self.monitorName = allMonitors[0]
+            thisMon = monitors.Monitor(self.monitorName)
+            print ("Current monitor name is: " + self.monitorName)
             # set monitor dimensions
             thisMon.setSizePix(dimensions)              
             # save monitor
             thisMon.saveMon()  # save monitor calibration
             self.win = thisMon
         # if serial number is not given as a string
-        elif not isinstance(nameString, basestring):
+        elif not isinstance(nameString, str):
             raise TypeError("Monitor name must be formatted as a string.")            
         # if serial number is given as a string
         else:
             # create monitor calibration object 
-            thisMon = monitors.Monitor(nameString) 
+            thisMon = monitors.Monitor(nameString)
             print ("Current monitor name is: " + nameString)
+            self.monitorName = nameString
             # set monitor dimensions
             thisMon.setSizePix(dimensions)              
             # save monitor
             thisMon.saveMon()  # save monitor calibration
             self.win = thisMon
                          
-             
+    def getMonitorName(self):
+        if self.monitorName is None:
+            raise ValueError("No monitor was set.")
+        return self.monitorName
+
+    def getMonitorDimensions(self):
+        if self.win is None:
+            raise ValueError("No monitor was set.")
+        return (self.win.getSizePix()[0], self.win.getSizePix()[1])
+
 # ----- Functions for starting and stopping eyetracker data collection -----
 
     # function for broadcasting real time gaze data
