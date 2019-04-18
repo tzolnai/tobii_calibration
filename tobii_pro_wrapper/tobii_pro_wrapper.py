@@ -420,6 +420,8 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
+        if self.gazeData is None:
+            raise ValueError("No recorded gaze data was found.")
 
         # access gaze data dictionary to get eye position tuples, given in
         # mm in from eyetracker origin
@@ -432,7 +434,7 @@ class TobiiHelper:
         zs = (lOriginXYZ[2],rOriginXYZ[2])
 
         # if all of the axes have data from at least one eye
-        if not (np.isnan(xs)).all() or not (np.isnan(ys)).all() or not (np.isnan(zs)).all():
+        if not (np.isnan(xs)).all() and not (np.isnan(ys)).all() and not (np.isnan(zs)).all():
             # update the distance if the values are reasonable
             avgEyePos = (np.nanmean(xs), np.nanmean(ys), np.nanmean(zs))
         else:
