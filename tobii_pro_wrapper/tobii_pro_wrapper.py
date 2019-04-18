@@ -326,30 +326,6 @@ class TobiiHelper:
         # return coordinates in psychowin 'pix' units
         return psychoPix
 
-
-    # function for converting from tobiis active display coordinate system in 
-    # normalized coordinates where (0,0) is the upper left corner, to monitor 
-    # coordinates in pix, where (0,0) is the upper left corner     
-    def ada2MonPix(self, xyCoor = tuple):
-        
-        # check argument values
-        if xyCoor is None:
-            raise ValueError("No coordinate values have been specified.")
-        elif not isinstance(xyCoor, tuple):
-            raise TypeError("XY coordinates must be given as tuple.")
-        elif isinstance(xyCoor, tuple) and len(xyCoor) is not 2: 
-            raise ValueError("Wrong number of coordinate dimensions")
-
-        if np.isnan(xyCoor[0]) and np.isnan(xyCoor[1]):
-            monPix = (np.nan, np.nan)
-            return monPix
-
-        # convert so point of gaze on monitor is accurate
-        monPix = (int(xyCoor[0] * self.win.getSizePix()[0]),
-                  int(xyCoor[1] * self.win.getSizePix()[1]))                                
-        return monPix        
-    
-        
 # ----- Functions for collecting eye and gaze data -----
       
     # function for collecting gaze coordinates in tobiis ada coordinate 
