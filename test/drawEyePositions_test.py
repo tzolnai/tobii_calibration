@@ -464,5 +464,45 @@ class drawEyePositionsTest(unittest.TestCase):
         self.assertTrue(isinstance(feedback_text, visual.TextStim))
         self.assertEqual(str("You're currently 67 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
+    def testOneEyeIsFar(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.97)
+        tobii_helper.gazeData['right_gaze_origin_in_trackbox_coordinate_system'] = (0.32, 0.61, 1.00)
+        tobii_helper.gazeData['left_gaze_origin_in_user_coordinate_system'] = (102.0, 135.52, 780.8)
+        tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 812.5)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        tobii_helper.drawEyePositions(self.trackWin)
+        drawing_list = visual_mock.getListOfDrawings()
+
+        self.assertEqual(4, len(drawing_list))
+
+        # left eye
+        left_eye = drawing_list[1]
+        self.assertTrue(isinstance(left_eye, visual.Circle))
+        # pos
+        self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
+        self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
+        # color
+        self.assertEqual(red_color, left_eye.fillColor.tolist())
+        self.assertEqual(red_color, left_eye.lineColor.tolist())
+
+        # right eye
+        right_eye = drawing_list[2]
+        self.assertTrue(isinstance(right_eye, visual.Circle))
+        # pos
+        self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
+        self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
+        # color
+        self.assertEqual(red_color, right_eye.fillColor.tolist())
+        self.assertEqual(red_color, right_eye.lineColor.tolist())
+
+        # text
+        feedback_text = drawing_list[3]
+        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertEqual(str("You're currently 81 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+
 if __name__ == "__main__":
     unittest.main() # run all tests
