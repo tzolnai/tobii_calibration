@@ -305,17 +305,20 @@ class TobiiHelper:
     # coordinates in pix, where (0,0) is at the center of psychopy window.
     def ada2PsychoPix(self, xyCoor = tuple):
         
+        if self.win is None:
+            raise ValueError("No monitor was set.")
+
         # check argument values
         if xyCoor is None:
             raise ValueError("No coordinate values have been specified.")
         elif not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
-        elif isinstance(xyCoor, tuple) and len(xyCoor) is not 2: 
-            raise ValueError("Wrong number of coordinate dimensions")
-            
-        if np.isnan(xyCoor[0]) and np.isnan(xyCoor[1]):
-            psychoPix = (np.nan, np.nan)
-            return psychoPix
+        elif len(xyCoor) is not 2:
+            raise ValueError("Wrong number of coordinate dimensions.")
+        elif not isinstance(xyCoor[0], numbers.Number) or not isinstance(xyCoor[1], numbers.Number):
+            raise TypeError("XY coordinates must be given as number values.")
+        elif xyCoor[0] > 1.0 or xyCoor[0] < 0.0 or xyCoor[1] > 1.0 or xyCoor[1] < 0.0:
+            raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
 
         # convert to pixels and correct for psychopy window coordinates
         monHW = (self.win.getSizePix()[0], 
@@ -632,12 +635,9 @@ class TobiiHelper:
             if len(gazePositions) == maxLength:
                 gazePositions = np.delete(gazePositions, 0, axis = 0)
     
-            # update stimuli in window and draw
-            drawStim = self.ada2PsychoPix(tuple(curPos))
-            
-            # draw gaze position only if found
-            if drawStim[0] is not self.win.getSizePix()[0]: 
-                gazeStim.pos = drawStim
+            # update stimuli in window and draw if we have a valid pos
+            if curPos[0] <= 1.0 and curPos[0] >= 0.0 and curPos[1] <= 1.0 and curPos[1] >= 0.0:
+                gazeStim.pos = self.ada2PsychoPix(tuple(curPos))
                 gazeStim.draw()
                 
             # points
