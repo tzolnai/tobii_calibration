@@ -56,7 +56,7 @@ class TobiiHelper:
                 
         self.monitorName = None
 
-        self.gazeData = {}
+        self.gazeData = None
           
 # ----- Functions for initialzing the eyetracker and class attributes -----      
     
@@ -341,6 +341,8 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
+        if self.gazeData is None:
+            raise ValueError("No recorded gaze data was found.")
             
         # access gaze data dictionary to get gaze position tuples
         lGazeXYZ = self.gazeData['left_gaze_point_on_display_area']
@@ -350,12 +352,12 @@ class TobiiHelper:
         ys = (lGazeXYZ[1], rGazeXYZ[1])
 
         # if all of the axes have data from at least one eye
-        if all([x != -1.0 for x in xs]) and all([y != -1.0 for y in ys]):
+        if all([np.isnan(x) for x in xs]) or all([np.isnan(y) for y in ys]):
             # take x and y averages
-            avgGazePos = np.nanmean(xs), np.nanmean(ys)
+            avgGazePos = (np.nan, np.nan)
         else:
             # or if no data, hide points by showing off screen
-            avgGazePos = (np.nan, np.nan)
+            avgGazePos = (np.nanmean(xs), np.nanmean(ys))
         return avgGazePos
 
                 
