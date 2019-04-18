@@ -452,6 +452,8 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
+        if self.gazeData is None:
+            raise ValueError("No recorded gaze data was found.")
 
         # get eye positions
         eyeCoors = self.getAvgEyePos()
@@ -459,6 +461,7 @@ class TobiiHelper:
         # if eyes were found
         if sum(eyeCoors) > 0:
             # calculate the euclidean distance of eyes from tracker origin
+            # also convert the result from mm to cm
             avgEyeDist = distance.euclidean((eyeCoors[0]/10,
                                              eyeCoors[1]/10,
                                              eyeCoors[2]/10), (0, 0, 0))
