@@ -562,7 +562,6 @@ class TobiiHelper:
                 raise KeyboardInterrupt("You aborted the script manually.")
             elif event.getKeys(keyList=['c']):
                 print("Proceeding to calibration.")
-                self.stopGazeData()
                 psychoWin.flip()
                 return 
         
@@ -1026,6 +1025,7 @@ class TobiiHelper:
         self.drawEyePositions(trackWin)
         # close track box 
         pcore.wait(2)
+        self.stopGazeData()
         trackWin.close()
         return 
 
