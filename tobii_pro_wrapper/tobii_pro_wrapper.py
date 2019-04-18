@@ -144,6 +144,9 @@ class TobiiHelper:
         self.tbCoordinates['height'] = trackBoxHeight
         self.tbCoordinates['width'] = trackBoxWidth
 
+        self.tbCoordinates['frontDistance'] = trackBox.front_lower_left[2]
+        self.tbCoordinates['backDistance'] = trackBox.back_lower_left[2]
+
 
     # define and calibrate experimental monitor, set monitor dimensions
     def setMonitor(self, nameString = None, dimensions = None):
@@ -444,7 +447,7 @@ class TobiiHelper:
         return avgEyePos
             
             
-    # get average distance of the eyes from the tracker origin, given in cm
+    # get average distance of the eyes from the tracker origin, given in mm
     def getAvgEyeDist(self):
         
         # check to see if the eyetracker is connected and turned on
@@ -461,13 +464,10 @@ class TobiiHelper:
         # if eyes were found
         if sum(eyeCoors) > 0:
             # calculate the euclidean distance of eyes from tracker origin
-            # also convert the result from mm to cm
-            avgEyeDist = distance.euclidean((eyeCoors[0]/10,
-                                             eyeCoors[1]/10,
-                                             eyeCoors[2]/10), (0, 0, 0))
+            avgEyeDist = distance.euclidean((eyeCoors[0], eyeCoors[1], eyeCoors[2]), (0, 0, 0))
         else: # if eyes were not found, return zero values
             avgEyeDist = 0
-        # return distance value in cm
+        # return distance value in mm
         return avgEyeDist
 
 # ----- Functions for running calibration -----
@@ -517,13 +517,15 @@ class TobiiHelper:
             # find and update eye positions
             leftStim.pos, rightStim.pos = self.trackboxEyePos()
             eyeDist = self.getAvgEyeDist()
+            frontDistance = self.tbCoordinates.get('frontDistance')
+            backDistance = self.tbCoordinates.get('backDistance')
             
-                # change color depending on distance
-            if eyeDist >= 55 and eyeDist <= 75:
+            # change color depending on distance
+            if eyeDist >= frontDistance + 50 and eyeDist <= backDistance - 50:
                 # correct distance
                 leftStim.fillColor, leftStim.lineColor = correctColor, correctColor
                 rightStim.fillColor, rightStim.lineColor = correctColor, correctColor
-            elif eyeDist <= 54 and eyeDist >= 45 or eyeDist >= 76 and eyeDist <= 85:
+            elif (eyeDist < frontDistance + 50 and eyeDist > frontDistance) or (eyeDist > backDistance - 50 and eyeDist < backDistance):
                 leftStim.fillColor, leftStim.lineColor = mediumColor, mediumColor
                 rightStim.fillColor, rightStim.lineColor = mediumColor, mediumColor
             else:
@@ -543,8 +545,8 @@ class TobiiHelper:
     
             # give distance feedback
             findmsg.text = "You're currently " + \
-                            str(int(eyeDist)) + \
-                            ("cm away from the screen. \n"
+                            str(int(eyeDist/10)) + \
+                            (" cm away from the screen. \n"
                              "Press 'c' to calibrate or 'q' to abort.")
                    
             # update stimuli in window
