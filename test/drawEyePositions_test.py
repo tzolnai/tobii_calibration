@@ -26,6 +26,10 @@ def GetKeys(keyList):
 
 event.getKeys = GetKeys
 
+green_color = [-1.0, 1.0, -1.0]
+red_color = [1.0, -1.0, -1.0]
+yellow_color = [1.0, 1.0, 0.0]
+
 class drawEyePositionsTest(unittest.TestCase):
 
     def initTrackBox(self, tobii_helper):
@@ -149,9 +153,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (green)
-        self.assertEqual([-1.0, 1.0, -1.0] , left_eye.fillColor.tolist())
-        self.assertEqual([-1.0, 1.0, -1.0] , left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(green_color, left_eye.fillColor.tolist())
+        self.assertEqual(green_color, left_eye.lineColor.tolist())
 
         #third object is the right eye
         right_eye = drawing_list[2]
@@ -161,9 +165,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (green)
-        self.assertEqual([-1.0, 1.0, -1.0] , right_eye.fillColor.tolist())
-        self.assertEqual([-1.0, 1.0, -1.0] , right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(green_color, right_eye.fillColor.tolist())
+        self.assertEqual(green_color, right_eye.lineColor.tolist())
 
         #fourth object is the text about the distance
         feedback_text = drawing_list[3]
@@ -174,7 +178,7 @@ class drawEyePositionsTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, feedback_text.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.65, feedback_text.pos[1], delta = 0.001)
         # color
-        self.assertEqual([1.0, 1.0, 1.0] , feedback_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("You're currently 67 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
@@ -199,9 +203,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, -1.0, -1.0] , left_eye.fillColor.tolist())
-        self.assertEqual([1.0, -1.0, -1.0] , left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(red_color, left_eye.fillColor.tolist())
+        self.assertEqual(red_color, left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -209,9 +213,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, -1.0, -1.0] , right_eye.fillColor.tolist())
-        self.assertEqual([1.0, -1.0, -1.0] , right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(red_color, right_eye.fillColor.tolist())
+        self.assertEqual(red_color, right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
@@ -239,9 +243,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, 1.0, 0.0] , left_eye.fillColor.tolist())
-        self.assertEqual([1.0, 1.0, 0.0] , left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(yellow_color, left_eye.fillColor.tolist())
+        self.assertEqual(yellow_color, left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -249,9 +253,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, 1.0, 0.0] , right_eye.fillColor.tolist())
-        self.assertEqual([1.0, 1.0, 0.0] , right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(yellow_color, right_eye.fillColor.tolist())
+        self.assertEqual(yellow_color, right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
@@ -279,9 +283,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, -1.0, -1.0] , left_eye.fillColor.tolist())
-        self.assertEqual([1.0, -1.0, -1.0] , left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(red_color, left_eye.fillColor.tolist())
+        self.assertEqual(red_color, left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -289,9 +293,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, -1.0, -1.0] , right_eye.fillColor.tolist())
-        self.assertEqual([1.0, -1.0, -1.0] , right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(red_color, right_eye.fillColor.tolist())
+        self.assertEqual(red_color, right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
@@ -319,9 +323,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, 1.0, 0.0] , left_eye.fillColor.tolist())
-        self.assertEqual([1.0, 1.0, 0.0] , left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(yellow_color, left_eye.fillColor.tolist())
+        self.assertEqual(yellow_color, left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -329,9 +333,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, 1.0, 0.0] , right_eye.fillColor.tolist())
-        self.assertEqual([1.0, 1.0, 0.0] , right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(yellow_color, right_eye.fillColor.tolist())
+        self.assertEqual(yellow_color, right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
@@ -404,9 +408,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (green)
-        self.assertEqual([-1.0, 1.0, -1.0], left_eye.fillColor.tolist())
-        self.assertEqual([-1.0, 1.0, -1.0], left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(green_color, left_eye.fillColor.tolist())
+        self.assertEqual(green_color, left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -414,9 +418,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (green)
-        self.assertEqual([-1.0, 1.0, -1.0], right_eye.fillColor.tolist())
-        self.assertEqual([-1.0, 1.0, -1.0], right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(green_color, right_eye.fillColor.tolist())
+        self.assertEqual(green_color, right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
@@ -441,9 +445,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, -1.0, -1.0], left_eye.fillColor.tolist())
-        self.assertEqual([1.0, -1.0, -1.0], left_eye.lineColor.tolist())
+        # color
+        self.assertEqual(red_color, left_eye.fillColor.tolist())
+        self.assertEqual(red_color, left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -451,9 +455,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual([1.0, -1.0, -1.0], right_eye.fillColor.tolist())
-        self.assertEqual([1.0, -1.0, -1.0], right_eye.lineColor.tolist())
+        # color
+        self.assertEqual(red_color, right_eye.fillColor.tolist())
+        self.assertEqual(red_color, right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
