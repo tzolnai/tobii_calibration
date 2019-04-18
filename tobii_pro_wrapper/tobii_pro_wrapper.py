@@ -371,6 +371,8 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         if self.tracking is False:
             raise ValueError("The eyetracker is not turned on.")
+        if self.gazeData is None:
+            raise ValueError("No recorded gaze data was found.")
 
         # access gaze data dictionary to get eye position tuples,
         # in trackbox coordinate system
