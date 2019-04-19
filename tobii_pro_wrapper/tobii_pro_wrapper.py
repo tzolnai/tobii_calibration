@@ -566,7 +566,7 @@ class TobiiHelper:
 
     # function for running validation routine post calibration to check 
     # calibration precision and accuracy
-    def runValidation(self, pointDict = dict):
+    def runValidation(self, pointDict = None):
         
         # check the values of the point dictionary
         if pointDict is None: 
@@ -624,22 +624,31 @@ class TobiiHelper:
                                   fillColor = [1.0, -1.0, -1.0])  # red
          
         # create array for smoothing gaze position
-        gazePositions = np.array([0.0, 0.0])
+        gazePositions = None
         maxLength = 6
     
         # while tracking 
         while True:   
-    
-            # smooth gaze data with moving window
-            gazePositions = np.vstack((gazePositions, 
-                                       np.array(self.getAvgGazePos())))
-            curPos = np.nanmean(gazePositions, axis = 0)
+
+            avgGazePos = self.getAvgGazePos()
+            if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
+                curPos = (np.nan, np.nan)
+            else:
+                # smooth gaze data with moving window
+                if gazePositions is None:
+                    gazePositions = np.array([avgGazePos])
+                else:
+                    gazePositions = np.vstack((gazePositions,
+                                               np.array(avgGazePos)))
+                curPos = np.nanmean(gazePositions, axis = 0)
+
             # remove previous position values
-            if len(gazePositions) == maxLength:
+            if gazePositions is not None and len(gazePositions) == maxLength:
                 gazePositions = np.delete(gazePositions, 0, axis = 0)
-    
+
             # update stimuli in window and draw if we have a valid pos
-            if curPos[0] <= 1.0 and curPos[0] >= 0.0 and curPos[1] <= 1.0 and curPos[1] >= 0.0:
+            if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
+               not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
                 gazeStim.pos = self.ada2PsychoPix(tuple(curPos))
                 gazeStim.draw()
                 

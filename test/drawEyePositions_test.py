@@ -16,6 +16,8 @@ from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
 import math
 
+from psychopy import core as pcore
+
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
@@ -77,7 +79,7 @@ class drawEyePositionsTest(unittest.TestCase):
                                  winType = 'pyglet',
                                  color = [0.4, 0.4, 0.4])
 
-    def testNotInitedThings(self):
+    def tesxtNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
         # no window
         with self.assertRaises(ValueError):
@@ -123,8 +125,8 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 652.0)
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
-
-        tobii_helper.drawEyePositions(trackWin)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testEyePosInTrackbox(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -137,7 +139,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         #first object is the background of the virtual trackbox
         background_rect = drawing_list[0]
-        self.assertTrue(isinstance(background_rect, visual.Rect))
+        self.assertTrue(isinstance(background_rect, pvm.Rect))
         # size
         self.assertAlmostEqual(0.629, background_rect.width, delta = 0.001)
         self.assertAlmostEqual(0.905, background_rect.height, delta = 0.001)
@@ -147,7 +149,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         #second object is the left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # size
         self.assertAlmostEqual(0.07, left_eye.radius, delta = 0.001)
         # pos
@@ -159,7 +161,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         #third object is the right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # size
         self.assertAlmostEqual(0.07, right_eye.radius, delta = 0.001)
         # pos
@@ -171,7 +173,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         #fourth object is the text about the distance
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         # size
         self.assertAlmostEqual(0.07, feedback_text.height, delta = 0.001)
         # pos
@@ -181,6 +183,8 @@ class drawEyePositionsTest(unittest.TestCase):
         self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testEyeIsTooFar(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -199,7 +203,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -209,7 +213,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -219,8 +223,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 82 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testEyeIsAlmostTooFar(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -239,7 +245,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -249,7 +255,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -259,8 +265,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 78 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testEyeIsTooNear(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -279,7 +287,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -289,7 +297,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -299,8 +307,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testEyeIsAlmostTooNear(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -319,7 +329,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -329,7 +339,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -339,8 +349,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 51 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testNoValidEyeData(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -361,7 +373,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.99, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(0.99, left_eye.pos[1], delta = 0.001)
@@ -371,7 +383,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.99, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(0.99, right_eye.pos[1], delta = 0.001)
@@ -381,8 +393,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 0 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testDifferentFrontDistance(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -404,7 +418,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -414,7 +428,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -424,8 +438,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testDifferentBackDistance(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -441,7 +457,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -451,7 +467,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -461,8 +477,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
     def testOneEyeIsFar(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -481,7 +499,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # left eye
         left_eye = drawing_list[1]
-        self.assertTrue(isinstance(left_eye, visual.Circle))
+        self.assertTrue(isinstance(left_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.171, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.054, left_eye.pos[1], delta = 0.001)
@@ -491,7 +509,7 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # right eye
         right_eye = drawing_list[2]
-        self.assertTrue(isinstance(right_eye, visual.Circle))
+        self.assertTrue(isinstance(right_eye, pvm.Circle))
         # pos
         self.assertAlmostEqual(0.192, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.099, right_eye.pos[1], delta = 0.001)
@@ -501,8 +519,10 @@ class drawEyePositionsTest(unittest.TestCase):
 
         # text
         feedback_text = drawing_list[3]
-        self.assertTrue(isinstance(feedback_text, visual.TextStim))
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 80 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.trackWin.close()
+        pcore.wait(0.5)
 
 if __name__ == "__main__":
     unittest.main() # run all tests
