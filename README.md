@@ -103,7 +103,7 @@ eyes relative to the eyetracker origin as a tuple. Returns position in mm units.
 
 ### getAvgEyeDist()
 Uses broadcasting **self.gazeData** and **self.getAvgEyePos()** to return average distance of the left and right eyes
-from the eyetracker origin. Retures position in cm units.
+from the eyetracker. Returns position in mm units.
 
 ### runValidation(pointDict = dict)
 Shows real time gaze position and draws several reference points (**pointDict** is a dictionary with numbered keys

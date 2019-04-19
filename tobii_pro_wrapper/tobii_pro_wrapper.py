@@ -447,7 +447,7 @@ class TobiiHelper:
         return avgEyePos
             
             
-    # get average distance of the eyes from the tracker origin, given in mm
+    # get average distance of the eyes from the tracker's plane, given in mm
     def getAvgEyeDist(self):
         
         # check to see if the eyetracker is connected and turned on
@@ -461,14 +461,7 @@ class TobiiHelper:
         # get eye positions
         eyeCoors = self.getAvgEyePos()
 
-        # if eyes were found
-        if sum(eyeCoors) > 0:
-            # calculate the euclidean distance of eyes from tracker origin
-            avgEyeDist = distance.euclidean((eyeCoors[0], eyeCoors[1], eyeCoors[2]), (0, 0, 0))
-        else: # if eyes were not found, return zero values
-            avgEyeDist = 0
-        # return distance value in mm
-        return avgEyeDist
+        return eyeCoors[2]
 
 # ----- Functions for running calibration -----
     
