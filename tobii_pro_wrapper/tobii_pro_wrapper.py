@@ -689,8 +689,8 @@ class TobiiHelper:
     def __calculateCalibration(self, calibResult):
         
         # check the values of the point dictionary
-        if calibResult is None:
-            raise ValueError('No argument passed for calibResult')
+        if not isinstance(calibResult, tobii.CalibrationResult):
+            raise ValueError('Argument should be a valid tobii_research.CalibResult object')
    
         #create an empty list to hold values
         calibDrawCoor = []
