@@ -32,7 +32,13 @@ green_color = [-1.0, 1.0, -1.0]
 red_color = [1.0, -1.0, -1.0]
 yellow_color = [1.0, 1.0, 0.0]
 
-class drawEyePositionsTest(unittest.TestCase):
+def DummyFunction(tobiiHelper):
+    pass
+
+wrapper.TobiiHelper.startGazeData = DummyFunction
+wrapper.TobiiHelper.stopGazeData = DummyFunction
+
+class runTrackBoxTest(unittest.TestCase):
 
     def initTrackBox(self, tobii_helper):
         tobii_helper.tbCoordinates = {}
@@ -68,16 +74,6 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 652.0)
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
-
-        self.trackWin = visual.Window(size = [tobii_helper.win.getSizePix()[0],
-                                              tobii_helper.win.getSizePix()[1]],
-                                 pos = [0, 0],
-                                 units = 'pix',
-                                 fullscr = True,
-                                 allowGUI = True,
-                                 monitor = tobii_helper.win,
-                                 winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
 
     def tesxtNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -125,14 +121,14 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 652.0)
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
-        self.trackWin.close()
+        trackWin.close()
         pcore.wait(0.5)
 
     def testEyePosInTrackbox(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -183,7 +179,6 @@ class drawEyePositionsTest(unittest.TestCase):
         self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testEyeIsTooFar(self):
@@ -196,7 +191,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 820.7)
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -225,7 +220,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 82 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testEyeIsAlmostTooFar(self):
@@ -238,7 +232,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 780.5)
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -267,7 +261,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 78 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testEyeIsTooNear(self):
@@ -280,7 +273,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 440.7)
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -309,7 +302,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testEyeIsAlmostTooNear(self):
@@ -322,7 +314,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 515.5)
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -351,7 +343,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 51 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testNoValidEyeData(self):
@@ -366,7 +357,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_validity'] = False
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -377,9 +368,9 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.99, left_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(0.99, left_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual(self.trackWin.color.tolist(), left_eye.fillColor.tolist())
-        self.assertEqual(self.trackWin.color.tolist(), left_eye.lineColor.tolist())
+        # color
+        self.assertEqual([0.4, 0.4, 0.4], left_eye.fillColor.tolist())
+        self.assertEqual([0.4, 0.4, 0.4], left_eye.lineColor.tolist())
 
         # right eye
         right_eye = drawing_list[2]
@@ -387,15 +378,14 @@ class drawEyePositionsTest(unittest.TestCase):
         # pos
         self.assertAlmostEqual(0.99, right_eye.pos[0], delta = 0.001)
         self.assertAlmostEqual(0.99, right_eye.pos[1], delta = 0.001)
-        # color (red)
-        self.assertEqual(self.trackWin.color.tolist(), right_eye.fillColor.tolist())
-        self.assertEqual(self.trackWin.color.tolist(), right_eye.lineColor.tolist())
+        # color
+        self.assertEqual([0.4, 0.4, 0.4], right_eye.fillColor.tolist())
+        self.assertEqual([0.4, 0.4, 0.4], right_eye.lineColor.tolist())
 
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 0 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testDifferentFrontDistance(self):
@@ -411,7 +401,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.tbCoordinates['backDistance'] = 800.0
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -440,7 +430,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testDifferentBackDistance(self):
@@ -450,7 +439,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.tbCoordinates['backDistance'] = 500.0
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -479,7 +468,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
     def testOneEyeIsFar(self):
@@ -492,7 +480,7 @@ class drawEyePositionsTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 812.5)
 
         visual_mock = pvm.PsychoPyVisualMock()
-        tobii_helper.drawEyePositions(self.trackWin)
+        tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
         self.assertEqual(4, len(drawing_list))
@@ -521,7 +509,6 @@ class drawEyePositionsTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 80 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        self.trackWin.close()
         pcore.wait(0.5)
 
 if __name__ == "__main__":
