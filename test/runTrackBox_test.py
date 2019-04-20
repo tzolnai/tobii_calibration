@@ -16,8 +16,6 @@ from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
 import math
 
-from psychopy import core as pcore
-
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
@@ -35,8 +33,8 @@ yellow_color = [1.0, 1.0, 0.0]
 def DummyFunction(tobiiHelper):
     pass
 
-wrapper.TobiiHelper.startGazeData = DummyFunction
-wrapper.TobiiHelper.stopGazeData = DummyFunction
+wrapper.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
+wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 class runTrackBoxTest(unittest.TestCase):
 
@@ -75,11 +73,11 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
 
-    def tesxtNotInitedThings(self):
+    def testNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
         # no window
         with self.assertRaises(ValueError):
-            tobii_helper.drawEyePositions(None)
+            tobii_helper._TobiiHelper__drawEyePositions(None)
 
         # ok init the window
         trackWin = visual.Window(size = [1366, 768],
@@ -93,26 +91,26 @@ class runTrackBoxTest(unittest.TestCase):
 
         # now we don't have tracker box coordinates
         with self.assertRaises(ValueError):
-            tobii_helper.drawEyePositions(trackWin)
+            tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
 
         # no eyetracker
         with self.assertRaises(ValueError):
-            tobii_helper.drawEyePositions(trackWin)
+            tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         tobii_helper.eyetracker = "dummy"
 
         # no tracking
         with self.assertRaises(ValueError):
-            tobii_helper.drawEyePositions(trackWin)
+            tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         tobii_helper.tracking = True
 
         # no gaze data
         with self.assertRaises(ValueError):
-            tobii_helper.drawEyePositions(trackWin)
+            tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         tobii_helper.gazeData = {}
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.81)
@@ -122,7 +120,6 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
         trackWin.close()
-        pcore.wait(0.5)
 
     def testEyePosInTrackbox(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -179,7 +176,6 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testEyeIsTooFar(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -220,7 +216,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 82 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
-        pcore.wait(0.5)
 
     def testEyeIsAlmostTooFar(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -261,7 +256,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 78 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testEyeIsTooNear(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -302,7 +296,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
-        pcore.wait(0.5)
 
     def testEyeIsAlmostTooNear(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -343,7 +336,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 51 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testNoValidEyeData(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -386,7 +378,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 0 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testDifferentFrontDistance(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -430,7 +421,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
-        pcore.wait(0.5)
 
     def testDifferentBackDistance(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -468,7 +458,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testOneEyeIsFar(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -509,7 +498,6 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 80 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
-        pcore.wait(0.5)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

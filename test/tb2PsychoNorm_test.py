@@ -35,41 +35,41 @@ class tb2PsychoNormTest(unittest.TestCase):
     def testNoneParam(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(ValueError):
-            tobii_helper.tb2PsychoNorm(None)
+            tobii_helper._TobiiHelper__tb2PsychoNorm(None)
 
     def testParamWithWrongType(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(TypeError):
-            tobii_helper.tb2PsychoNorm([])
+            tobii_helper._TobiiHelper__tb2PsychoNorm([])
 
     def testTupleParamWithWrongLen(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(ValueError):
-            tobii_helper.tb2PsychoNorm((12, 11, 10))
+            tobii_helper._TobiiHelper__tb2PsychoNorm((12, 11, 10))
 
     def testNoTrackBoxInited(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(ValueError):
-            tobii_helper.tb2PsychoNorm((12, 11))
+            tobii_helper._TobiiHelper__tb2PsychoNorm((12, 11))
 
     def testNoDisplayAreAInited(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         with self.assertRaises(ValueError):
-            tobii_helper.tb2PsychoNorm((12, 11))
+            tobii_helper._TobiiHelper__tb2PsychoNorm((12, 11))
 
     def testNoneNormalizedParam(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         with self.assertRaises(ValueError):
-            adaResult = tobii_helper.tb2PsychoNorm((12, 11))
+            adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((12, 11))
 
     def testNormalizedCall(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2PsychoNorm((0.34, 0.45))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((0.34, 0.45))
         self.assertAlmostEqual(-0.100, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.045, adaResult[1], delta = 0.001)
 
@@ -77,7 +77,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2PsychoNorm((0.34, 0.45))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((0.34, 0.45))
         self.assertAlmostEqual(-0.159, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.049, adaResult[1], delta = 0.001)
 
@@ -85,7 +85,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2PsychoNorm((1.0, 1.0))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((1.0, 1.0))
         self.assertAlmostEqual(0.314, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(-0.452, adaResult[1], delta = 0.001)
 
@@ -93,7 +93,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2PsychoNorm((0.0, 0.0))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((0.0, 0.0))
         self.assertAlmostEqual(-0.314, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.452, adaResult[1], delta = 0.001)
 
@@ -101,7 +101,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2PsychoNorm((1.0, 1.0))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((1.0, 1.0))
         self.assertAlmostEqual(0.5, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(-0.5, adaResult[1], delta = 0.001)
 
@@ -109,7 +109,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2PsychoNorm((0.0, 0.0))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((0.0, 0.0))
         self.assertAlmostEqual(-0.5, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.5, adaResult[1], delta = 0.001)
 
@@ -117,7 +117,7 @@ class tb2PsychoNormTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2PsychoNorm((0.5, 0.5))
+        adaResult = tobii_helper._TobiiHelper__tb2PsychoNorm((0.5, 0.5))
         self.assertAlmostEqual(0.0, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
 

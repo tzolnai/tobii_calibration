@@ -38,23 +38,7 @@ python setup.py install
 ## Package Details
 
 ### TobiiHelper() *class*
-A class for a wrapper for the Tobii Pro SDK for Python. Contains the following attributes:
-
-```
-        self.eyetracker = None
-        
-        self.adaCoordinates = None
-        
-        self.tbCoordinates = None
-        
-        self.calibration = None
-        
-        self.tracking = False
-        
-        self.win = None
-                
-        self.gazeData = {}
-```
+A class for doing calibration using the Tobii Pro SDK for Python. Contains the following functions:
 
 ### findTracker(serialString = None)
 Find and connect to the eyetracker identified by its serial number.
@@ -67,43 +51,13 @@ monitor with **nameString** and set its dimensions with **dimensions**. If no **
 **dimensions** are given, it will use the default monitor and that monitors dimensions. Sets the
 self.win attributes
 
-### startGazeData()
-Connect to the eyetracker and uses the **self.gazeData** attribute to
-broadcast all gaze data as a dictionary.
+### getMonitorName()
+Returns the name of the selected monitor. This name comes from an earlier setMonitor() call
+or get from the default monitor.
 
-### getGazeData()
-Takes the gaze data dictionary specified by Tobii (self.gazeData), pulls out important values, and converts
-those values to more readily understood measurements. 
-
-Returns a single row (current sample) dictionary with gaze positions, eye positions,
-pupil size, and eye validities. 
-
-### stopGazeData()
-Disconnect from the eyetracker and stops broadcasting gaze data.
-
-### tb2Ada(xyCoor = tuple)
-Takes trackbox location coordinates and converts to active display area coordinates. Returns an (x,y)
-coordinate tuple. 
-
-### tb2PsychoNorm(xyCoor = tuple)
-Takes trackbox location coordinates and converts psychopy window normal units. Returns an (x,y)
-coordinate tuple. 
-
-### ada2MonPix(xyCoor = tuple)
-Takes active display area coordinates and converts to monitor pixel coordinates. Returns an (x,y)
-coordinate tuple. 
-
-### getAvgGazePos()
-Uses broadcasting **self.gazeData** to return the average (x,y) gaze position of the left and right eyes as a
-tuple. Gaze position is returned in active display area units.
-
-### getAvgEyePos()
-Uses broadcasting **self.gazeData** to return the average 3D (x, y, z) physical position of the left and right 
-eyes relative to the eyetracker origin as a tuple. Returns position in mm units. 
-
-### getAvgEyeDist()
-Uses broadcasting **self.gazeData** and **self.getAvgEyePos()** to return average distance of the left and right eyes
-from the eyetracker. Returns position in mm units.
+### getMonitorDimensions()
+Returns the screen width and height of the selected monitor. This dimensions can be set with setMonitor
+method. If it was not specified, then the code uses the default screen size.
 
 ### runValidation(pointDict = dict)
 Shows real time gaze position and draws several reference points (**pointDict** is a dictionary with numbered keys

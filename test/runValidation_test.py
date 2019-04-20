@@ -16,7 +16,6 @@ from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
 import math
 import collections
-from psychopy import core as pcore
 
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
@@ -31,8 +30,8 @@ event.getKeys = GetKeys
 def DummyFunction(tobiiHelper):
     pass
 
-wrapper.TobiiHelper.startGazeData = DummyFunction
-wrapper.TobiiHelper.stopGazeData = DummyFunction
+wrapper.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
+wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 class runValidationTest(unittest.TestCase):
 
@@ -109,7 +108,6 @@ class runValidationTest(unittest.TestCase):
         self.assertEqual([0.4, 0.4, 0.4], feedback_text.color.tolist())
         # text
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testNineCalibPoints(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -185,7 +183,6 @@ class runValidationTest(unittest.TestCase):
         self.assertEqual([0.4, 0.4, 0.4], feedback_text.color.tolist())
         # text
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testTwoCalibPoints(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -238,7 +235,6 @@ class runValidationTest(unittest.TestCase):
         self.assertEqual([0.4, 0.4, 0.4], feedback_text.color.tolist())
         # text
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
-        pcore.wait(0.5)
 
     def testEyeOutOfScope(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -261,7 +257,6 @@ class runValidationTest(unittest.TestCase):
         # last object is the text
         feedback_text = drawing_list[5]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        pcore.wait(0.5)
 
     def testInvalidEyePos(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -284,7 +279,6 @@ class runValidationTest(unittest.TestCase):
         # last object is the text
         feedback_text = drawing_list[5]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        pcore.wait(0.5)
 
 
 if __name__ == "__main__":

@@ -215,12 +215,12 @@ class TobiiHelper:
 # ----- Functions for starting and stopping eyetracker data collection -----
 
     # function for broadcasting real time gaze data
-    def gazeDataCallback(self,startGazeData):
+    def __gazeDataCallback(self,startGazeData):
         self.gazeData = startGazeData
     
     
     # function for subscribing to real time gaze data from eyetracker
-    def startGazeData(self):
+    def __startGazeData(self):
        
         # check to see if eyetracker is there
         if self.eyetracker is None:
@@ -229,13 +229,13 @@ class TobiiHelper:
         # if it is, proceed
         print ("Subscribing to eyetracker.")
         self.eyetracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, 
-                                     self.gazeDataCallback, 
+                                     self.__gazeDataCallback, 
                                      as_dictionary = True)
         self.tracking = True
     
     
     # function for unsubscring from gaze data
-    def stopGazeData(self):
+    def __stopGazeData(self):
         
         # check to see if eyetracker is there
         if self.eyetracker is None:
@@ -243,13 +243,13 @@ class TobiiHelper:
         # if it is, proceed
         print ("Unsubscribing from eyetracker")
         self.eyetracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, 
-                                         self.gazeDataCallback)
+                                         self.__gazeDataCallback)
         self.tracking = False
     
         
     # function for converting normalized positions from trackbox coordinate system
     # to normalized active display area coordinates
-    def tb2Ada(self, xyCoor = tuple):
+    def __tb2Ada(self, xyCoor = tuple):
         
         # check argument values
         if xyCoor is None:
@@ -280,7 +280,7 @@ class TobiiHelper:
     
     # function for converting normalized positions from trackbox coordinate system
     # to normalized coordinates based on the psychopy window
-    def tb2PsychoNorm(self, xyCoor = tuple):
+    def __tb2PsychoNorm(self, xyCoor = tuple):
         
         # check argument values
         if xyCoor is None:
@@ -293,9 +293,9 @@ class TobiiHelper:
             raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
 
         # convert track box coordinates to ada coordinates
-        adaCoors = self.tb2Ada(xyCoor)
+        adaCoors = self.__tb2Ada(xyCoor)
         # correct for psychopy window coordinates
-        centerScale = self.tb2Ada((1, 1))
+        centerScale = self.__tb2Ada((1, 1))
         centerShift = ((centerScale[0] / 2), (centerScale[1] / 2))
         psychoNorm = (adaCoors[0] - centerShift[0], 
                       -(adaCoors[1] - centerShift[1]))
@@ -306,7 +306,7 @@ class TobiiHelper:
     # function for converting from tobiis ada coordinate system in normalized 
     # coordinates where (0,0) is the upper left corner, to psychopy window 
     # coordinates in pix, where (0,0) is at the center of psychopy window.
-    def ada2PsychoPix(self, xyCoor = tuple):
+    def __ada2PsychoPix(self, xyCoor = tuple):
         
         if self.win is None:
             raise ValueError("No monitor was set.")
@@ -337,7 +337,7 @@ class TobiiHelper:
     # function for collecting gaze coordinates in tobiis ada coordinate 
     # system. currently written to return the average (x, y) position of both 
     # eyes, but can be easily rewritten to return data from one or both eyes   
-    def getAvgGazePos(self):
+    def __getAvgGazePos(self):
         
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
@@ -367,7 +367,7 @@ class TobiiHelper:
     # function for finding the avg 3d position of subject's eyes, so that they
     # can be drawn in the virtual track box before calibration. The x and y 
     # coordinates are returned in normalized "tobii track box" units.
-    def trackboxEyePos(self):
+    def __trackboxEyePos(self):
         
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
@@ -391,9 +391,9 @@ class TobiiHelper:
         if lVal == 1:
             # update the left eye positions if the values are reasonable
             # scale left eye position so that it fits in track box
-            leftTbPos = (-self.tb2PsychoNorm((lTbXYZ[0],
+            leftTbPos = (-self.__tb2PsychoNorm((lTbXYZ[0],
                                               lTbXYZ[1]))[0] * 1.7,
-                          self.tb2PsychoNorm((lTbXYZ[0],
+                          self.__tb2PsychoNorm((lTbXYZ[0],
                                               lTbXYZ[1]))[1])
         else:
             # hide by drawing in the corner
@@ -403,8 +403,8 @@ class TobiiHelper:
         if rVal == 1:
             # update the right eye positions if the values are reasonable
             # scale right eye position so that it fits in track box
-            rightTbPos = (-self.tb2PsychoNorm((rTbXYZ[0], rTbXYZ[1]))[0] * 1.7,
-                           self.tb2PsychoNorm((rTbXYZ[0],
+            rightTbPos = (-self.__tb2PsychoNorm((rTbXYZ[0], rTbXYZ[1]))[0] * 1.7,
+                           self.__tb2PsychoNorm((rTbXYZ[0],
                                                rTbXYZ[1]))[1])
         else:
             # hide by drawing in the corner
@@ -416,7 +416,7 @@ class TobiiHelper:
     # x, y, and z dimensions are given in mm from the tracker origin, gives the
     # average 3d position of both eyes, but can be easily rewritten to yield
     # the position of each eye separately
-    def getAvgEyePos(self):
+    def __getAvgEyePos(self):
         
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
@@ -448,7 +448,7 @@ class TobiiHelper:
             
             
     # get average distance of the eyes from the tracker's plane, given in mm
-    def getAvgEyeDist(self):
+    def __getAvgEyeDist(self):
         
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
@@ -459,14 +459,14 @@ class TobiiHelper:
             raise ValueError("No recorded gaze data was found.")
 
         # get eye positions
-        eyeCoors = self.getAvgEyePos()
+        eyeCoors = self.__getAvgEyePos()
 
         return eyeCoors[2]
 
 # ----- Functions for running calibration -----
     
     # function for drawing representation of the eyes in virtual trackbox
-    def drawEyePositions(self, psychoWin):
+    def __drawEyePositions(self, psychoWin):
         
         # check that psychopy window exists
         if psychoWin is None:
@@ -479,7 +479,7 @@ class TobiiHelper:
         wrongColor = [1.0, -1.0, -1.0]
         
         # rectangle for viewing eyes
-        rectScale = self.tb2Ada((1, 1))
+        rectScale = self.__tb2Ada((1, 1))
         eyeArea = visual.Rect(psychoWin,
                               fillColor = [0.0, 0.0, 0.0],
                               lineColor = [0.0, 0.0, 0.0],
@@ -508,8 +508,8 @@ class TobiiHelper:
         # while tracking 
         while True:         
             # find and update eye positions
-            leftStim.pos, rightStim.pos = self.trackboxEyePos()
-            eyeDist = self.getAvgEyeDist()
+            leftStim.pos, rightStim.pos = self.__trackboxEyePos()
+            eyeDist = self.__getAvgEyeDist()
             frontDistance = self.tbCoordinates.get('frontDistance')
             backDistance = self.tbCoordinates.get('backDistance')
             
@@ -551,13 +551,13 @@ class TobiiHelper:
             
             # depending on response, either abort script or continue to calibration
             if event.getKeys(keyList=['q']):
-                self.stopGazeData()
+                self.__stopGazeData()
                 psychoWin.close()
                 pcore.quit()
                 raise KeyboardInterrupt("You aborted the script manually.")
             elif event.getKeys(keyList=['c']):
                 print("Proceeding to calibration.")
-                self.stopGazeData()
+                self.__stopGazeData()
                 psychoWin.flip()
                 return 
         
@@ -583,7 +583,7 @@ class TobiiHelper:
             raise ValueError('No experimental monitor has been specified.\n' +\
                              'Try running setMonitor().')
         # start eyetracker
-        self.startGazeData()
+        self.__startGazeData()
         # let it warm up briefly
         pcore.wait(0.5)
         
@@ -591,7 +591,7 @@ class TobiiHelper:
         curPoints = pointDict.values()
         
         # convert points from normalized ada units to psychopy pix
-        pointPositions = [self.ada2PsychoPix(x) for x in curPoints]
+        pointPositions = [self.__ada2PsychoPix(x) for x in curPoints]
         
         # window stimuli
         valWin = visual.Window(size = [self.win.getSizePix()[0], 
@@ -631,7 +631,7 @@ class TobiiHelper:
         # while tracking 
         while True:   
 
-            avgGazePos = self.getAvgGazePos()
+            avgGazePos = self.__getAvgGazePos()
             if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
                 curPos = (np.nan, np.nan)
             else:
@@ -650,7 +650,7 @@ class TobiiHelper:
             # update stimuli in window and draw if we have a valid pos
             if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
                not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
-                gazeStim.pos = self.ada2PsychoPix(tuple(curPos))
+                gazeStim.pos = self.__ada2PsychoPix(tuple(curPos))
                 gazeStim.draw()
                 
             # points
@@ -665,13 +665,13 @@ class TobiiHelper:
             # depending on response, either abort script or continue to calibration
             if event.getKeys(keyList=['q']):
                 valWin.close()
-                self.stopGazeData()
+                self.__stopGazeData()
                 pcore.quit()
                 raise KeyboardInterrupt("You aborted the script manually.")
             elif event.getKeys(keyList=['c']):
                 valWin.close()
                 print ("Exiting calibration validation.")
-                self.stopGazeData()
+                self.__stopGazeData()
                 return
                 
             # clear events not accessed this iteration
@@ -680,7 +680,7 @@ class TobiiHelper:
             
     # function for getting the average left and right gaze position coordinates
     # for each calibration point in psychopy pix units
-    def calculateCalibration(self, calibResult):
+    def __calculateCalibration(self, calibResult):
         
         # check the values of the point dictionary
         if calibResult is None:
@@ -713,8 +713,8 @@ class TobiiHelper:
             point = tuple((pointPosition[0], pointPosition[1]))
             # put current calibration point coordinates , l and r eye coordinates
             # into list, and convert to psychopy window coordinates in pix
-            newList = [self.ada2PsychoPix(point), self.ada2PsychoPix(lXY), 
-                       self.ada2PsychoPix(rXY), pointPosition]
+            newList = [self.__ada2PsychoPix(point), self.__ada2PsychoPix(lXY), 
+                       self.__ada2PsychoPix(rXY), pointPosition]
             calibDrawCoor.insert(i, newList)
             
         # for some weird reason my calibration always includes the point (0,0) at 
@@ -725,7 +725,7 @@ class TobiiHelper:
        
     
     # function for drawing the results of the calibration
-    def drawCalibrationResults(self, calibResult = None, calibWin = None, curDict = dict):
+    def __drawCalibrationResults(self, calibResult = None, calibWin = None, curDict = dict):
         
         # check argument values
         if self.calibration is None:
@@ -744,7 +744,7 @@ class TobiiHelper:
             raise ValueError('No psychopy window object given.')     
 
         # get gaze position results
-        points2Draw = self.calculateCalibration(calibResult)
+        points2Draw = self.__calculateCalibration(calibResult)
         
         # create stimuli objects for drawing
         # outlined empty circle object for showing calibration point
@@ -885,7 +885,7 @@ class TobiiHelper:
 
     # function for drawing calibration points, collecting and applying 
     # calibration data
-    def getCalibrationData(self, calibWin, pointList = list):
+    def __getCalibrationData(self, calibWin, pointList = list):
         
         # check argument values
         if self.calibration is None:
@@ -935,7 +935,7 @@ class TobiiHelper:
                 firstPoint[0] += pointStep[0]
                 firstPoint[1] += pointStep[1]
                 # draw & flip
-                calibPoint.pos = self.ada2PsychoPix(tuple(firstPoint))
+                calibPoint.pos = self.__ada2PsychoPix(tuple(firstPoint))
                 calibPoint.draw()
                 calibWin.flip()          
             # wait to let eyes settle    
@@ -1011,7 +1011,7 @@ class TobiiHelper:
                              'Try running setMonitor().')
         
         # start the eyetracker
-        self.startGazeData()
+        self.__startGazeData()
         # wait for it ot warm up
         pcore.wait(0.5)
         
@@ -1027,7 +1027,7 @@ class TobiiHelper:
                                  color = [0.4, 0.4, 0.4])
         
         # feedback about eye position
-        self.drawEyePositions(trackWin)
+        self.__drawEyePositions(trackWin)
         # close track box 
         pcore.wait(2)
         trackWin.close()
@@ -1132,7 +1132,7 @@ class TobiiHelper:
             pointOrder = list(redoCalDict.values())
             
             # perform calibration 
-            calibResult = self.getCalibrationData(calibWin, pointOrder)
+            calibResult = self.__getCalibrationData(calibWin, pointOrder)
     
             # Check status of calibration result
             # if calibration was successful, check calibration results
@@ -1149,7 +1149,7 @@ class TobiiHelper:
                 pcore.wait(2)
                 
                 # check calibration for poorly calibrated points
-                redoCalDict = self.drawCalibrationResults(calibResult, 
+                redoCalDict = self.__drawCalibrationResults(calibResult, 
                                                           calibWin, 
                                                           calibDict)
        

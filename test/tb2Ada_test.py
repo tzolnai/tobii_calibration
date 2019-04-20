@@ -35,41 +35,41 @@ class tb2AdaTest(unittest.TestCase):
     def testNoneParam(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(ValueError):
-            tobii_helper.tb2Ada(None)
+            tobii_helper._TobiiHelper__tb2Ada(None)
 
     def testParamWithWrongType(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(TypeError):
-            tobii_helper.tb2Ada([])
+            tobii_helper._TobiiHelper__tb2Ada([])
 
     def testTupleParamWithWrongLen(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(ValueError):
-            tobii_helper.tb2Ada((12, 11, 10))
+            tobii_helper._TobiiHelper__tb2Ada((12, 11, 10))
 
     def testNoTrackBoxInited(self):
         tobii_helper = wrapper.TobiiHelper()
         with self.assertRaises(ValueError):
-            tobii_helper.tb2Ada((12, 11))
+            tobii_helper._TobiiHelper__tb2Ada((12, 11))
 
     def testNoDisplayAreAInited(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         with self.assertRaises(ValueError):
-            tobii_helper.tb2Ada((12, 11))
+            tobii_helper._TobiiHelper__tb2Ada((12, 11))
 
     def testNoneNormalizedParam(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         with self.assertRaises(ValueError):
-            adaResult = tobii_helper.tb2Ada((12, 11))
+            adaResult = tobii_helper._TobiiHelper__tb2Ada((12, 11))
 
     def testNormalizedCall(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2Ada((0.34, 0.45))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((0.34, 0.45))
         self.assertAlmostEqual(0.213, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.407, adaResult[1], delta = 0.001)
 
@@ -77,7 +77,7 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2Ada((0.34, 0.45))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((0.34, 0.45))
         self.assertAlmostEqual(0.34, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.45, adaResult[1], delta = 0.001)
 
@@ -85,7 +85,7 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2Ada((1.0, 1.0))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((1.0, 1.0))
         self.assertAlmostEqual(0.629, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.905, adaResult[1], delta = 0.001)
 
@@ -93,7 +93,7 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
-        adaResult = tobii_helper.tb2Ada((0.0, 0.0))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((0.0, 0.0))
         self.assertAlmostEqual(0.0, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
 
@@ -101,7 +101,7 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2Ada((1.0, 1.0))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((1.0, 1.0))
         self.assertAlmostEqual(1.0, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(1.0, adaResult[1], delta = 0.001)
 
@@ -109,7 +109,7 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2Ada((0.0, 0.0))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((0.0, 0.0))
         self.assertAlmostEqual(0.0, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
 
@@ -117,7 +117,7 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
-        adaResult = tobii_helper.tb2Ada((0.5, 0.5))
+        adaResult = tobii_helper._TobiiHelper__tb2Ada((0.5, 0.5))
         self.assertAlmostEqual(0.5, adaResult[0], delta = 0.001)
         self.assertAlmostEqual(0.5, adaResult[1], delta = 0.001)
 
