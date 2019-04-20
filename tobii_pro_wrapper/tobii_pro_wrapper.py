@@ -61,11 +61,21 @@ class TobiiHelper:
 # ----- Functions for initialzing the eyetracker and class attributes -----      
     
     # find and connect to a tobii eyetracker
-    def findTracker(self, serialString = None):
-        
+    def setEyeTracker(self, serialString = None):
+
+        # if serial number is not given as a string
+        if serialString is not None and not isinstance(serialString, str):
+            raise TypeError("Serial number must be formatted as a string.")
+
         # try to find all eyetrackers
+        # Sometimes the eyetracker is not identified for the first time. Try more times.
+        loopCount = 1
         allTrackers = tobii.find_all_eyetrackers()
-        
+        while not allTrackers and loopCount < 10:
+            allTrackers = tobii.find_all_eyetrackers()
+            pcore.wait(0.01)
+            loopCount += 1
+
         # if there are no eyetrackers
         if len(allTrackers) < 1:
             raise ValueError("Cannot find any eyetrackers.")
@@ -81,11 +91,8 @@ class TobiiHelper:
             print("Serial number: " + eyetracker.serial_number)
             # create eyetracker object
             self.eyetracker = tobii.EyeTracker(address)
-        # if serial number is not given as a string
-        elif not isinstance(serialString, basestring):
-            raise TypeError("Serial number must be formatted as a string.")        
         # if serial number is given as a string
-        else:    
+        else:
             # get information about available eyetrackers
             for eyetracker in allTrackers:
                 if eyetracker.serial_number == serialString:
@@ -101,8 +108,7 @@ class TobiiHelper:
 
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            print("Eyetracker did not connect. Check serial number?")
-            return
+            raise ValueError("Eyetracker did not connect. Check serial number?")
         else:
             print("Eyetracker connected successfully.")
 

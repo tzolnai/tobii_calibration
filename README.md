@@ -40,7 +40,7 @@ python setup.py install
 ### TobiiHelper() *class*
 A class for doing calibration using the Tobii Pro SDK for Python. Contains the following functions:
 
-### findTracker(serialString = None)
+### setEyeTracker(serialString = None)
 Find and connect to the eyetracker identified by its serial number.
 If no serial number is given, defaults to connecting to the first eyetracker it can find.
 Sets the self.eyetracker attribute.
@@ -90,7 +90,7 @@ foo = tpw.TobiiHelper()
 foo.setMonitor(nameString = None, dimensions = None)
 
 # Find eyetrackers and connect
-foo.findTracker(serialString = None)
+foo.setEyeTracker(serialString = None)
 
 # Run a full 5 point calibration routing
 foo.runFullCalibration(numCalibPoints = 5)
