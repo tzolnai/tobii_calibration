@@ -142,6 +142,25 @@ class calculateCalibrationTest(unittest.TestCase):
         with self.assertRaises(ValueError):        
             calibData = tobii_helper._TobiiHelper__calculateCalibration(calibResult)
 
+    def testInvalidSamplePoints(self):
+        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.setMonitor()
+
+        calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.0, 0.0), True),
+                                                            tobii.CalibrationEyeData((0.0, 0.0), True)),))
+        calibration_point = tobii.CalibrationPoint((0.1, 0.1),(
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((-0.5, -0.5), True),
+                                                            tobii.CalibrationEyeData((-0.5, -0.5), True)),))
+        calibration_point2 = tobii.CalibrationPoint((0.9, 0.9),(
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.98, 0.98), True),
+                                                            tobii.CalibrationEyeData((0.99, 0.98), True)),))
+
+        calibration_points = (calibration_point0, calibration_point, calibration_point2)
+        calibResult = tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS, calibration_points)
+        with self.assertRaises(ValueError):
+            calibData = tobii_helper._TobiiHelper__calculateCalibration(calibResult)
+
     def testOneCalibPoint(self):
         tobii_helper = wrapper.TobiiHelper()
         tobii_helper.setMonitor()
