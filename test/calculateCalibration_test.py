@@ -14,11 +14,6 @@ import tobii_pro_wrapper as wrapper
 import tobii_research as tobii
 import math
 
-class myCalibrationResult:
-   def __init__(self, status_, calibration_points_):
-        self.status = status_
-        self.calibration_points = calibration_points_
-
 class calculateCalibrationTest(unittest.TestCase):
 
     def initCalibPoints(self):

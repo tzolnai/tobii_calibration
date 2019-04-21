@@ -731,23 +731,22 @@ class TobiiHelper:
        
     
     # function for drawing the results of the calibration
-    def __drawCalibrationResults(self, calibResult = None, calibWin = None, curDict = dict):
+    def __drawCalibrationResults(self, calibResult, calibWin, curDict):
         
         # check argument values
         if self.calibration is None:
             raise ValueError('No calibration object exists.')
         # check values of calibration result
-        if calibResult is None:
-            raise ValueError('No calibration result object given.')
+        if not isinstance(calibResult, tobii.CalibrationResult):
+            raise TypeError('calibResult should be a valid tobii_research.CalibrationResult object.')
+        if not isinstance(calibWin, visual.Window):
+            raise TypeError('calibWin should be a visual.Window object.')
         # check the values of the point dictionary
-        if curDict is None: 
-            raise ValueError('No dictionary object given.')
-        elif not isinstance(curDict, dict):
+        if not isinstance(curDict, dict):
             raise TypeError('curDict must be a dictionary with number \n' +\
                             'keys and coordinate values.')
-        # check value of calibration window
-        if calibWin is None:
-            raise ValueError('No psychopy window object given.')     
+        if len(curDict) != len(calibResult.calibration_points) - 1: # TODO: why it this minus 1 is here
+            raise ValueError('Data inconsistency: calibResult and curDict have different amount of items')
 
         # get gaze position results
         points2Draw = self.__calculateCalibration(calibResult)
@@ -782,7 +781,7 @@ class TobiiHelper:
                                     units = 'pix',
                                     pos = [0.0, 0.0],
                                     height = 60)
-            # Make a dummy message
+        # Make a dummy message
         checkMsg = visual.TextStim(calibWin,
                                    text = 'Wait for the experimenter.',
                                    color = [1.0, 1.0, 1.0],
@@ -807,12 +806,17 @@ class TobiiHelper:
                 pointPos = point[3]
                 pointKey = 0
                 
-                # update text 
+                # update text
+                pointFound = False
                 for key, point in curDict.items():
                     if point == pointPos:
                         pointText.text = key
                         pointKey = key
-                
+                        pointFound = True
+
+                if not pointFound:
+                    raise ValueError('Data inconsistency: calibResult and curDict contains different items.')
+
                 # if current point is selected for recalibrate, make it noticeable
                 if int(pointKey) in holdColorPoints:
                     calibPoint.lineColor = [-1.0, 1.0, -1.0]  # green circle
@@ -836,13 +840,14 @@ class TobiiHelper:
                 pointText.draw() 
                 leftEyeLine.draw()
                 rightEyeLine.draw()
-                checkMsg.draw()
+                checkMsg.draw() # TODO: it's enough to draw this once
             
             # show points and lines on window         
             calibWin.flip()
             
             # determine problem points
             # list of acceptable key input !!IF PRESSED KEYS ARE NOT IN KEYLIST, KEYBOARD EVENT MAY CRASH!!
+            # TODO: dynamic keylist
             pressedKeys = event.getKeys(keyList = ['c', 'q', '1', '2', '3', '4',
                                                    '5', '6', '7', '8', '9'])
 
@@ -853,7 +858,6 @@ class TobiiHelper:
                     calibWin.close()
                     self.calibration.leave_calibration_mode()
                     pcore.quit()
-                    raise KeyboardInterrupt("You aborted the script manually.")
                 
                 # else if recalibration point is requested
                 elif key in curDict.keys():

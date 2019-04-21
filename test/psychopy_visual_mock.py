@@ -27,6 +27,16 @@ def CircleDraw(circle):
 
 visual.Circle.draw = CircleDraw
 
+def LineDraw(line):
+    line_copy = Line()
+    line_copy.start = line.start
+    line_copy.end = line.end
+    line_copy.lineWidth = line.lineWidth
+    line_copy.lineColor = line.lineColor
+    listOfDrawings.append(line_copy)
+
+visual.Line.draw = LineDraw
+
 def TextStimDraw(textStim):
     test_stim_copy = TextStim()
     test_stim_copy.height = textStim.height
@@ -55,6 +65,14 @@ class Circle:
         pos = None
         radius = None
         fillColor = None
+        lineColor = None
+
+class Line:
+
+    def __init__(self):
+        start = None
+        end = None
+        lineWidth = None
         lineColor = None
 
 class TextStim:
