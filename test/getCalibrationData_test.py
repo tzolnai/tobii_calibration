@@ -14,8 +14,13 @@ import tobii_pro_wrapper as wrapper
 import tobii_research as tobii
 from psychopy import visual, event
 import psychopy_visual_mock as pvm
+from psychopy import core as pcore
 import collections
 
+def DummyFunction(time):
+    pass
+
+pcore.wait = DummyFunction
 
 class DummyCalibration:
     def collect_data(posx, posy):
