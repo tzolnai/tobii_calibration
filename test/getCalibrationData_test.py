@@ -39,7 +39,7 @@ class getCalibrationDataTest(unittest.TestCase):
 
     def initAll(self, tobii_helper):
         tobii_helper.calibration = DummyCalibration
-        tobii_helper.setMonitor()
+        tobii_helper.setMonitor(dimensions = (1366, 768))
 
         self.calibWin = visual.Window(size = [1366, 768],
                          pos = [0, 0],
@@ -292,8 +292,8 @@ class getCalibrationDataTest(unittest.TestCase):
             # size
             self.assertEqual(50, calibPoint.radius)
             # pos
-            self.assertAlmostEqual(546, calibPoint.pos[0], delta = 10.0) # bug: no movement
-            self.assertAlmostEqual(-307, calibPoint.pos[1], delta = 13.0) # bug: no movement
+            self.assertAlmostEqual(-524 + i * 22, calibPoint.pos[0], delta = 10.0)
+            self.assertAlmostEqual(294 - i * 12, calibPoint.pos[1], delta = 13.0)
             # color
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.fillColor.tolist())
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
@@ -301,7 +301,7 @@ class getCalibrationDataTest(unittest.TestCase):
     def testFirstPointOnBottomLeft(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        self.pointList = [(0.1, 0.9), (0.9, 0.1), (0.5, 0.5), (0.9, 0.9), (0.1, 0.1)]
+        self.pointList = [(0.1, 0.9), (0.9, 0.1), (0.5, 0.5), (0.1, 0.1), (0.9, 0.9)]
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['x'])
@@ -326,7 +326,7 @@ class getCalibrationDataTest(unittest.TestCase):
     def testFirstPointOnTopRight(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        self.pointList = [(0.9, 0.1), (0.1, 0.9), (0.5, 0.5), (0.9, 0.9), (0.1, 0.1)]
+        self.pointList = [(0.9, 0.1), (0.1, 0.9), (0.5, 0.5), (0.1, 0.1), (0.9, 0.9)]
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['x'])
@@ -351,7 +351,7 @@ class getCalibrationDataTest(unittest.TestCase):
     def testFirstPointOnCenter(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        self.pointList = [(0.5, 0.5), (0.9, 0.1), (0.1, 0.9), (0.9, 0.9), (0.1, 0.1)]
+        self.pointList = [(0.5, 0.5), (0.9, 0.1), (0.1, 0.9), (0.1, 0.1), (0.9, 0.9)]
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['x'])
