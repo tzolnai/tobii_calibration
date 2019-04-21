@@ -38,6 +38,9 @@ wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 class runTrackBoxTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def initTrackBox(self, tobii_helper):
         tobii_helper.tbCoordinates = {}
         tobii_helper.tbCoordinates['bottomLeft'] = (-150.0, -121.0, 500.0)
@@ -119,6 +122,29 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 652.0)
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
+        trackWin.close()
+
+    def testNegativEyeData(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (-0.34, 0.56, 0.5)
+        tobii_helper.gazeData['right_gaze_origin_in_trackbox_coordinate_system'] = (0.32, 0.61, 0.5)
+        tobii_helper.gazeData['left_gaze_origin_in_user_coordinate_system'] = (102.0, 135.52, 440.9)
+        tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 440.7)
+
+        trackWin = visual.Window(size = [1366, 768],
+                                 pos = [0, 0],
+                                 units = 'pix',
+                                 fullscr = True,
+                                 allowGUI = True,
+                                 monitor = tobii_helper.win,
+                                 winType = 'pyglet',
+                                 color = [0.4, 0.4, 0.4])
+
+        with self.assertRaises(ValueError):
+            tobii_helper._TobiiHelper__drawEyePositions(trackWin)
+
         trackWin.close()
 
     def testEyePosInTrackbox(self):

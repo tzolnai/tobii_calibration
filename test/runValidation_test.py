@@ -35,6 +35,9 @@ wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 class runValidationTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def initAll(self, tobii_helper):
         tobii_helper.setMonitor()
         tobii_helper.eyetracker = "dummy"
