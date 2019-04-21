@@ -196,7 +196,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(11, len(drawing_list))
+        self.assertEqual(10, len(drawing_list))
 
         # first calib point's circle
         calibPoint1_circle = drawing_list[0]
@@ -249,13 +249,8 @@ class drawCalibrationResultTest(unittest.TestCase):
         # color
         self.assertEqual("red", calibPoint1_right_eye.lineColor)
 
-        # text
-        feedback_text = drawing_list[4]
-        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("Wait for the experimenter."), feedback_text.text)
-
         # second calib point's circle
-        calibPoint2_circle = drawing_list[5]
+        calibPoint2_circle = drawing_list[4]
         self.assertTrue(isinstance(calibPoint2_circle, pvm.Circle))
         # size
         self.assertEqual(50, calibPoint2_circle.radius)
@@ -267,7 +262,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual([1.0, 1.0, 1.0], calibPoint2_circle.lineColor.tolist())
 
         # second calib point's text
-        calibPoint2_text = drawing_list[6]
+        calibPoint2_text = drawing_list[5]
         self.assertTrue(isinstance(calibPoint2_text, pvm.TextStim))
         # size
         self.assertEqual(60, calibPoint2_text.height)
@@ -280,7 +275,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual(str("2") , calibPoint2_text.text)
 
         # second calib point's left eye line
-        calibPoint2_left_eye = drawing_list[7]
+        calibPoint2_left_eye = drawing_list[6]
         self.assertTrue(isinstance(calibPoint2_left_eye, pvm.Line))
         # size
         self.assertEqual(20, calibPoint2_left_eye.lineWidth)
@@ -293,7 +288,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual("yellow", calibPoint2_left_eye.lineColor)
 
         # second calib point's right eye line
-        calibPoint2_right_eye = drawing_list[8]
+        calibPoint2_right_eye = drawing_list[7]
         self.assertTrue(isinstance(calibPoint2_right_eye, pvm.Line))
         # size
         self.assertEqual(20, calibPoint2_right_eye.lineWidth)
@@ -306,12 +301,12 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual("red", calibPoint2_right_eye.lineColor)
 
         # text
-        feedback_text = drawing_list[9]
+        feedback_text = drawing_list[8]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("Wait for the experimenter."), feedback_text.text)
 
         # text
-        feedback_text = drawing_list[10]
+        feedback_text = drawing_list[9]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("Finished checking. Resuming calibration."), feedback_text.text)
 
@@ -324,10 +319,10 @@ class drawCalibrationResultTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(26, len(drawing_list))
+        self.assertEqual(22, len(drawing_list))
 
         for i in range(0,5):
-            index = i * 5
+            index = i * 4
 
             # calib point's circle
             calibPoint_circle = drawing_list[index]
@@ -438,10 +433,10 @@ class drawCalibrationResultTest(unittest.TestCase):
                 self.assertEqual(623, calibPoint_right_eye.end[0])
                 self.assertEqual(-332, calibPoint_right_eye.end[1])
 
-            # text
-            feedback_text = drawing_list[index + 4]
-            self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-            self.assertEqual(str("Wait for the experimenter."), feedback_text.text)
+        # text
+        feedback_text = drawing_list[index + 4]
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
+        self.assertEqual(str("Wait for the experimenter."), feedback_text.text)
 
     def testNoReturnedValues(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -493,7 +488,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(76, len(drawing_list))
+        self.assertEqual(64, len(drawing_list))
 
         # first calib point's color before pushing any button
         calibPoint_circle = drawing_list[0]
@@ -501,27 +496,27 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual([1.0, 1.0, 1.0], calibPoint_circle.lineColor.tolist())
 
         # first calib point's color after first keyboard input
-        calibPoint_circle = drawing_list[25]
+        calibPoint_circle = drawing_list[21]
         self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
         self.assertEqual([-1.0, 1.0, -1.0], calibPoint_circle.lineColor.tolist())
 
         # first calib point's color after second keyboard input
-        calibPoint_circle = drawing_list[50]
+        calibPoint_circle = drawing_list[42]
         self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
         self.assertEqual([-1.0, 1.0, -1.0], calibPoint_circle.lineColor.tolist())
 
         # fifth calib point's color before pushing any button
-        calibPoint_circle = drawing_list[15]
+        calibPoint_circle = drawing_list[12]
         self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
         self.assertEqual([1.0, 1.0, 1.0], calibPoint_circle.lineColor.tolist())
 
         # fifth calib point's color after first keyboard input
-        calibPoint_circle = drawing_list[40]
+        calibPoint_circle = drawing_list[33]
         self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
         self.assertEqual([1.0, 1.0, 1.0], calibPoint_circle.lineColor.tolist())
 
         # fifth calib point's color after second keyboard input
-        calibPoint_circle = drawing_list[65]
+        calibPoint_circle = drawing_list[54]
         self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
         self.assertEqual([-1.0, 1.0, -1.0], calibPoint_circle.lineColor.tolist())
 

@@ -838,7 +838,8 @@ class TobiiHelper:
                 pointText.draw() 
                 leftEyeLine.draw()
                 rightEyeLine.draw()
-                checkMsg.draw() # TODO: it's enough to draw this once
+
+            checkMsg.draw()
             
             # show points and lines on window         
             calibWin.flip()
