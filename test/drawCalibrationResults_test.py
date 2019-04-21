@@ -16,9 +16,6 @@ from psychopy import visual, event
 import psychopy_visual_mock as pvm
 import collections
 
-def DummyFunction(tobiiHelper):
-    pass
-
 class DummyClass:
     def leave_calibration_mode():
         pass
@@ -90,7 +87,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
         self.calibDict = collections.OrderedDict(pointList)
 
-    def testWrongCalibResultParam(self):
+    def testNotInitedThingOrWrongParam(self):
         tobii_helper = wrapper.TobiiHelper()
         tobii_helper.setMonitor()
         # no calibration
@@ -528,8 +525,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         visual_mock.setReturnKeyList(['q'])
 
         with self.assertRaises(SystemExit):
-            result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
-
+            tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

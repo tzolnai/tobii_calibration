@@ -894,26 +894,23 @@ class TobiiHelper:
 
     # function for drawing calibration points, collecting and applying 
     # calibration data
-    def __getCalibrationData(self, calibWin, pointList = list):
+    def __getCalibrationData(self, calibWin, pointList):
         
         # check argument values
         if self.calibration is None:
-            raise ValueError('No calibration object exists.\n' +\
-                             'Try running runFullCalibration()')
+            raise ValueError('No calibration object exists')
         # check value of calibration window
-        if calibWin is None:
-            raise ValueError('No psychopy window object given')
+        if not isinstance(calibWin, visual.Window):
+            raise TypeError('calibWin should be a visual.Window object.')
         # check the values of the point dictionary
-        if pointList is None: 
-            raise ValueError('No list object given for pointList.')
-        elif not isinstance(pointList, list):
+        if not isinstance(pointList, list):
             raise TypeError('pointList must be a list of coordinate tuples.')
 
         # defaults
         pointSmallRadius = 5.0  # point radius
         pointLargeRadius = pointSmallRadius * 10.0  
         moveFrames = 50 # number of frames to draw between points
-        startPoint = (0.90, 0.90) # starter point for animation    
+        startPoint = (0.90, 0.90) # starter point for animation TODO: and what if the first calib point is the same?
     
         # calibraiton point visual object
         calibPoint = visual.Circle(calibWin, 
@@ -940,6 +937,7 @@ class TobiiHelper:
                          ((secondPoint[1] - firstPoint[1]) / moveFrames)]
             
             # Move the point in position (smooth pursuit)
+            # TODO: firstPoint + (moveFrames - 1) * pointStep is not equal to secondPoint
             for frame in range(moveFrames - 1):
                 firstPoint[0] += pointStep[0]
                 firstPoint[1] += pointStep[1]
@@ -990,7 +988,7 @@ class TobiiHelper:
             if event.getKeys(keyList=['q']):
                 calibWin.close()
                 self.calibration.leave_calibration_mode()
-                raise KeyboardInterrupt("You aborted the script manually.")
+                pcore.quit()
                 return
                 
             # clear events not accessed this iteration
