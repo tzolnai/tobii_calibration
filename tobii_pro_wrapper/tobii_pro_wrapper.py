@@ -937,8 +937,7 @@ class TobiiHelper:
                          ((secondPoint[1] - firstPoint[1]) / moveFrames)]
             
             # Move the point in position (smooth pursuit)
-            # TODO: firstPoint + (moveFrames - 1) * pointStep is not equal to secondPoint
-            for frame in range(moveFrames - 1):
+            for frame in range(moveFrames):
                 firstPoint[0] += pointStep[0]
                 firstPoint[1] += pointStep[1]
                 # draw & flip
