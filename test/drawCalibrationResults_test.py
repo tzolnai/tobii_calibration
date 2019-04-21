@@ -16,22 +16,6 @@ from psychopy import visual, event
 import psychopy_visual_mock as pvm
 import collections
 
-# override getKeys to make the program to continue after the first screen was drawn
-
-returnKeyList = []
-
-def GetKeys(keyList):
-    global returnKeyList
-    if len(returnKeyList) is not 0:
-        returnKey = returnKeyList[0]
-        returnKeyList = returnKeyList[1:]
-        return returnKey
-
-    if 'c' in keyList:
-        return ['c']
-
-event.getKeys = GetKeys
-
 def DummyFunction(tobiiHelper):
     pass
 
@@ -174,6 +158,8 @@ class drawCalibrationResultTest(unittest.TestCase):
         calibDict = collections.OrderedDict(pointList)
 
         # we are good now
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, calibDict)
 
         calibWin.close()
@@ -206,6 +192,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.calibDict = collections.OrderedDict(pointList)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -333,6 +320,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -459,14 +447,18 @@ class drawCalibrationResultTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
 
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(0, len(result))
 
     def testHasOneRedoPoint(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        global returnKeyList
-        returnKeyList = ['3']
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['3', 'c'])
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(1, len(result))
@@ -474,8 +466,9 @@ class drawCalibrationResultTest(unittest.TestCase):
     def testHasSomeRedoPoints(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        global returnKeyList
-        returnKeyList = ['5', '1', '2']
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['5', '1', '2', 'c'])
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(3, len(result))
@@ -483,17 +476,9 @@ class drawCalibrationResultTest(unittest.TestCase):
     def testRedundantRedoPoints(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        global returnKeyList
-        returnKeyList = ['1', '2','1', '3', '3']
 
-        result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
-        self.assertEqual(3, len(result))
-
-    def testWrongPushedKey(self):
-        tobii_helper = wrapper.TobiiHelper()
-        self.initAll(tobii_helper)
-        global returnKeyList
-        returnKeyList = ['1', '2', '0', '3']
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['1', '2', '1', '3', '3', 'c'])
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(3, len(result))
@@ -501,10 +486,10 @@ class drawCalibrationResultTest(unittest.TestCase):
     def testRedoPointDrawing(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        global returnKeyList
-        returnKeyList = ['1', '4']
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['1', '4', 'c'])
+
         tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -543,8 +528,9 @@ class drawCalibrationResultTest(unittest.TestCase):
     def testQuitByQ(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
-        global returnKeyList
-        returnKeyList = ['q']
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['q'])
 
         with self.assertRaises(SystemExit):
             result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)

@@ -560,7 +560,6 @@ class TobiiHelper:
                 self.__stopGazeData()
                 psychoWin.close()
                 pcore.quit()
-                raise KeyboardInterrupt("You aborted the script manually.")
             elif event.getKeys(keyList=['c']):
                 print("Proceeding to calibration.")
                 self.__stopGazeData()
@@ -673,7 +672,6 @@ class TobiiHelper:
                     valWin.close()
                     self.__stopGazeData()
                     pcore.quit()
-                    raise KeyboardInterrupt("You aborted the script manually.")
                 elif event.getKeys(keyList=['c']):
                     valWin.close()
                     print ("Exiting calibration validation.")

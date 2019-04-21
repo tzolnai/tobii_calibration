@@ -19,13 +19,6 @@ import math
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
-# override getKeys to make the program to continue after the first screen was drawn
-def GetKeys(keyList):
-    if 'c' in keyList:
-        return ['c']
-
-event.getKeys = GetKeys
-
 green_color = [-1.0, 1.0, -1.0]
 red_color = [1.0, -1.0, -1.0]
 yellow_color = [1.0, 1.0, 0.0]
@@ -122,6 +115,9 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 652.0)
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper._TobiiHelper__drawEyePositions(trackWin)
         trackWin.close()
 
@@ -141,6 +137,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -203,6 +200,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 820.7)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -243,6 +241,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 780.5)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -283,6 +282,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 440.7)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -323,6 +323,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 515.5)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -365,6 +366,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_validity'] = False
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -408,6 +410,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.tbCoordinates['backDistance'] = 800.0
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -445,6 +448,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.tbCoordinates['backDistance'] = 500.0
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -485,6 +489,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_in_user_coordinate_system'] = (96.0, 147.62, 812.5)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runTrackBox()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -514,6 +519,16 @@ class runTrackBoxTest(unittest.TestCase):
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
         self.assertEqual(str("You're currently 80 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+
+    def testQuitByQ(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['q'])
+
+        with self.assertRaises(SystemExit):
+            tobii_helper.runTrackBox()
 
 if __name__ == "__main__":
     unittest.main() # run all tests

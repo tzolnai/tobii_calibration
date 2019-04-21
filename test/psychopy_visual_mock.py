@@ -3,7 +3,7 @@
 
 # License: Apache License 2.0, see LICENSE.txt for more details.
 
-from psychopy import visual
+from psychopy import visual, event
 
 listOfDrawings = []
 
@@ -52,6 +52,20 @@ def WindowFlip(window):
 
 visual.Window.flip = WindowFlip
 
+returnKeyList = []
+
+def GetKeys(keyList):
+    global returnKeyList
+    if len(returnKeyList) > 0:
+        if returnKeyList[0] in keyList:
+            returnKey = returnKeyList[0]
+            returnKeyList = returnKeyList[1:]
+            return returnKey
+    elif len(keyList) > 0:
+        return keyList[0]
+
+event.getKeys = GetKeys
+
 class Rect:
 
     def __init__(self):
@@ -96,3 +110,7 @@ class PsychoPyVisualMock:
 
     def clear(self):
         listOfDrawings = []
+
+    def setReturnKeyList(self, keyList):
+        global returnKeyList
+        returnKeyList = keyList

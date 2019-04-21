@@ -20,13 +20,6 @@ import collections
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
-# override getKeys to make the program to continue after the first screen was drawn
-def GetKeys(keyList):
-    if 'c' in keyList:
-        return ['c']
-
-event.getKeys = GetKeys
-
 def DummyFunction(tobiiHelper):
     pass
 
@@ -81,13 +74,15 @@ class runValidationTest(unittest.TestCase):
         tobii_helper.gazeData['left_gaze_point_on_display_area'] = (0.34, 0.56)
         tobii_helper.gazeData['right_gaze_point_on_display_area'] = (0.32, 0.6)
 
-
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runValidation()
 
     def testDefaultFiveCalibPoints(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runValidation()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -148,6 +143,7 @@ class runValidationTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         pointList = [('1',(0.1, 0.1)), ('2',(0.5, 0.1)), ('3',(0.9, 0.1)),
                      ('4',(0.1, 0.5)), ('5',(0.5, 0.5)), ('6',(0.9, 0.5)),
                      ('7',(0.1, 0.9)), ('8',(0.5, 0.9)), ('9',(0.9, 0.9))]
@@ -223,6 +219,7 @@ class runValidationTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         pointList = [('1',(0.25, 0.5)), ('2',(0.75, 0.5))]
         tobii_helper.runValidation(collections.OrderedDict(pointList))
         drawing_list = visual_mock.getListOfDrawings()
@@ -279,6 +276,7 @@ class runValidationTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_point_on_display_area'] = (1.04, 0.61)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runValidation()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -301,6 +299,7 @@ class runValidationTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_point_on_display_area'] = (math.nan, math.nan)
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
         tobii_helper.runValidation()
         drawing_list = visual_mock.getListOfDrawings()
 
@@ -314,6 +313,15 @@ class runValidationTest(unittest.TestCase):
         # last object is the text
         feedback_text = drawing_list[5]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
+
+    def testQuitByQ(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['q'])
+        with self.assertRaises(SystemExit):
+            tobii_helper.runValidation()
 
 
 if __name__ == "__main__":
