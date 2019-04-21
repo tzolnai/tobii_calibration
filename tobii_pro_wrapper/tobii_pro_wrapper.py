@@ -844,11 +844,11 @@ class TobiiHelper:
             # show points and lines on window         
             calibWin.flip()
             
-            # determine problem points
-            # list of acceptable key input !!IF PRESSED KEYS ARE NOT IN KEYLIST, KEYBOARD EVENT MAY CRASH!!
-            # TODO: dynamic keylist
-            pressedKeys = event.getKeys(keyList = ['c', 'q', '1', '2', '3', '4',
-                                                   '5', '6', '7', '8', '9'])
+            keyList = ['c', 'q']
+            for key, point in curDict.items():
+                keyList.append(key)
+
+            pressedKeys = event.getKeys(keyList)
 
             # depending on response, either...
             # abort script
