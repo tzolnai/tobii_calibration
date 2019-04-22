@@ -569,13 +569,103 @@ class TobiiHelper:
             # clear events not accessed this iteration
             event.clearEvents(eventType='keyboard')
 
+    def __drawValidationScreen(self, pointDict, valWin):
+
+        # check the values of the point dictionary
+        if not isinstance(pointDict, dict):
+            raise TypeError('pointDict must be a dictionary with number ' +\
+                            'keys and coordinate values.')
+        if not isinstance(valWin, visual.Window):
+            raise TypeError('valWin should be a valid visual.Window object.')
+        # check window attribute
+        if self.win is None:
+            raise ValueError('No experimental monitor has been specified.\n' +\
+                             'Try running setMonitor().')
+
+        # get points from dictionary
+        curPoints = pointDict.values()
+
+        # convert points from normalized ada units to psychopy pix
+        pointPositions = [self.__ada2PsychoPix(x) for x in curPoints]
+
+        # stimuli for showing point of gaze
+        gazeStim = visual.Circle(valWin,
+                                 radius = 50,
+                                 lineColor = [1.0, 0.95, 0.0],  # yellow circle
+                                 fillColor = [1.0, 1.0, 0.55],  # light interior
+                                 lineWidth = 40,
+                                 units = 'pix')
+        # Make a dummy message
+        valMsg = visual.TextStim(valWin,
+                                 text = 'Wait for the experimenter.',
+                                 color = [0.4, 0.4, 0.4],  # grey
+                                 units = 'norm',
+                                 pos = [0.0, -0.5],
+                                 height = 0.07)
+        # Stimuli for all validation points
+        valPoints = visual.Circle(valWin,
+                                  units = "pix",
+                                  radius = 20,
+                                  lineColor = [1.0, -1.0, -1.0],  # red
+                                  fillColor = [1.0, -1.0, -1.0])  # red
+
+        # create array for smoothing gaze position
+        gazePositions = None
+        maxLength = 6
+
+        # while tracking
+        while True:
+
+            avgGazePos = self.__getAvgGazePos()
+            if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
+                curPos = (np.nan, np.nan)
+            else:
+                # smooth gaze data with moving window
+                if gazePositions is None:
+                    gazePositions = np.array([avgGazePos])
+                else:
+                    gazePositions = np.vstack((gazePositions,
+                                               np.array(avgGazePos)))
+                curPos = np.nanmean(gazePositions, axis = 0)
+
+            # remove previous position values
+            if gazePositions is not None and len(gazePositions) == maxLength:
+                gazePositions = np.delete(gazePositions, 0, axis = 0)
+
+            # update stimuli in window and draw if we have a valid pos
+            if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
+               not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
+                gazeStim.pos = self.__ada2PsychoPix(tuple(curPos))
+                gazeStim.draw()
+
+            # points
+            for point in pointPositions:
+                valPoints.pos = point
+                valPoints.draw()
+
+            # text
+            valMsg.draw()
+            valWin.flip()
+
+            # depending on response, either abort script or continue to calibration
+            if event.getKeys(keyList=['q']):
+                self.__stopGazeData()
+                pcore.quit()
+            elif event.getKeys(keyList=['c']):
+                print ("Exiting calibration validation.")
+                self.__stopGazeData()
+                return
+
+            # clear events not accessed this iteration
+            event.clearEvents(eventType='keyboard')
+
 
     # function for running validation routine post calibration to check 
     # calibration precision and accuracy
-    def runValidation(self, pointDict = None):
-        
+    def runValidation(self, pointDict = None, valWin = None):
+
         # check the values of the point dictionary
-        if pointDict is None: 
+        if pointDict is None:
             print('pointDict has no value. Using 5 point default.')
             pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), 
                          ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
@@ -583,6 +673,8 @@ class TobiiHelper:
         if not isinstance(pointDict, dict):
             raise TypeError('pointDict must be a dictionary with number ' +\
                             'keys and coordinate values.')
+        if valWin is not None and not isinstance(valWin, visual.Window):
+            raise TypeError('valWin should be a valid visual.Window object.')
         # check window attribute
         if self.win is None:
             raise ValueError('No experimental monitor has been specified.\n' +\
@@ -591,96 +683,23 @@ class TobiiHelper:
         self.__startGazeData()
         # let it warm up briefly
         pcore.wait(0.5)
-        
-        # get points from dictionary
-        curPoints = pointDict.values()
-        
-        # convert points from normalized ada units to psychopy pix
-        pointPositions = [self.__ada2PsychoPix(x) for x in curPoints]
 
-        # window stimuli
-        with visual.Window(size = [self.win.getSizePix()[0],
-                                   self.win.getSizePix()[1]],
-                                   pos = [0, 0],
-                                   units = 'pix',
-                                   fullscr = True,
-                                   allowGUI = True,
-                                   monitor = self.win,
-                                   winType = 'pyglet',
-                                   color = [0.8, 0.8, 0.8]) as valWin:
-            # stimuli for showing point of gaze
-            gazeStim = visual.Circle(valWin,
-                                     radius = 50,
-                                     lineColor = [1.0, 0.95, 0.0],  # yellow circle
-                                     fillColor = [1.0, 1.0, 0.55],  # light interior
-                                     lineWidth = 40,
-                                     units = 'pix')
-            # Make a dummy message
-            valMsg = visual.TextStim(valWin,
-                                     text = 'Wait for the experimenter.',
-                                     color = [0.4, 0.4, 0.4],  # grey
-                                     units = 'norm',
-                                     pos = [0.0, -0.5],
-                                     height = 0.07)
-            # Stimuli for all validation points
-            valPoints = visual.Circle(valWin,
-                                      units = "pix",
-                                      radius = 20,
-                                      lineColor = [1.0, -1.0, -1.0],  # red
-                                      fillColor = [1.0, -1.0, -1.0])  # red
+        # use existing window
+        if valWin is not None:
+            self.__drawValidationScreen(pointDict, valWin)
+        else:
+            # window stimuli
+            with visual.Window(size = [self.win.getSizePix()[0],
+                                       self.win.getSizePix()[1]],
+                                       pos = [0, 0],
+                                       units = 'pix',
+                                       fullscr = True,
+                                       allowGUI = True,
+                                       monitor = self.win,
+                                       winType = 'pyglet',
+                                       color = [0.8, 0.8, 0.8]) as ownValWin:
+                self.__drawValidationScreen(pointDict, ownValWin)
 
-            # create array for smoothing gaze position
-            gazePositions = None
-            maxLength = 6
-
-            # while tracking
-            while True:
-
-                avgGazePos = self.__getAvgGazePos()
-                if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
-                    curPos = (np.nan, np.nan)
-                else:
-                    # smooth gaze data with moving window
-                    if gazePositions is None:
-                        gazePositions = np.array([avgGazePos])
-                    else:
-                        gazePositions = np.vstack((gazePositions,
-                                                   np.array(avgGazePos)))
-                    curPos = np.nanmean(gazePositions, axis = 0)
-
-                # remove previous position values
-                if gazePositions is not None and len(gazePositions) == maxLength:
-                    gazePositions = np.delete(gazePositions, 0, axis = 0)
-
-                # update stimuli in window and draw if we have a valid pos
-                if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
-                   not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
-                    gazeStim.pos = self.__ada2PsychoPix(tuple(curPos))
-                    gazeStim.draw()
-
-                # points
-                for point in pointPositions:
-                    valPoints.pos = point
-                    valPoints.draw()
-
-                # text
-                valMsg.draw()
-                valWin.flip()
-
-                # depending on response, either abort script or continue to calibration
-                if event.getKeys(keyList=['q']):
-                    valWin.close()
-                    self.__stopGazeData()
-                    pcore.quit()
-                elif event.getKeys(keyList=['c']):
-                    valWin.close()
-                    print ("Exiting calibration validation.")
-                    self.__stopGazeData()
-                    return
-
-                # clear events not accessed this iteration
-                event.clearEvents(eventType='keyboard')
-    
             
     # function for getting the average left and right gaze position coordinates
     # for each calibration point in psychopy pix units
@@ -1216,7 +1235,7 @@ class TobiiHelper:
         calibWin.flip()
         pcore.wait(3)
         # run validation
-        self.runValidation(calibDict)
+        self.runValidation(calibDict, calibWin)
         # close window
         calibMessage.text = ("Finished validating the calibration.\n\n" +\
                              "Calibration is complete. Closing window.")

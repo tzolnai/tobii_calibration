@@ -326,6 +326,32 @@ class runValidationTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             tobii_helper.runValidation()
 
+    def testRunWithExistingWindow(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+
+        valWin = visual.Window(size = [1366, 768],
+                                 pos = [0, 0],
+                                 units = 'pix',
+                                 fullscr = True,
+                                 allowGUI = True,
+                                 monitor = tobii_helper.win,
+                                 winType = 'pyglet',
+                                 color = [0.4, 0.4, 0.4])
+
+        tobii_helper.runValidation(valWin = valWin)
+        valWin.close()
+
+    def testWrongWindowParam(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        with self.assertRaises(TypeError):
+            tobii_helper.runValidation(valWin = [])
+
 
 if __name__ == "__main__":
     unittest.main() # run all tests
