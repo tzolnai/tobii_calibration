@@ -1191,6 +1191,12 @@ class TobiiHelper:
     # function for running a complete calibration routine
     def runFullCalibration(self, numCalibPoints = None):
 
+        if numCalibPoints is not None:
+            if not isinstance(numCalibPoints, numbers.Number):
+                raise TypeError("numCalibPoints should be a number.")
+            if numCalibPoints not in [5, 9]:
+                raise ValueError("Only 5 or 9 points calibration is supported.")
+
         # check that eyetracker is connected before running
         if self.eyetracker is None:  # eyeTracker
             raise ValueError("No eyetracker is specified. " +\
