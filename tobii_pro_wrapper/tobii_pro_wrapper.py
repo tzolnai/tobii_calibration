@@ -274,7 +274,7 @@ class TobiiHelper:
         xRatio = tbDict.get('width')/adaDict.get('width')
        
         # convert and return coordinates
-        adaNorm = ((xyCoor[0] * xRatio), (xyCoor[1] * yRatio))
+        adaNorm = (xyCoor[0] * xRatio, xyCoor[1] * yRatio)
         return adaNorm
     
     
