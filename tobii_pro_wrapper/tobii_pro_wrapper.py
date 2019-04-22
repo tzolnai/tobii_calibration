@@ -1203,9 +1203,6 @@ class TobiiHelper:
                 for newPoint in redoCalDict.values():
                     print (newPoint)
                     self.calibration.discard_data(newPoint[0], newPoint[1])
-    
-                # continue with calibration of remaining points
-                continue
             
         # Validate calibration
         # draw fixation cross
