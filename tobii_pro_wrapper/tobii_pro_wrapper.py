@@ -159,10 +159,6 @@ class TobiiHelper:
         allMonitors = monitors.getAllMonitors()
         if len(allMonitors) is 0:
             raise RuntimeError("Can't find any monitor.")
-
-        # if there are no eyetrackers
-        if len(allMonitors) < 1:
-            raise ValueError("Psychopy can't find any monitors.")
             
         # if no dimensions given
         if dimensions is None:
