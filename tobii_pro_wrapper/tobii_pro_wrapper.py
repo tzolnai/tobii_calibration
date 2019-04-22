@@ -1080,11 +1080,10 @@ class TobiiHelper:
                              'Try running setMonitor().')
                
         # create dictionary of calibration points
-        # if nothing entered then default is nine
+        # if nothing entered then default is five
         if numCalibPoints is None: 
-            pointList = [('1',(0.1, 0.1)), ('2',(0.5, 0.1)), ('3',(0.9, 0.1)), 
-                         ('4',(0.1, 0.5)), ('5',(0.5, 0.5)), ('6',(0.9, 0.5)), 
-                         ('7',(0.1, 0.9)), ('8',(0.5, 0.9)), ('9',(0.9, 0.9))]
+            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
+                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
         elif numCalibPoints is 5:
             pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), 
                          ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
