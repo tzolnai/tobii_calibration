@@ -530,5 +530,34 @@ class runTrackBoxTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             tobii_helper.runTrackBox()
 
+    def testRunWithExistingWindow(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+
+        trackWin = visual.Window(size = [1366, 768],
+                                 pos = [0, 0],
+                                 units = 'pix',
+                                 fullscr = True,
+                                 allowGUI = True,
+                                 monitor = tobii_helper.win,
+                                 winType = 'pyglet',
+                                 color = [0.4, 0.4, 0.4])
+
+        tobii_helper.runTrackBox(trackWin)
+        trackWin.close()
+
+    def testWrongWindowParam(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+
+        with self.assertRaises(TypeError):
+            tobii_helper.runTrackBox(trackWin = [])
+
 if __name__ == "__main__":
     unittest.main() # run all tests

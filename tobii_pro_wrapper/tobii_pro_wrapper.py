@@ -1005,7 +1005,7 @@ class TobiiHelper:
     
     # function for running simple gui to visualize subject eye position. Make 
     # sure that the eyes are in optimal location for eye tracker
-    def runTrackBox(self):
+    def runTrackBox(self, trackWin = None):
         
         # check to see that eyetracker is connected
         if self.eyetracker is None:
@@ -1015,30 +1015,36 @@ class TobiiHelper:
         if self.win is None:
             raise ValueError('No experimental monitor has been specified.\n' +\
                              'Try running setMonitor().')
-        
+        if trackWin is not None and not isinstance(trackWin, visual.Window):
+            raise TypeError('If trackWin parameter is set, then it should be valid visual.Window object')
+
         # start the eyetracker
         self.__startGazeData()
         # wait for it ot warm up
         pcore.wait(0.5)
-        
-        # create window for visualizing eye position and text
-        with visual.Window(size = [self.win.getSizePix()[0],
-                                   self.win.getSizePix()[1]],
-                                   pos = [0, 0],
-                                   units = 'pix',
-                                   fullscr = True,
-                                   allowGUI = True,
-                                   monitor = self.win,
-                                   winType = 'pyglet',
-                                   color = [0.4, 0.4, 0.4]) as trackWin:
 
+        # use the existing window
+        if trackWin is not None:
             # feedback about eye position
             self.__drawEyePositions(trackWin)
-            # close track box
             pcore.wait(2)
-            trackWin.close()
+        else: # use an own window
+            # create window for visualizing eye position and text
+            with visual.Window(size = [self.win.getSizePix()[0],
+                                       self.win.getSizePix()[1]],
+                                       pos = [0, 0],
+                                       units = 'pix',
+                                       fullscr = True,
+                                       allowGUI = True,
+                                       monitor = self.win,
+                                       winType = 'pyglet',
+                                       color = [0.4, 0.4, 0.4]) as trackWin:
 
-        return 
+                # feedback about eye position
+                self.__drawEyePositions(trackWin)
+                pcore.wait(2)
+
+        return
 
     
     # function for running a complete calibration routine 
@@ -1108,7 +1114,7 @@ class TobiiHelper:
     
         #run track box routine
         calibWin.flip()   # clear previous text
-        self.runTrackBox()
+        self.runTrackBox(calibWin)
     
         # initialize calibration
         self.calibration = tobii.ScreenBasedCalibration(self.eyetracker)  # calib object 
