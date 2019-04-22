@@ -14,6 +14,7 @@ import tobii_pro_wrapper as wrapper
 
 from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
+from psychopy import core as pcore
 import math
 
 # ignore warnings comming from psychopy
@@ -28,6 +29,8 @@ def DummyFunction(tobiiHelper):
 
 wrapper.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
 wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
+
+pcore.wait = DummyFunction
 
 class runTrackBoxTest(unittest.TestCase):
 
