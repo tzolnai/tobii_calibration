@@ -1038,10 +1038,10 @@ class TobiiHelper:
                                        allowGUI = True,
                                        monitor = self.win,
                                        winType = 'pyglet',
-                                       color = [0.4, 0.4, 0.4]) as trackWin:
+                                       color = [0.4, 0.4, 0.4]) as ownTrackWin:
 
                 # feedback about eye position
-                self.__drawEyePositions(trackWin)
+                self.__drawEyePositions(ownTrackWin)
                 pcore.wait(2)
 
         return
