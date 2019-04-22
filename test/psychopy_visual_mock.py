@@ -54,7 +54,7 @@ visual.Window.flip = WindowFlip
 
 returnKeyList = []
 
-def GetKeys(keyList):
+def GetKeys(keyList, modifiers = False, timeStamped = False):
     global returnKeyList
     if len(returnKeyList) > 0:
         if returnKeyList[0] in keyList:

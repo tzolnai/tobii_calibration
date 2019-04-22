@@ -1065,47 +1065,15 @@ class TobiiHelper:
 
         return
 
-    
-    # function for running a complete calibration routine 
-    def runFullCalibration(self, numCalibPoints = None):   
-        
-        # check that eyetracker is connected before running
-        if self.eyetracker is None:  # eyeTracker
-            raise ValueError("No eyetracker is specified. " +\
-                             "Aborting calibration.\n" +\
-                             "Try running findTracker().")
-        # check window attribute
-        if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
-               
-        # create dictionary of calibration points
-        # if nothing entered then default is five
-        if numCalibPoints is None: 
-            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
-                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
-        elif numCalibPoints is 5:
-            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), 
-                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
-        elif numCalibPoints is 9: 
-            pointList = [('1',(0.1, 0.1)), ('2',(0.5, 0.1)), ('3',(0.9, 0.1)), 
-                         ('4',(0.1, 0.5)), ('5',(0.5, 0.5)), ('6',(0.9, 0.5)), 
-                         ('7',(0.1, 0.9)), ('8',(0.5, 0.9)), ('9',(0.9, 0.9))]
-            
-        # randomize points as ordered dictionary 
-        np.random.shuffle(pointList)
-        calibDict = collections.OrderedDict(pointList)
-    
-        # create window for calibration
-        calibWin = visual.Window(size = [self.win.getSizePix()[0], 
-                                         self.win.getSizePix()[1]],
-                                 pos = [0, 0],
-                                 units = 'pix',
-                                 fullscr = True,
-                                 allowGUI = True,
-                                 monitor = self.win,
-                                 winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])  
+    def __drawCalibrationScreen(self, calibDict, calibWin):
+
+        # check the values of the point dictionary
+        if not isinstance(calibDict, dict):
+            raise TypeError('calibDict must be a dictionary with number ' +\
+                            'keys and coordinate values.')
+        if not isinstance(calibWin, visual.Window):
+            raise TypeError('calibWin should be a valid visual.Window object.')
+
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin, 
                                        color = [1.0, 1.0, 1.0],  # text
@@ -1120,20 +1088,6 @@ class TobiiHelper:
                                    pos = (0.0, 0.0),
                                    text = "+")
        
-        # track box to position participant
-        # subject instructions for track box
-        calibMessage.text = ("Please position yourself so that the\n" + \
-                             "eye-tracker can locate your eyes." + \
-                             "\n\nPress 'c' to continue.")
-        calibMessage.draw()
-        calibWin.flip() 
-        # turn keyboard reporting on and get subject response
-        event.waitKeys(maxWait = 10, keyList = ['c'])  # proceed with calibration
-    
-        #run track box routine
-        calibWin.flip()   # clear previous text
-        self.runTrackBox(calibWin)
-    
         # initialize calibration
         self.calibration = tobii.ScreenBasedCalibration(self.eyetracker)  # calib object 
         # enter calibration mode
@@ -1161,13 +1115,12 @@ class TobiiHelper:
             
             # create point order form randomized dictionary values
             pointOrder = list(redoCalDict.values())
-            
             # perform calibration 
             calibResult = self.__getCalibrationData(calibWin, pointOrder)
     
             # Check status of calibration result
             # if calibration was successful, check calibration results
-            if calibResult.status != tobii.CALIBRATION_STATUS_FAILURE:      
+            if calibResult.status != tobii.CALIBRATION_STATUS_FAILURE: # TODO: what if only one eye failes
                 # give feedback
                 calibMessage.text = ("Applying calibration...")
                 calibMessage.draw()
@@ -1233,6 +1186,72 @@ class TobiiHelper:
         fixCross.draw()
         calibWin.flip()
         pcore.wait(3)
+
+
+    # function for running a complete calibration routine
+    def runFullCalibration(self, numCalibPoints = None):
+
+        # check that eyetracker is connected before running
+        if self.eyetracker is None:  # eyeTracker
+            raise ValueError("No eyetracker is specified. " +\
+                             "Aborting calibration.\n" +\
+                             "Try running findTracker().")
+        # check window attribute
+        if self.win is None:
+            raise ValueError('No experimental monitor has been specified.\n' +\
+                             'Try running setMonitor().')
+
+        # create dictionary of calibration points
+        # if nothing entered then default is five
+        if numCalibPoints is None:
+            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
+                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
+        elif numCalibPoints is 5:
+            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
+                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
+        elif numCalibPoints is 9:
+            pointList = [('1',(0.1, 0.1)), ('2',(0.5, 0.1)), ('3',(0.9, 0.1)),
+                         ('4',(0.1, 0.5)), ('5',(0.5, 0.5)), ('6',(0.9, 0.5)),
+                         ('7',(0.1, 0.9)), ('8',(0.5, 0.9)), ('9',(0.9, 0.9))]
+
+        # randomize points as ordered dictionary
+        np.random.shuffle(pointList)
+        calibDict = collections.OrderedDict(pointList)
+
+        # create window for calibration
+        calibWin = visual.Window(size = [self.win.getSizePix()[0],
+                                         self.win.getSizePix()[1]],
+                                 pos = [0, 0],
+                                 units = 'pix',
+                                 fullscr = True,
+                                 allowGUI = True,
+                                 monitor = self.win,
+                                 winType = 'pyglet',
+                                 color = [0.4, 0.4, 0.4])
+        # stimuli for holding text
+        calibMessage = visual.TextStim(calibWin,
+                                       color = [1.0, 1.0, 1.0],  # text
+                                       units = 'norm',
+                                       height = 0.08,
+                                       pos = (0.0, 0.1))
+
+        # track box to position participant
+        # subject instructions for track box
+        calibMessage.text = ("Please position yourself so that the\n" + \
+                             "eye-tracker can locate your eyes." + \
+                             "\n\nPress 'c' to continue.")
+        calibMessage.draw()
+        calibWin.flip()
+        # turn keyboard reporting on and get subject response
+        event.waitKeys(maxWait = 10, keyList = ['c'])  # proceed with calibration
+
+        #run track box routine
+        calibWin.flip()   # clear previous text
+        self.runTrackBox(calibWin)
+
+        # run calibration rutine
+        self.__drawCalibrationScreen(calibDict, calibWin)
+
         # run validation
         self.runValidation(calibDict, calibWin)
         # close window
