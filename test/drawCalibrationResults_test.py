@@ -454,6 +454,7 @@ class drawCalibrationResultTest(unittest.TestCase):
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(1, len(result))
+        self.assertEqual(collections.OrderedDict([('3',(0.5, 0.5))]), result)
 
     def testHasSomeRedoPoints(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -464,6 +465,7 @@ class drawCalibrationResultTest(unittest.TestCase):
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(3, len(result))
+        self.assertEqual(collections.OrderedDict([('5',(0.9, 0.9)), ('1',(0.1, 0.1)), ('2',(0.9, 0.1))]), result)
 
     def testRedundantRedoPoints(self):
         tobii_helper = wrapper.TobiiHelper()
@@ -474,6 +476,8 @@ class drawCalibrationResultTest(unittest.TestCase):
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
         self.assertEqual(3, len(result))
+        self.assertEqual(collections.OrderedDict([('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5))]), result)
+
 
     def testRedoPointDrawing(self):
         tobii_helper = wrapper.TobiiHelper()
