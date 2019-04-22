@@ -215,8 +215,8 @@ class TobiiHelper:
 # ----- Functions for starting and stopping eyetracker data collection -----
 
     # function for broadcasting real time gaze data
-    def __gazeDataCallback(self,startGazeData):
-        self.gazeData = startGazeData
+    def __gazeDataCallback(self, gazeData):
+        self.gazeData = gazeData
     
     
     # function for subscribing to real time gaze data from eyetracker
