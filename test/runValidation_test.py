@@ -52,6 +52,38 @@ class runValidationTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             tobii_helper.runValidation([])
 
+    def testNotInitedThings(self):
+        tobii_helper = wrapper.TobiiHelper()
+
+        # no monitor
+        with self.assertRaises(ValueError):
+            tobii_helper.runValidation()
+
+        tobii_helper.setMonitor()
+
+        # no eye tracker
+        with self.assertRaises(ValueError):
+            tobii_helper.runValidation()
+        
+        tobii_helper.eyetracker = "dummy"
+
+        # no tracking
+        with self.assertRaises(ValueError):
+            tobii_helper.runValidation()
+
+        tobii_helper.tracking = True
+
+        # no gaze data
+        with self.assertRaises(ValueError):
+            tobii_helper.runValidation()
+            
+        tobii_helper.gazeData = {}
+        tobii_helper.gazeData['left_gaze_point_on_display_area'] = (0.34, 0.56)
+        tobii_helper.gazeData['right_gaze_point_on_display_area'] = (0.32, 0.6)
+
+
+        tobii_helper.runValidation()
+
     def testDefaultFiveCalibPoints(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)

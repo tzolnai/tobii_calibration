@@ -598,90 +598,90 @@ class TobiiHelper:
         
         # convert points from normalized ada units to psychopy pix
         pointPositions = [self.__ada2PsychoPix(x) for x in curPoints]
-        
+
         # window stimuli
-        valWin = visual.Window(size = [self.win.getSizePix()[0], 
-                                       self.win.getSizePix()[1]],
-                               pos = [0, 0],
-                               units = 'pix',
-                               fullscr = True,
-                               allowGUI = True,
-                               monitor = self.win,
-                               winType = 'pyglet',
-                               color = [0.8, 0.8, 0.8])  
-        # stimuli for showing point of gaze
-        gazeStim = visual.Circle(valWin, 
-                                 radius = 50,
-                                 lineColor = [1.0, 0.95, 0.0],  # yellow circle
-                                 fillColor = [1.0, 1.0, 0.55],  # light interior
-                                 lineWidth = 40,
-                                 units = 'pix')
-        # Make a dummy message
-        valMsg = visual.TextStim(valWin,
-                                 text = 'Wait for the experimenter.',
-                                 color = [0.4, 0.4, 0.4],  # grey
-                                 units = 'norm',
-                                 pos = [0.0, -0.5],
-                                 height = 0.07)
-        # Stimuli for all validation points
-        valPoints = visual.Circle(valWin,
-                                  units = "pix",
-                                  radius = 20, 
-                                  lineColor = [1.0, -1.0, -1.0],  # red
-                                  fillColor = [1.0, -1.0, -1.0])  # red
-         
-        # create array for smoothing gaze position
-        gazePositions = None
-        maxLength = 6
-    
-        # while tracking 
-        while True:   
+        with visual.Window(size = [self.win.getSizePix()[0],
+                                   self.win.getSizePix()[1]],
+                                   pos = [0, 0],
+                                   units = 'pix',
+                                   fullscr = True,
+                                   allowGUI = True,
+                                   monitor = self.win,
+                                   winType = 'pyglet',
+                                   color = [0.8, 0.8, 0.8]) as valWin:
+            # stimuli for showing point of gaze
+            gazeStim = visual.Circle(valWin,
+                                     radius = 50,
+                                     lineColor = [1.0, 0.95, 0.0],  # yellow circle
+                                     fillColor = [1.0, 1.0, 0.55],  # light interior
+                                     lineWidth = 40,
+                                     units = 'pix')
+            # Make a dummy message
+            valMsg = visual.TextStim(valWin,
+                                     text = 'Wait for the experimenter.',
+                                     color = [0.4, 0.4, 0.4],  # grey
+                                     units = 'norm',
+                                     pos = [0.0, -0.5],
+                                     height = 0.07)
+            # Stimuli for all validation points
+            valPoints = visual.Circle(valWin,
+                                      units = "pix",
+                                      radius = 20,
+                                      lineColor = [1.0, -1.0, -1.0],  # red
+                                      fillColor = [1.0, -1.0, -1.0])  # red
 
-            avgGazePos = self.__getAvgGazePos()
-            if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
-                curPos = (np.nan, np.nan)
-            else:
-                # smooth gaze data with moving window
-                if gazePositions is None:
-                    gazePositions = np.array([avgGazePos])
+            # create array for smoothing gaze position
+            gazePositions = None
+            maxLength = 6
+
+            # while tracking
+            while True:
+
+                avgGazePos = self.__getAvgGazePos()
+                if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
+                    curPos = (np.nan, np.nan)
                 else:
-                    gazePositions = np.vstack((gazePositions,
-                                               np.array(avgGazePos)))
-                curPos = np.nanmean(gazePositions, axis = 0)
+                    # smooth gaze data with moving window
+                    if gazePositions is None:
+                        gazePositions = np.array([avgGazePos])
+                    else:
+                        gazePositions = np.vstack((gazePositions,
+                                                   np.array(avgGazePos)))
+                    curPos = np.nanmean(gazePositions, axis = 0)
 
-            # remove previous position values
-            if gazePositions is not None and len(gazePositions) == maxLength:
-                gazePositions = np.delete(gazePositions, 0, axis = 0)
+                # remove previous position values
+                if gazePositions is not None and len(gazePositions) == maxLength:
+                    gazePositions = np.delete(gazePositions, 0, axis = 0)
 
-            # update stimuli in window and draw if we have a valid pos
-            if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
-               not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
-                gazeStim.pos = self.__ada2PsychoPix(tuple(curPos))
-                gazeStim.draw()
-                
-            # points
-            for point in pointPositions:
-                valPoints.pos = point
-                valPoints.draw()
-                
-            # text
-            valMsg.draw()
-            valWin.flip()
-                       
-            # depending on response, either abort script or continue to calibration
-            if event.getKeys(keyList=['q']):
-                valWin.close()
-                self.__stopGazeData()
-                pcore.quit()
-                raise KeyboardInterrupt("You aborted the script manually.")
-            elif event.getKeys(keyList=['c']):
-                valWin.close()
-                print ("Exiting calibration validation.")
-                self.__stopGazeData()
-                return
-                
-            # clear events not accessed this iteration
-            event.clearEvents(eventType='keyboard')   
+                # update stimuli in window and draw if we have a valid pos
+                if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
+                   not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
+                    gazeStim.pos = self.__ada2PsychoPix(tuple(curPos))
+                    gazeStim.draw()
+
+                # points
+                for point in pointPositions:
+                    valPoints.pos = point
+                    valPoints.draw()
+
+                # text
+                valMsg.draw()
+                valWin.flip()
+
+                # depending on response, either abort script or continue to calibration
+                if event.getKeys(keyList=['q']):
+                    valWin.close()
+                    self.__stopGazeData()
+                    pcore.quit()
+                    raise KeyboardInterrupt("You aborted the script manually.")
+                elif event.getKeys(keyList=['c']):
+                    valWin.close()
+                    print ("Exiting calibration validation.")
+                    self.__stopGazeData()
+                    return
+
+                # clear events not accessed this iteration
+                event.clearEvents(eventType='keyboard')
     
             
     # function for getting the average left and right gaze position coordinates
@@ -1022,21 +1022,22 @@ class TobiiHelper:
         pcore.wait(0.5)
         
         # create window for visualizing eye position and text
-        trackWin = visual.Window(size = [self.win.getSizePix()[0], 
-                                         self.win.getSizePix()[1]],
-                                 pos = [0, 0],
-                                 units = 'pix',
-                                 fullscr = True,
-                                 allowGUI = True,
-                                 monitor = self.win,
-                                 winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
-        
-        # feedback about eye position
-        self.__drawEyePositions(trackWin)
-        # close track box 
-        pcore.wait(2)
-        trackWin.close()
+        with visual.Window(size = [self.win.getSizePix()[0],
+                                   self.win.getSizePix()[1]],
+                                   pos = [0, 0],
+                                   units = 'pix',
+                                   fullscr = True,
+                                   allowGUI = True,
+                                   monitor = self.win,
+                                   winType = 'pyglet',
+                                   color = [0.4, 0.4, 0.4]) as trackWin:
+
+            # feedback about eye position
+            self.__drawEyePositions(trackWin)
+            # close track box
+            pcore.wait(2)
+            trackWin.close()
+
         return 
 
     
