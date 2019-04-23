@@ -561,10 +561,6 @@ class TobiiHelper:
                             'keys and coordinate values.')
         if not isinstance(valWin, visual.Window):
             raise TypeError('valWin should be a valid visual.Window object.')
-        # check window attribute
-        if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
 
         # get points from dictionary
         curPoints = pointDict.values()
