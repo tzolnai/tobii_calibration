@@ -342,11 +342,11 @@ class TobiiHelper:
             raise ValueError("No recorded gaze data was found.")
             
         # access gaze data dictionary to get gaze position tuples
-        lGazeXYZ = self.gazeData['left_gaze_point_on_display_area']
-        rGazeXYZ = self.gazeData['right_gaze_point_on_display_area']
+        leftGazeXYZ = self.gazeData['left_gaze_point_on_display_area']
+        rightGazeXYZ = self.gazeData['right_gaze_point_on_display_area']
         # get 2D gaze positions for left and right eye
-        xs = (lGazeXYZ[0], rGazeXYZ[0])
-        ys = (lGazeXYZ[1], rGazeXYZ[1])
+        xs = (leftGazeXYZ[0], rightGazeXYZ[0])
+        ys = (leftGazeXYZ[1], rightGazeXYZ[1])
 
         # if all of the axes have data from at least one eye
         if all([np.isnan(x) for x in xs]) or all([np.isnan(y) for y in ys]):
@@ -373,33 +373,33 @@ class TobiiHelper:
 
         # access gaze data dictionary to get eye position tuples,
         # in trackbox coordinate system
-        lTbXYZ = self.gazeData['left_gaze_origin_in_trackbox_coordinate_system']
-        rTbXYZ = self.gazeData['right_gaze_origin_in_trackbox_coordinate_system']
+        lelfTbXYZ = self.gazeData['left_gaze_origin_in_trackbox_coordinate_system']
+        rightTbXYZ = self.gazeData['right_gaze_origin_in_trackbox_coordinate_system']
 
         # left eye validity
-        lVal = self.gazeData['left_gaze_origin_validity']
+        leftVal = self.gazeData['left_gaze_origin_validity']
         # right eye validity
-        rVal = self.gazeData['right_gaze_origin_validity']
+        rightVal = self.gazeData['right_gaze_origin_validity']
 
         # if left eye is found by the eyetracker
-        if lVal == 1:
+        if leftVal == 1:
             # update the left eye positions if the values are reasonable
             # scale left eye position so that it fits in track box
-            leftTbPos = (-self.__tb2PsychoNorm((lTbXYZ[0],
-                                              lTbXYZ[1]))[0] * 1.7,
-                          self.__tb2PsychoNorm((lTbXYZ[0],
-                                              lTbXYZ[1]))[1])
+            leftTbPos = (-self.__tb2PsychoNorm((lelfTbXYZ[0],
+                                              lelfTbXYZ[1]))[0] * 1.7,
+                          self.__tb2PsychoNorm((lelfTbXYZ[0],
+                                              lelfTbXYZ[1]))[1])
         else:
             # hide by drawing in the corner
             leftTbPos = [0.99, 0.99]
 
         # if right eye is found by the eyetracker
-        if rVal == 1:
+        if rightVal == 1:
             # update the right eye positions if the values are reasonable
             # scale right eye position so that it fits in track box
-            rightTbPos = (-self.__tb2PsychoNorm((rTbXYZ[0], rTbXYZ[1]))[0] * 1.7,
-                           self.__tb2PsychoNorm((rTbXYZ[0],
-                                               rTbXYZ[1]))[1])
+            rightTbPos = (-self.__tb2PsychoNorm((rightTbXYZ[0], rightTbXYZ[1]))[0] * 1.7,
+                           self.__tb2PsychoNorm((rightTbXYZ[0],
+                                               rightTbXYZ[1]))[1])
         else:
             # hide by drawing in the corner
             rightTbPos = [0.99, 0.99]
@@ -422,13 +422,13 @@ class TobiiHelper:
 
         # access gaze data dictionary to get eye position tuples, given in
         # mm in from eyetracker origin
-        lOriginXYZ = self.gazeData['left_gaze_origin_in_user_coordinate_system']
-        rOriginXYZ = self.gazeData['right_gaze_origin_in_user_coordinate_system']
+        leftOriginXYZ = self.gazeData['left_gaze_origin_in_user_coordinate_system']
+        rightOriginXYZ = self.gazeData['right_gaze_origin_in_user_coordinate_system']
             
         # create arrays with positions of both eyes on x, y, and z axes
-        xs = (lOriginXYZ[0],rOriginXYZ[0])
-        ys = (lOriginXYZ[1],rOriginXYZ[1])
-        zs = (lOriginXYZ[2],rOriginXYZ[2])
+        xs = (leftOriginXYZ[0],rightOriginXYZ[0])
+        ys = (leftOriginXYZ[1],rightOriginXYZ[1])
+        zs = (leftOriginXYZ[2],rightOriginXYZ[2])
 
         # if all of the axes have data from at least one eye
         if not (np.isnan(xs)).all() and not (np.isnan(ys)).all() and not (np.isnan(zs)).all():
@@ -719,13 +719,13 @@ class TobiiHelper:
                 rightOutput[j] = rightEye.position_on_display_area
                 
             # get average x and y coordinates using all samples in point
-            lXY = tuple(np.mean(leftOutput, axis = 0))
-            rXY = tuple(np.mean(rightOutput, axis = 0))
+            leftXY = tuple(np.mean(leftOutput, axis = 0))
+            rightXY = tuple(np.mean(rightOutput, axis = 0))
             point = tuple((pointPosition[0], pointPosition[1]))
             # put current calibration point coordinates , l and r eye coordinates
             # into list, and convert to psychopy window coordinates in pix
-            newList = [self.__ada2PsychoPix(point), self.__ada2PsychoPix(lXY), 
-                       self.__ada2PsychoPix(rXY), pointPosition]
+            newList = [self.__ada2PsychoPix(point), self.__ada2PsychoPix(leftXY),
+                       self.__ada2PsychoPix(rightXY), pointPosition]
             calibDrawCoor.insert(i, newList)
             
         # for some weird reason my calibration always includes the point (0,0) at 
