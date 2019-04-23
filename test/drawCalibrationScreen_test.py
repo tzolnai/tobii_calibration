@@ -62,6 +62,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
 
     def initAll(self, tobii_helper):
         tobii_helper.setMonitor(dimensions = (1366, 768))
+        tobii_helper.eyetracker = "dummy"
 
         pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
         self.calibDict = collections.OrderedDict(pointList)
@@ -109,6 +110,12 @@ class drawCalibrationScreenTest(unittest.TestCase):
             tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
 
         tobii_helper.setMonitor()
+
+        # no eyetracker
+        with self.assertRaises(ValueError):
+            tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
+
+        tobii_helper.eyetracker = "dummy"
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c', 'c'])

@@ -1051,6 +1051,10 @@ class TobiiHelper:
                             'keys and coordinate values.')
         if not isinstance(calibWin, visual.Window):
             raise TypeError('calibWin should be a valid visual.Window object.')
+        # check to see that eyetracker is connected
+        if self.eyetracker is None:
+            raise ValueError('There is no eyetracker object. \n' +\
+                             'Try running findTracker().')
 
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin, 
