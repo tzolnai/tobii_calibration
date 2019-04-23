@@ -249,7 +249,7 @@ class TobiiHelper:
         
     # function for converting normalized positions from trackbox coordinate system
     # to normalized active display area coordinates
-    def __tb2Ada(self, xyCoor = tuple):
+    def __tb2Ada(self, xyCoor):
         
         # check argument values
         if xyCoor is None:
@@ -280,7 +280,7 @@ class TobiiHelper:
     
     # function for converting normalized positions from trackbox coordinate system
     # to normalized coordinates based on the psychopy window
-    def __tb2PsychoNorm(self, xyCoor = tuple):
+    def __tb2PsychoNorm(self, xyCoor):
         
         # check argument values
         if xyCoor is None:
@@ -306,7 +306,7 @@ class TobiiHelper:
     # function for converting from tobiis ada coordinate system in normalized 
     # coordinates where (0,0) is the upper left corner, to psychopy window 
     # coordinates in pix, where (0,0) is at the center of psychopy window.
-    def __ada2PsychoPix(self, xyCoor = tuple):
+    def __ada2PsychoPix(self, xyCoor):
         
         if self.win is None:
             raise ValueError("No monitor was set.")
