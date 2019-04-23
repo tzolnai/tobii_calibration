@@ -842,9 +842,10 @@ class TobiiHelper:
             
             # show points and lines on window         
             calibWin.flip()
-            
+
+            # add the label of calib points to the accepted key list
             keyList = ['c', 'q']
-            for key, point in curDict.items():
+            for key in curDict.keys():
                 keyList.append(key)
 
             pressedKeys = event.getKeys(keyList)
