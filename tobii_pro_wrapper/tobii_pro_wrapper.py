@@ -382,7 +382,7 @@ class TobiiHelper:
         rightVal = self.gazeData['right_gaze_origin_validity']
 
         # if left eye is found by the eyetracker
-        if leftVal == 1:
+        if leftVal:
             # update the left eye positions if the values are reasonable
             # scale left eye position so that it fits in track box
             leftTbPos = (-self.__tb2PsychoNorm((lelfTbXYZ[0],
@@ -394,7 +394,7 @@ class TobiiHelper:
             leftTbPos = [0.99, 0.99]
 
         # if right eye is found by the eyetracker
-        if rightVal == 1:
+        if rightVal:
             # update the right eye positions if the values are reasonable
             # scale right eye position so that it fits in track box
             rightTbPos = (-self.__tb2PsychoNorm((rightTbXYZ[0], rightTbXYZ[1]))[0] * 1.7,
