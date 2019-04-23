@@ -34,7 +34,7 @@ class tb2AdaTest(unittest.TestCase):
 
     def testNoneParam(self):
         tobii_helper = wrapper.TobiiHelper()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__tb2Ada(None)
 
     def testParamWithWrongType(self):

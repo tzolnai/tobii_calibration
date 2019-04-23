@@ -17,7 +17,7 @@ class ada2PsychoPixTest(unittest.TestCase):
     def testNoneParam(self):
         tobii_helper = wrapper.TobiiHelper()
         tobii_helper.setMonitor()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__ada2PsychoPix(None)
 
     def testParamWithWrongType(self):

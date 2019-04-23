@@ -252,9 +252,7 @@ class TobiiHelper:
     def __tb2Ada(self, xyCoor):
         
         # check argument values
-        if xyCoor is None:
-            raise ValueError("No coordinate values have been specified.")
-        elif not isinstance(xyCoor, tuple):
+        if not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
         elif len(xyCoor) is not 2:
             raise ValueError("Wrong number of coordinate dimensions.")
@@ -283,9 +281,7 @@ class TobiiHelper:
     def __tb2PsychoNorm(self, xyCoor):
         
         # check argument values
-        if xyCoor is None:
-            raise ValueError("No coordinate values have been specified.")
-        elif not isinstance(xyCoor, tuple):
+        if not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
         elif len(xyCoor) is not 2:
             raise ValueError("Wrong number of coordinate dimensions.")
@@ -312,9 +308,7 @@ class TobiiHelper:
             raise ValueError("No monitor was set.")
 
         # check argument values
-        if xyCoor is None:
-            raise ValueError("No coordinate values have been specified.")
-        elif not isinstance(xyCoor, tuple):
+        if not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
         elif len(xyCoor) is not 2:
             raise ValueError("Wrong number of coordinate dimensions.")
