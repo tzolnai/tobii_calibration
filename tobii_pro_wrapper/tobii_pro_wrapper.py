@@ -962,15 +962,13 @@ class TobiiHelper:
             
             # conduct calibration of point
             print ("Collecting data at {0}." .format(i + 1))
-            while self.calibration.collect_data(pointList[i][0], 
-                                                pointList[i][1]) != tobii.CALIBRATION_STATUS_SUCCESS:
-                self.calibration.collect_data(pointList[i][0], 
-                                              pointList[i][1])   
-                
+            collecting_status = None
+            while collecting_status != tobii.CALIBRATION_STATUS_SUCCESS:
+                collecting_status = self.calibration.collect_data(pointList[i][0], pointList[i][1])
+
             # feedback from calibration
-            print ("{0} for data at point {1}." 
-                   .format(self.calibration.collect_data(pointList[i][0],
-                   pointList[i][1]), i + 1))
+            print ("{0} for data at point {1}."
+                   .format(collecting_status, i + 1))
             pcore.wait(0.3)  # wait before continuing
           
             # Return point to original size
