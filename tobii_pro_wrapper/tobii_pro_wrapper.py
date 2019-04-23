@@ -292,7 +292,7 @@ class TobiiHelper:
         adaCoors = self.__tb2Ada(xyCoor)
         # correct for psychopy window coordinates
         centerScale = self.__tb2Ada((1, 1))
-        centerShift = ((centerScale[0] / 2), (centerScale[1] / 2))
+        centerShift = (centerScale[0] / 2, centerScale[1] / 2)
         psychoNorm = (adaCoors[0] - centerShift[0], 
                       -(adaCoors[1] - centerShift[1]))
         # return coordinates in psychowin 'norm' units
@@ -321,7 +321,7 @@ class TobiiHelper:
         monHW = (self.win.getSizePix()[0], 
                  self.win.getSizePix()[1])
         wShift, hShift = monHW[0] / 2 , monHW[1] / 2
-        psychoPix = (int(((xyCoor[0]* monHW[0]) - wShift)), 
+        psychoPix = (int((xyCoor[0]* monHW[0]) - wShift),
                      int(((xyCoor[1] * monHW[1]) - hShift) * -1))
         # return coordinates in psychowin 'pix' units
         return psychoPix
@@ -732,7 +732,7 @@ class TobiiHelper:
         # index 0, so just remove it here
         calibDrawCoor.pop(0)
         # return as list
-        return(calibDrawCoor)
+        return calibDrawCoor
        
     
     # function for drawing the results of the calibration
@@ -940,8 +940,8 @@ class TobiiHelper:
                    
             # draw and move dot
             # step size for dot movement is new - old divided by frames
-            pointStep = [((secondPoint[0] - firstPoint[0]) / moveFrames), 
-                         ((secondPoint[1] - firstPoint[1]) / moveFrames)]
+            pointStep = [(secondPoint[0] - firstPoint[0]) / moveFrames,
+                         (secondPoint[1] - firstPoint[1]) / moveFrames]
             
             # Move the point in position (smooth pursuit)
             for frame in range(moveFrames):
