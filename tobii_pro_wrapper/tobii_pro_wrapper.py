@@ -988,7 +988,6 @@ class TobiiHelper:
                 calibWin.close()
                 self.calibration.leave_calibration_mode()
                 pcore.quit()
-                return
                 
             # clear events not accessed this iteration
             event.clearEvents(eventType='keyboard')
@@ -1043,8 +1042,6 @@ class TobiiHelper:
                 # feedback about eye position
                 self.__drawEyePositions(ownTrackWin)
                 pcore.wait(2)
-
-        return
 
     def __drawCalibrationScreen(self, calibDict, calibWin):
 
@@ -1247,8 +1244,7 @@ class TobiiHelper:
         calibMessage.draw()
         calibWin.flip()
         pcore.wait(3)
-        calibWin.close() 
-        return
+        calibWin.close()
   
 
 
