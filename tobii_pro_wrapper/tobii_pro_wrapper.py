@@ -141,10 +141,10 @@ class TobiiHelper:
         self.tbCoordinates['topLeft'] = trackBox.front_upper_left
         self.tbCoordinates['topRight'] = trackBox.front_upper_right
         # calculate box height and width
-        trackBoxHeight = np.absolute(trackBox.front_lower_left[1] - 
-                                     trackBox.front_upper_right[1])
-        trackBoxWidth = np.absolute(trackBox.front_lower_left[0] - 
-                                    trackBox.front_lower_right[0])
+        trackBoxHeight = abs(trackBox.front_lower_left[1] -
+                             trackBox.front_upper_right[1])
+        trackBoxWidth = abs(trackBox.front_lower_left[0] -
+                            trackBox.front_lower_right[0])
         self.tbCoordinates['height'] = trackBoxHeight
         self.tbCoordinates['width'] = trackBoxWidth
 
