@@ -76,7 +76,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         # no window
         with self.assertRaises(ValueError):
-            tobii_helper._TobiiHelper__drawEyePositions(None)
+            tobii_helper._TobiiHelper__drawEyePositions([])
 
         # ok init the window
         trackWin = visual.Window(size = [1366, 768],

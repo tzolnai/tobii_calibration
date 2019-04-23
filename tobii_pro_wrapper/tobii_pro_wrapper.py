@@ -460,9 +460,8 @@ class TobiiHelper:
     def __drawEyePositions(self, psychoWin):
         
         # check that psychopy window exists
-        if psychoWin is None:
-            raise ValueError("There is no psychopy window available. " +\
-                             "Try calling runTrackbox() instead.")
+        if not isinstance(psychoWin, visual.Window):
+            raise ValueError("psychoWin should be a valid visual.Window object.")
 
         # Set default colors
         correctColor = [-1.0, 1.0, -1.0]   
