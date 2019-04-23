@@ -13,9 +13,7 @@ setup(
     long_description='README.md',
     install_requires=[
         'numpy',
-        'scipy',
         'psychopy',
-        'datetime',
         'pyglet',
         'tobii_research==1.0.1.128',
     ],

@@ -25,18 +25,15 @@
 # -----Import Required Libraries-----
 import pyglet
 from psychopy import core as pcore
-from psychopy import monitors, visual, gui, data, event
-from psychopy.iohub import launchHubServer
+from psychopy import monitors, visual, event
 
-import datetime as dt
 import numpy as np
-from scipy.spatial import distance
 import numbers
 import math
+import collections
 
 import tobii_research as tobii
 
-import collections
 
 # -----Class for working with Tobii Eyetrackers -----
 class TobiiHelper:

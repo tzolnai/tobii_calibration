@@ -24,7 +24,6 @@ PsychoPy is installed.
 
 * [Psychopy](https://www.psychopy.org/installation.html#manual-install)
 * [numpy](https://scipy.org/install.html)
-* [scipy](https://scipy.org/install.html)
 * [pyglet](https://pyglet.readthedocs.io/en/pyglet-1.3-maintenance/)
 
 ### Installing
