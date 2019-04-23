@@ -452,10 +452,7 @@ class TobiiHelper:
         if self.gazeData is None:
             raise ValueError("No recorded gaze data was found.")
 
-        # get eye positions
-        eyeCoors = self.__getAvgEyePos()
-
-        return eyeCoors[2]
+        return self.__getAvgEyePos()[2]
 
 # ----- Functions for running calibration -----
     
