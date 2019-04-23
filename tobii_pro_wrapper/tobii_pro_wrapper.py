@@ -32,6 +32,7 @@ import datetime as dt
 import numpy as np
 from scipy.spatial import distance
 import numbers
+import math
 
 import tobii_research as tobii
 
@@ -349,9 +350,9 @@ class TobiiHelper:
         ys = (leftGazeXYZ[1], rightGazeXYZ[1])
 
         # if all of the axes have data from at least one eye
-        if all([np.isnan(x) for x in xs]) or all([np.isnan(y) for y in ys]):
+        if all([math.isnan(x) for x in xs]) or all([math.isnan(y) for y in ys]):
             # take x and y averages
-            avgGazePos = (np.nan, np.nan)
+            avgGazePos = (math.nan, math.nan)
         else:
             # or if no data, hide points by showing off screen
             avgGazePos = (np.nanmean(xs), np.nanmean(ys))
@@ -431,7 +432,7 @@ class TobiiHelper:
         zs = (leftOriginXYZ[2],rightOriginXYZ[2])
 
         # if all of the axes have data from at least one eye
-        if not (np.isnan(xs)).all() and not (np.isnan(ys)).all() and not (np.isnan(zs)).all():
+        if not all([math.isnan(x) for x in xs]) and not all([math.isnan(y) for y in ys]) and not all([math.isnan(z) for z in zs]):
             # update the distance if the values are reasonable
             avgEyePos = (np.nanmean(xs), np.nanmean(ys), np.nanmean(zs))
         else:
@@ -597,8 +598,8 @@ class TobiiHelper:
         while True:
 
             avgGazePos = self.__getAvgGazePos()
-            if np.isnan(avgGazePos[0]) or np.isnan(avgGazePos[1]):
-                curPos = (np.nan, np.nan)
+            if math.isnan(avgGazePos[0]) or math.isnan(avgGazePos[1]):
+                curPos = (math.nan, math.nan)
             else:
                 # smooth gaze data with moving window
                 if gazePositions is None:
@@ -613,8 +614,8 @@ class TobiiHelper:
                 gazePositions = np.delete(gazePositions, 0, axis = 0)
 
             # update stimuli in window and draw if we have a valid pos
-            if not np.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
-               not np.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
+            if not math.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
+               not math.isnan(curPos[1]) and curPos[1] <= 1.0 and curPos[1] >= 0.0:
                 gazeStim.pos = self.__ada2PsychoPix(tuple(curPos))
                 gazeStim.draw()
 
