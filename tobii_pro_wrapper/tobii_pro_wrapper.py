@@ -905,8 +905,8 @@ class TobiiHelper:
                     # iterate through each of these presses
                     for entry in curDict.items():
                         # if the key press is the same as the current dictionary key
-                        if entry[0] == key:  # user changed his / her mind
-                            if entry in holdRedoDict:
+                        if entry[0] == key:
+                            if entry in holdRedoDict:  # user changed his / her mind
                                 holdRedoDict.remove(entry)
                                 holdColorPoints.remove(int(key))
                             else:
