@@ -729,7 +729,11 @@ class TobiiHelper:
         calibDrawCoor = []
         
         # iterate through calibration points
-        for i in range(len(calibResult.calibration_points)):
+        startindex = 0
+        if len(calibResult.calibration_points) > 0 and \
+            calibResult.calibration_points[0].position_on_display_area == (0.0, 0.0): # Tobii SDK adds an extra calib point
+            startindex = 1
+        for i in range(startindex, len(calibResult.calibration_points)):
             # current point
             curPoint = calibResult.calibration_points[i]
             pointPosition = curPoint.position_on_display_area  # point position
@@ -755,10 +759,7 @@ class TobiiHelper:
             newList = [self.__ada2PsychoPix(point), self.__ada2PsychoPix(leftXY),
                        self.__ada2PsychoPix(rightXY), pointPosition]
             calibDrawCoor.insert(i, newList)
-            
-        # for some weird reason my calibration always includes the point (0,0) at 
-        # index 0, so just remove it here
-        calibDrawCoor.pop(0)
+
         # return as list
         return calibDrawCoor
        
@@ -778,8 +779,13 @@ class TobiiHelper:
         if not isinstance(curDict, dict):
             raise TypeError('curDict must be a dictionary with number \n' +\
                             'keys and coordinate values.')
-        if len(curDict) != len(calibResult.calibration_points) - 1: # TODO: why it this minus 1 is here
-            raise ValueError('Data inconsistency: calibResult and curDict have different amount of items')
+        if len(calibResult.calibration_points) > 0 and\
+            calibResult.calibration_points[0].position_on_display_area == (0.0, 0.0): # Tobii SDK adds an extra calib point
+            if len(curDict) != len(calibResult.calibration_points) - 1:
+                raise ValueError('Data inconsistency: calibResult and curDict have different amount of items')
+        else:
+            if len(curDict) != len(calibResult.calibration_points):
+                raise ValueError('Data inconsistency: calibResult and curDict have different amount of items')
 
         # get gaze position results
         points2Draw = self.__calculateCalibration(calibResult)

@@ -521,6 +521,149 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
         self.assertEqual([-1.0, 1.0, -1.0], calibPoint_circle.lineColor.tolist())
 
+    def testTwoCalibPointsWithoutNullItem(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        calibration_point = tobii.CalibrationPoint((0.1, 0.1),(
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.08, 0.08), True),
+                                                            tobii.CalibrationEyeData((0.09, 0.08), True)),
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.12, 0.11), True),
+                                                            tobii.CalibrationEyeData((0.18, 0.12), True)),
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.11, 0.12), True),
+                                                            tobii.CalibrationEyeData((0.10, 0.10), True))))
+        calibration_point2 = tobii.CalibrationPoint((0.9, 0.9),(
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.98, 0.98), True),
+                                                            tobii.CalibrationEyeData((0.99, 0.98), True)),
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.91, 0.90), True),
+                                                            tobii.CalibrationEyeData((0.90, 0.97), True)),
+                                    tobii.CalibrationSample(tobii.CalibrationEyeData((0.89, 0.87), True),
+                                                            tobii.CalibrationEyeData((0.98, 0.99), True))))
+        calibration_points = (calibration_point, calibration_point2)
+        self.calibResult = tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS, calibration_points)
+
+        pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.9))]
+        self.calibDict = collections.OrderedDict(pointList)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+        tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
+        drawing_list = visual_mock.getListOfDrawings()
+
+        self.assertEqual(10, len(drawing_list))
+
+        # first calib point's circle
+        calibPoint1_circle = drawing_list[0]
+        self.assertTrue(isinstance(calibPoint1_circle, pvm.Circle))
+        # size
+        self.assertEqual(50, calibPoint1_circle.radius)
+        # pos
+        self.assertEqual(-546, calibPoint1_circle.pos[0])
+        self.assertEqual(307, calibPoint1_circle.pos[1])
+        # color
+        self.assertEqual([0.4, 0.4, 0.4], calibPoint1_circle.fillColor.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], calibPoint1_circle.lineColor.tolist())
+
+        # first calib point's text
+        calibPoint1_text = drawing_list[1]
+        self.assertTrue(isinstance(calibPoint1_text, pvm.TextStim))
+        # size
+        self.assertEqual(60, calibPoint1_text.height)
+        # pos
+        self.assertEqual(-546, calibPoint1_text.pos[0])
+        self.assertEqual(307, calibPoint1_text.pos[1])
+        # color
+        self.assertEqual([0.8, 0.8, 0.8], calibPoint1_text.color.tolist())
+        # text
+        self.assertEqual(str("1") , calibPoint1_text.text)
+
+        # first calib point's left eye line
+        calibPoint1_left_eye = drawing_list[2]
+        self.assertTrue(isinstance(calibPoint1_left_eye, pvm.Line))
+        # size
+        self.assertEqual(20, calibPoint1_left_eye.lineWidth)
+        # pos
+        self.assertEqual(-546, calibPoint1_left_eye.start[0])
+        self.assertEqual(307, calibPoint1_left_eye.start[1])
+        self.assertEqual(-541, calibPoint1_left_eye.end[0])
+        self.assertEqual(304, calibPoint1_left_eye.end[1])
+        # color
+        self.assertEqual("yellow", calibPoint1_left_eye.lineColor)
+
+        # first calib point's right eye line
+        calibPoint1_right_eye = drawing_list[3]
+        self.assertTrue(isinstance(calibPoint1_right_eye, pvm.Line))
+        # size
+        self.assertEqual(20, calibPoint1_right_eye.lineWidth)
+        # pos
+        self.assertEqual(-546, calibPoint1_right_eye.start[0])
+        self.assertEqual(307, calibPoint1_right_eye.start[1])
+        self.assertEqual(-514, calibPoint1_right_eye.end[0])
+        self.assertEqual(307, calibPoint1_right_eye.end[1])
+        # color
+        self.assertEqual("red", calibPoint1_right_eye.lineColor)
+
+        # second calib point's circle
+        calibPoint2_circle = drawing_list[4]
+        self.assertTrue(isinstance(calibPoint2_circle, pvm.Circle))
+        # size
+        self.assertEqual(50, calibPoint2_circle.radius)
+        # pos
+        self.assertEqual(546, calibPoint2_circle.pos[0])
+        self.assertEqual(-307, calibPoint2_circle.pos[1])
+        # color
+        self.assertEqual([0.4, 0.4, 0.4], calibPoint2_circle.fillColor.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], calibPoint2_circle.lineColor.tolist())
+
+        # second calib point's text
+        calibPoint2_text = drawing_list[5]
+        self.assertTrue(isinstance(calibPoint2_text, pvm.TextStim))
+        # size
+        self.assertEqual(60, calibPoint2_text.height)
+        # pos
+        self.assertEqual(546, calibPoint2_text.pos[0])
+        self.assertEqual(-307, calibPoint2_text.pos[1])
+        # color
+        self.assertEqual([0.8, 0.8, 0.8], calibPoint2_text.color.tolist())
+        # text
+        self.assertEqual(str("2") , calibPoint2_text.text)
+
+        # second calib point's left eye line
+        calibPoint2_left_eye = drawing_list[6]
+        self.assertTrue(isinstance(calibPoint2_left_eye, pvm.Line))
+        # size
+        self.assertEqual(20, calibPoint2_left_eye.lineWidth)
+        # pos
+        self.assertEqual(546, calibPoint2_left_eye.start[0])
+        self.assertEqual(-307, calibPoint2_left_eye.start[1])
+        self.assertEqual(582, calibPoint2_left_eye.end[0])
+        self.assertEqual(-320, calibPoint2_left_eye.end[1])
+        # color
+        self.assertEqual("yellow", calibPoint2_left_eye.lineColor)
+
+        # second calib point's right eye line
+        calibPoint2_right_eye = drawing_list[7]
+        self.assertTrue(isinstance(calibPoint2_right_eye, pvm.Line))
+        # size
+        self.assertEqual(20, calibPoint2_right_eye.lineWidth)
+        # pos
+        self.assertEqual(546, calibPoint2_right_eye.start[0])
+        self.assertEqual(-307, calibPoint2_right_eye.start[1])
+        self.assertEqual(623, calibPoint2_right_eye.end[0])
+        self.assertEqual(-368, calibPoint2_right_eye.end[1])
+        # color
+        self.assertEqual("red", calibPoint2_right_eye.lineColor)
+
+        # text
+        feedback_text = drawing_list[8]
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
+        self.assertEqual(str("Wait for the experimenter. \nUse number keys to select points for recalibration."), feedback_text.text)
+
+        # text
+        feedback_text = drawing_list[9]
+        self.assertTrue(isinstance(feedback_text, pvm.TextStim))
+        self.assertEqual(str("Finished checking. Resuming calibration."), feedback_text.text)
+
     def testQuitByQ(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
