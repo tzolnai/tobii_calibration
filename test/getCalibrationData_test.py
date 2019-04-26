@@ -378,6 +378,36 @@ class getCalibrationDataTest(unittest.TestCase):
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.fillColor.tolist())
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
+    def testOneCalibPoint(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        self.pointList = [(0.9, 0.9)]
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['x'])
+        tobii_helper._TobiiHelper__getCalibrationData(self.calibWin, self.pointList)
+        drawing_list = visual_mock.getListOfDrawings()
+
+        self.assertEqual(150, len(drawing_list))
+
+        # first 50 frames are about moving the circle to the next calib point
+        for i in range(0, 50):
+            calibPoint = drawing_list[i]
+            self.assertTrue(isinstance(calibPoint, pvm.Circle))
+            # size
+            self.assertEqual(50, calibPoint.radius)
+            # pos
+            self.assertAlmostEqual(-524 + i * 22, calibPoint.pos[0], delta = 10.0)
+            self.assertAlmostEqual(295 - i * 12.5, calibPoint.pos[1], delta = 13.0)
+            # color
+            self.assertEqual([1.0, -1.0, -1.0], calibPoint.fillColor.tolist())
+            self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
+
+        # after the moving, circle is at the first calib point
+        self.assertEqual(546, drawing_list[49].pos[0])
+        self.assertEqual(-307, drawing_list[49].pos[1])
+
     def testNoReturnedValues(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)

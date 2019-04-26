@@ -913,7 +913,11 @@ class TobiiHelper:
         pointSmallRadius = 5.0  # point radius
         pointLargeRadius = pointSmallRadius * 10.0  
         moveFrames = 50 # number of frames to draw between points
-        startPoint = pointList[-1] # starter point for animation
+        # starter point for animation
+        if len(pointList) > 0 and pointList[0] != (0.9, 0.9):
+            startPoint = (0.9, 0.9)
+        else:
+            startPoint = (0.1, 0.1)
     
         # calibraiton point visual object
         calibPoint = visual.Circle(calibWin, 
