@@ -1151,7 +1151,7 @@ class TobiiHelper:
     
             # Check status of calibration result
             # if calibration was successful, check calibration results
-            if calibResult.status != tobii.CALIBRATION_STATUS_FAILURE: # TODO: what if only one eye failes
+            if calibResult.status == tobii.CALIBRATION_STATUS_SUCCESS:
                 # give feedback
                 calibMessage.text = ("Applying calibration...")
                 calibMessage.draw()

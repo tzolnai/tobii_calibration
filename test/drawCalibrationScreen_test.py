@@ -61,6 +61,11 @@ class drawCalibrationScreenTest(unittest.TestCase):
             self.calibWin.close()
 
     def initAll(self, tobii_helper):
+
+        def returnSuccess(*args):
+            return tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS, ())
+        DummyCalibration.compute_and_apply = returnSuccess
+
         tobii_helper.setMonitor(dimensions = (1366, 768))
         tobii_helper.eyetracker = "dummy"
 
@@ -238,7 +243,6 @@ class drawCalibrationScreenTest(unittest.TestCase):
 
         redoList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1))]
 
-        # doing redoing
         def returnFailure(*args):
             return tobii.CalibrationResult(tobii.CALIBRATION_STATUS_FAILURE, ())
 
@@ -275,18 +279,18 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
 
-        # doing redoing
         def returnFailure(*args):
             return tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS_RIGHT_EYE, ())
 
         DummyCalibration.compute_and_apply = returnFailure
 
         visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c', 'c'])
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(5 * 150 + 6, len(drawing_list))
+        self.assertEqual(5 * 150 + 3, len(drawing_list))
         # 5 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -302,29 +306,16 @@ class drawCalibrationScreenTest(unittest.TestCase):
 
         # doing __getCalibrationData()
 
-        # then more messages
+        # then message about the failure
         message = drawing_list[752]
         self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Applying calibration..."), message.text)
-
-        message = drawing_list[753]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Calculating calibration accuracy..."), message.text)
-
-        message = drawing_list[754]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Calibration was successful.\n\n" + \
-                             "Moving on to validation."), message.text)
-
-        message = drawing_list[755]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("+"), message.text)
+        self.assertEqual(str("Calibration was not successful.\n\n" + \
+                             "Closing the calibration window."), message.text)
 
     def testRigthEyeFailure(self):
         tobii_helper = wrapper.TobiiHelper()
         self.initAll(tobii_helper)
 
-        # doing redoing
         def returnFailure(*args):
             return tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS_LEFT_EYE, ())
 
@@ -335,7 +326,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(5 * 150 + 6, len(drawing_list))
+        self.assertEqual(5 * 150 + 3, len(drawing_list))
         # 5 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -351,23 +342,11 @@ class drawCalibrationScreenTest(unittest.TestCase):
 
         # doing __getCalibrationData()
 
-        # then more messages
+        # then message about the failure
         message = drawing_list[752]
         self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Applying calibration..."), message.text)
-
-        message = drawing_list[753]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Calculating calibration accuracy..."), message.text)
-
-        message = drawing_list[754]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Calibration was successful.\n\n" + \
-                             "Moving on to validation."), message.text)
-
-        message = drawing_list[755]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("+"), message.text)
+        self.assertEqual(str("Calibration was not successful.\n\n" + \
+                             "Closing the calibration window."), message.text)
 
 if __name__ == "__main__":
     unittest.main() # run all tests
