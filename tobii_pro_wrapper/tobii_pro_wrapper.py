@@ -676,6 +676,7 @@ class TobiiHelper:
                                        monitor = self.win,
                                        winType = 'pyglet',
                                        color = [0.8, 0.8, 0.8]) as ownValWin:
+                ownValWin.mouseVisible = False
                 self.__drawValidationScreen(pointDict, ownValWin)
 
             
@@ -1034,6 +1035,7 @@ class TobiiHelper:
                                        monitor = self.win,
                                        winType = 'pyglet',
                                        color = [0.4, 0.4, 0.4]) as ownTrackWin:
+                ownTrackWin.mouseVisible = False
 
                 # feedback about eye position
                 self.__drawEyePositions(ownTrackWin)
@@ -1212,6 +1214,7 @@ class TobiiHelper:
                                  monitor = self.win,
                                  winType = 'pyglet',
                                  color = [0.4, 0.4, 0.4])
+        calibWin.mouseVisible = False
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin,
                                        color = [1.0, 1.0, 1.0],  # text
