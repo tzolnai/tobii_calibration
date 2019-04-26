@@ -90,7 +90,7 @@ class TobiiHelper:
             print("Name: " + eyetracker.device_name)
             print("Serial number: " + eyetracker.serial_number)
             # create eyetracker object
-            self.eyetracker = tobii.EyeTracker(address)
+            self.eyetracker = eyetracker
         # if serial number is given as a string
         else:
             # get information about available eyetrackers
@@ -104,7 +104,7 @@ class TobiiHelper:
                     print("Serial number: " + eyetracker.serial_number)
 
                     # create eyetracker object
-                    self.eyetracker = tobii.EyeTracker(address)
+                    self.eyetracker = eyetracker
 
         # check to see that eyetracker is connected
         if self.eyetracker is None:
