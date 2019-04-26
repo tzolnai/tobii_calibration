@@ -452,6 +452,45 @@ class TobiiHelper:
 
         return self.__getAvgEyePos()[2]
 
+    def __calcMeanOfPointList(self, pointList):
+        # we need a non empty list
+        assert isinstance(pointList, list)
+        assert len(pointList) != 0
+
+        sumX = 0.0
+        sumY = 0.0
+        for i in range(len(pointList)):
+
+            assert isinstance(pointList[i], tuple)
+            assert len(pointList[i]) == 2
+            assert isinstance(pointList[i][0], numbers.Number)
+            assert isinstance(pointList[i][1], numbers.Number)
+
+            sumX += pointList[i][0]
+            sumY += pointList[i][1]
+
+        return (sumX / len(pointList), sumY / len(pointList))
+
+    def __smoothing(self, currentObject, objectList, invalidObject, smoothFunction):
+        assert isinstance(objectList, list)
+        maxLength = 6
+        if currentObject == invalidObject:
+            if len(objectList) > 0:
+                objectList.pop(0)
+        else:
+            objectList.append(currentObject)
+
+        if len(objectList) == 0: # no valid data
+            result = invalidObject
+        else:
+            result = smoothFunction(objectList)
+
+        # remove previous position values
+        if len(objectList) == maxLength:
+            objectList.pop(0)
+
+        return result
+
 # ----- Functions for running calibration -----
     
     # function for drawing representation of the eyes in virtual trackbox
@@ -493,11 +532,22 @@ class TobiiHelper:
                                   pos = [0.0, -0.65],
                                   height = 0.07)
 
+        eyeDistances = []
+        leftPositions = []
+        rightPositions = []
+
         # while tracking 
         while True:         
             # find and update eye positions
-            leftStim.pos, rightStim.pos = self.__trackboxEyePos()
+            leftEyePos, rightEyePos = self.__trackboxEyePos()
             eyeDist = self.__getAvgEyeDist()
+
+            eyeDist = self.__smoothing(eyeDist, eyeDistances, 0.0, lambda list : sum(list) / len(list))
+
+            leftStim.pos = self.__smoothing(leftEyePos, leftPositions, [0.99, 0.99], self.__calcMeanOfPointList)
+
+            rightStim.pos = self.__smoothing(rightEyePos, rightPositions, [0.99, 0.99], self.__calcMeanOfPointList)
+
             frontDistance = self.tbCoordinates.get('frontDistance')
             backDistance = self.tbCoordinates.get('backDistance')
             
@@ -588,27 +638,14 @@ class TobiiHelper:
                                   fillColor = [1.0, -1.0, -1.0])  # red
 
         # create array for smoothing gaze position
-        gazePositions = None
-        maxLength = 6
+        gazePositions = []
 
         # while tracking
         while True:
 
             avgGazePos = self.__getAvgGazePos()
-            if math.isnan(avgGazePos[0]) or math.isnan(avgGazePos[1]):
-                curPos = (math.nan, math.nan)
-            else:
-                # smooth gaze data with moving window
-                if gazePositions is None:
-                    gazePositions = np.array([avgGazePos])
-                else:
-                    gazePositions = np.vstack((gazePositions,
-                                               np.array(avgGazePos)))
-                curPos = np.nanmean(gazePositions, axis = 0)
 
-            # remove previous position values
-            if gazePositions is not None and len(gazePositions) == maxLength:
-                gazePositions = np.delete(gazePositions, 0, axis = 0)
+            curPos = self.__smoothing(avgGazePos, gazePositions, (math.nan, math.nan), self.__calcMeanOfPointList)
 
             # update stimuli in window and draw if we have a valid pos
             if not math.isnan(curPos[0]) and curPos[0] <= 1.0 and curPos[0] >= 0.0 and \
