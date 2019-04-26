@@ -472,11 +472,11 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
-        visual_mock.setReturnKeyList(['1', '2', '1', '3', '3', 'c'])
+        visual_mock.setReturnKeyList(['1', '2', '1', '3', '3', '1', 'c'])
 
         result = tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
-        self.assertEqual(3, len(result))
-        self.assertEqual(collections.OrderedDict([('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5))]), result)
+        self.assertEqual(2, len(result))
+        self.assertEqual(collections.OrderedDict([('2',(0.9, 0.1)), ('1',(0.1, 0.1))]), result)
 
 
     def testRedoPointDrawing(self):

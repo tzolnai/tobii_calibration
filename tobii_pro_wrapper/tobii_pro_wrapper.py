@@ -862,11 +862,15 @@ class TobiiHelper:
                     # iterate through each of these presses
                     for entry in curDict.items():
                         # if the key press is the same as the current dictionary key
-                        if entry[0] == key:
-                            # append that dictionary entry into a holding dictionary
-                            holdRedoDict.append(entry)
-                            # append integer version to a holding list  
-                            holdColorPoints.append(int(key))
+                        if entry[0] == key:  # user changed his / her mind
+                            if entry in holdRedoDict:
+                                holdRedoDict.remove(entry)
+                                holdColorPoints.remove(int(key))
+                            else:
+                                # append that dictionary entry into a holding dictionary
+                                holdRedoDict.append(entry)
+                                # append integer version to a holding list
+                                holdColorPoints.append(int(key))
                                 
                 # continue with calibration procedure           
                 elif key in ['c']:
