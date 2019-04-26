@@ -84,7 +84,6 @@ class TobiiHelper:
         if serialString is None:
             # use first found eyetracker
             eyetracker = allTrackers[0]
-            address = eyetracker.address
             print("Address: " + eyetracker.address)
             print("Model: " + eyetracker.model)
             print("Name: " + eyetracker.device_name)
@@ -96,7 +95,6 @@ class TobiiHelper:
             # get information about available eyetrackers
             for eyetracker in allTrackers:
                 if eyetracker.serial_number == serialString:
-                    address = eyetracker.address
                     print("Address: " + eyetracker.address)
                     print("Model: " + eyetracker.model)
                     # fine if name is empty
