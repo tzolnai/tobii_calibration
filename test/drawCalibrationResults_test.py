@@ -300,7 +300,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[8]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("Wait for the experimenter."), feedback_text.text)
+        self.assertEqual(str("Wait for the experimenter. \nUse number keys to select points for recalibration."), feedback_text.text)
 
         # text
         feedback_text = drawing_list[9]
@@ -433,7 +433,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[index + 4]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("Wait for the experimenter."), feedback_text.text)
+        self.assertEqual(str("Wait for the experimenter. \nUse number keys to select points for recalibration."), feedback_text.text)
 
     def testNoReturnedValues(self):
         tobii_helper = wrapper.TobiiHelper()

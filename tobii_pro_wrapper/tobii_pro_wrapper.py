@@ -816,7 +816,7 @@ class TobiiHelper:
                                     height = 60)
         # Make a dummy message
         checkMsg = visual.TextStim(calibWin,
-                                   text = 'Wait for the experimenter.',
+                                   text = 'Wait for the experimenter. \nUse number keys to select points for recalibration.',
                                    color = [1.0, 1.0, 1.0],
                                    units = 'norm',
                                    pos = [0.0, -0.5],
