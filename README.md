@@ -58,20 +58,26 @@ or get from the default monitor.
 Returns the screen width and height of the selected monitor. This dimensions can be set with setMonitor
 method. If it was not specified, then the code uses the default screen size.
 
-### runValidation(pointDict = dict)
+### runValidation(pointDict = None, valWin = None)
 Shows real time gaze position and draws several reference points (**pointDict** is a dictionary with numbered keys
 and coordinate values for drawing those points) to check calibration quality. If no value for **pointDict** is given,
 reference points will be drawn at the standard locations for a 5 point calibration.
+valWin is a psychopy.visual.Window object. If this parameter is set the validation screen is drawn in the specified
+window. Otherwise a new validation window is created.
 
-### runTrackBox()
+### runTrackBox(trackWin = None)
 Shows real time eye position within in the Tobii eyetracker trackbox. Uses colors and reported eye distance to let
 the subject know if they are well positioned relative to the tracker.
+trackWin is a psychopy.visual.Window object. If this parameter is set the track box screen is drawn in the specified
+window. Otherwise a new track box window is created.
 
-### runFullCalibration(numCalibPoints = int())
+### runFullCalibration(numCalibPoints = None, calibWin = None)
 Runs a full 5 or 9 point calibration routine as specified by **numCalibPoints**. If **numCalibPoints** is not defined,
 then the default is a 9 point calibration. This full calibration routine includes: finding eye positions within the trackbox,
 running a calibration, showing calibration accuracy, re-calibrating problem points, checking the quality of the calibration, and
-saving the calibration to the eyetracker. Requires a working keyboard to control. 
+saving the calibration to the eyetracker. Requires a working keyboard to control.
+calibWin is a psychopy.visual.Window object. If this parameter is set the calibration screen is drawn in the specified
+window. Otherwise a new calibration window is created.
 
 ## Examples
 
@@ -83,37 +89,18 @@ and run a full 5-point calibration routine:
 import tobii_pro_wrapper as tpw
 
 # Create a TobiiHelper object
-foo = tpw.TobiiHelper()
+tobii_helper = tpw.TobiiHelper()
 
 # Idenfity and define the experimental monitor
-foo.setMonitor(nameString = None, dimensions = None)
+tobii_helper.setMonitor()
 
 # Find eyetrackers and connect
-foo.setEyeTracker(serialString = None)
+tobii_helper.setEyeTracker()
 
 # Run a full 5 point calibration routing
-foo.runFullCalibration(numCalibPoints = 5)
+tobii_helper.runFullCalibration(numCalibPoints = 5)
 
 ```
-
-To start, output, and stop the eyetracker's collection of gaze data:
-
-```
-# start the eyetracker
-foo.startGazeData()
-
-# to get real time gaze data, place this command within a "while" loop 
-# during each trial run
-foo.getCurrentData()
-
-# stop the eyetracker
-foo.stopGazeData()
-
-```
-
-That's it!
-
-Further examples will be linked below as they are developed.
 
 ## Authors
 
