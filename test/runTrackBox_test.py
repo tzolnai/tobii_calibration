@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 
 from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
@@ -27,8 +27,8 @@ yellow_color = [1.0, 1.0, 0.0]
 def DummyFunction(tobiiHelper):
     pass
 
-wrapper.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
-wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
+calibrator.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
+calibrator.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 pcore.wait = DummyFunction
 
@@ -74,7 +74,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
 
     def testNotInitedThings(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         # no window
         with self.assertRaises(ValueError):
@@ -127,7 +127,7 @@ class runTrackBoxTest(unittest.TestCase):
         trackWin.close()
 
     def testNegativEyeData(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (-0.34, 0.56, 0.5)
@@ -139,7 +139,7 @@ class runTrackBoxTest(unittest.TestCase):
             tobii_helper.runTrackBox()
 
     def testEyePosInTrackbox(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c'])
@@ -196,7 +196,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testEyeIsTooFar(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 1.0)
@@ -237,7 +237,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 82 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
 
     def testEyeIsAlmostTooFar(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.97)
@@ -278,7 +278,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 78 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testEyeIsTooNear(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.5)
@@ -319,7 +319,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
 
     def testEyeIsAlmostTooNear(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.97)
@@ -360,7 +360,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 51 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testNoValidEyeData(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (math.nan, math.nan, math.nan)
@@ -403,7 +403,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 0 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testDifferentFrontDistance(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.5)
@@ -447,7 +447,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
 
     def testDifferentBackDistance(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         tobii_helper.tbCoordinates['frontDistance'] = 300.0
         tobii_helper.tbCoordinates['backDistance'] = 500.0
@@ -485,7 +485,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testOneEyeIsFar(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (0.34, 0.56, 0.97)
@@ -526,7 +526,7 @@ class runTrackBoxTest(unittest.TestCase):
         self.assertEqual(str("You're currently 80 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testQuitByQ(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -536,7 +536,7 @@ class runTrackBoxTest(unittest.TestCase):
             tobii_helper.runTrackBox()
 
     def testRunWithExistingWindow(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -555,7 +555,7 @@ class runTrackBoxTest(unittest.TestCase):
         trackWin.close()
 
     def testWrongWindowParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()

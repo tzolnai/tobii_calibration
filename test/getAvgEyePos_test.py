@@ -6,38 +6,38 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 import math
 
 class getAvgEyePosTest(unittest.TestCase):
 
     def testNotInitedEyeTracker(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.tracking = True
         # tobii_helper.eyetracker is None
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__getAvgEyePos()
 
     def testNoTracking(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         # tobii_helper.tracking is False
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__getAvgEyePos()
 
     def testNoGazeData(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__getAvgEyePos()
 
     def testValidGazeData(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
         tobii_helper.gazeData = {}
@@ -49,7 +49,7 @@ class getAvgEyePosTest(unittest.TestCase):
         self.assertAlmostEqual(651.0, avgResult[2], delta = 0.001)
 
     def testGazeDataWithNoLeftEye(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
         tobii_helper.gazeData = {}
@@ -61,7 +61,7 @@ class getAvgEyePosTest(unittest.TestCase):
         self.assertAlmostEqual(650.0, avgResult[2], delta = 0.001)
 
     def testGazeDataWithNoRightEye(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
         tobii_helper.gazeData = {}
@@ -73,7 +73,7 @@ class getAvgEyePosTest(unittest.TestCase):
         self.assertAlmostEqual(650.0, avgResult[2], delta = 0.001)
 
     def testGazeDataWithNanData(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
         tobii_helper.gazeData = {}

@@ -8,9 +8,9 @@ import unittest
 import sys
 # Add the local path of the wrapper module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as wrapper
 import math
 
 class getAvgGazePosTest(unittest.TestCase):

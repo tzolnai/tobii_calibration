@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 import tobii_research as tobii
 
 from psychopy import visual, event, logging
@@ -25,8 +25,8 @@ logging.console.setLevel(logging.ERROR)
 def DummyFunction(*argv):
     pass
 
-wrapper.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
-wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
+calibrator.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
+calibrator.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 pcore.wait = DummyFunction
 
 class DummyCalibration:
@@ -82,11 +82,11 @@ class drawCalibrationScreenTest(unittest.TestCase):
                                      winType = 'pyglet',
                                      color = [0.4, 0.4, 0.4])
 
-        wrapper.TobiiHelper._TobiiHelper__drawCalibrationResults = DummyFunction # we tested this somewhere else
+        calibrator.TobiiHelper._TobiiHelper__drawCalibrationResults = DummyFunction # we tested this somewhere else
 
 
     def testWrongParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__drawCalibrationScreen(None, None)
 
@@ -97,7 +97,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
             tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, None)
 
     def testNotInitedThings(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
 
         pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
@@ -133,7 +133,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         calibWin.close()
 
     def testNormalExecution(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -176,7 +176,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("+"), message.text)
 
     def testWithRedoPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         redoList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1))]
@@ -188,7 +188,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
                 redoList.clear()
                 return result
 
-        wrapper.TobiiHelper._TobiiHelper__drawCalibrationResults = drawCalibrationResultsRedo
+        calibrator.TobiiHelper._TobiiHelper__drawCalibrationResults = drawCalibrationResultsRedo
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c', 'c'])
@@ -240,7 +240,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("+"), message.text)
 
     def testFailedCalibration(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         redoList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1))]
@@ -278,7 +278,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
                              "Closing the calibration window."), message.text)
 
     def testLeftEyeFailure(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         def returnFailure(*args):
@@ -315,7 +315,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
                              "Closing the calibration window."), message.text)
 
     def testRigthEyeFailure(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         def returnFailure(*args):

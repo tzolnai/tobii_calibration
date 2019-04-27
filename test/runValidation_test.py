@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 
 from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
@@ -24,8 +24,8 @@ logging.console.setLevel(logging.ERROR)
 def DummyFunction(tobiiHelper):
     pass
 
-wrapper.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
-wrapper.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
+calibrator.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
+calibrator.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 pcore.wait = DummyFunction
 
@@ -45,12 +45,12 @@ class runValidationTest(unittest.TestCase):
         tobii_helper.gazeData['right_gaze_point_on_display_area'] = (0.32, 0.61)
 
     def testWrongParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper.runValidation([])
 
     def testNotInitedThings(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
 
         # no monitor
@@ -84,7 +84,7 @@ class runValidationTest(unittest.TestCase):
         tobii_helper.runValidation()
 
     def testDefaultFiveCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c'])
@@ -145,7 +145,7 @@ class runValidationTest(unittest.TestCase):
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
 
     def testNineCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c'])
@@ -221,7 +221,7 @@ class runValidationTest(unittest.TestCase):
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
 
     def testTwoCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c'])
@@ -274,7 +274,7 @@ class runValidationTest(unittest.TestCase):
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
 
     def testEyeOutOfScope(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_point_on_display_area'] = (1.1, 0.56)
@@ -297,7 +297,7 @@ class runValidationTest(unittest.TestCase):
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
 
     def testInvalidEyePos(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         tobii_helper.gazeData['left_gaze_point_on_display_area'] = (math.nan, math.nan)
@@ -320,7 +320,7 @@ class runValidationTest(unittest.TestCase):
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
 
     def testQuitByQ(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -329,7 +329,7 @@ class runValidationTest(unittest.TestCase):
             tobii_helper.runValidation()
 
     def testRunWithExistingWindow(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -348,7 +348,7 @@ class runValidationTest(unittest.TestCase):
         valWin.close()
 
     def testWrongWindowParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         with self.assertRaises(TypeError):

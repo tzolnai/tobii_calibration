@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 import tobii_research as tobii
 from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
@@ -62,7 +62,7 @@ class getCalibrationDataTest(unittest.TestCase):
         self.pointList = [(0.1, 0.1), (0.9, 0.1), (0.5, 0.5), (0.1, 0.9), (0.9, 0.9)]
 
     def testNotInitedThingOrWrongParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
 
         # no calibration
         with self.assertRaises(ValueError):
@@ -105,7 +105,7 @@ class getCalibrationDataTest(unittest.TestCase):
         calibWin.close()
 
     def testTwoCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         self.pointList = [(0.1, 0.1), (0.9, 0.9)]
@@ -206,7 +206,7 @@ class getCalibrationDataTest(unittest.TestCase):
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
     def testFiveCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -284,7 +284,7 @@ class getCalibrationDataTest(unittest.TestCase):
                 self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
     def testFirstPointOnBottomRight(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         self.pointList = [(0.9, 0.9), (0.9, 0.1), (0.5, 0.5), (0.1, 0.9), (0.1, 0.1)]
 
@@ -309,7 +309,7 @@ class getCalibrationDataTest(unittest.TestCase):
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
     def testFirstPointOnBottomLeft(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         self.pointList = [(0.1, 0.9), (0.9, 0.1), (0.5, 0.5), (0.1, 0.1), (0.9, 0.9)]
 
@@ -334,7 +334,7 @@ class getCalibrationDataTest(unittest.TestCase):
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
     def testFirstPointOnTopRight(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         self.pointList = [(0.9, 0.1), (0.1, 0.9), (0.5, 0.5), (0.1, 0.1), (0.9, 0.9)]
 
@@ -359,7 +359,7 @@ class getCalibrationDataTest(unittest.TestCase):
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
     def testFirstPointOnCenter(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
         self.pointList = [(0.5, 0.5), (0.9, 0.1), (0.1, 0.9), (0.1, 0.1), (0.9, 0.9)]
 
@@ -384,7 +384,7 @@ class getCalibrationDataTest(unittest.TestCase):
             self.assertEqual([1.0, -1.0, -1.0], calibPoint.lineColor.tolist())
 
     def testOneCalibPoint(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         self.pointList = [(0.9, 0.9)]
@@ -414,7 +414,7 @@ class getCalibrationDataTest(unittest.TestCase):
         self.assertEqual(-307, drawing_list[49].pos[1])
 
     def testNoReturnedValues(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -424,7 +424,7 @@ class getCalibrationDataTest(unittest.TestCase):
         self.assertEqual(0, len(result))
 
     def testQuitByQ(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()

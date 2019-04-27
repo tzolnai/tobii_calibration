@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 import tobii_research as tobii
 
 from psychopy import visual, event, logging
@@ -45,7 +45,7 @@ class runFullCalibrationTest(unittest.TestCase):
         tobii_helper.runValidation = runValidationDummy # we test this somewhere else
 
     def testNotInitedThings(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
 
         # wrong param
@@ -73,7 +73,7 @@ class runFullCalibrationTest(unittest.TestCase):
         tobii_helper.setMonitor()
 
     def testDefaultCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -107,7 +107,7 @@ class runFullCalibrationTest(unittest.TestCase):
         self.assertEqual((0.9, 0.9), self.calibDict['5'])
 
     def testNineCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         visual_mock = pvm.PsychoPyVisualMock()
@@ -148,7 +148,7 @@ class runFullCalibrationTest(unittest.TestCase):
         self.assertEqual((0.9, 0.9), self.calibDict['9'])
 
     def testCallWithWindow(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
         calibWin = visual.Window(size = [1366, 768],

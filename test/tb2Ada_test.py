@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 
 class tb2AdaTest(unittest.TestCase):
 
@@ -33,40 +33,40 @@ class tb2AdaTest(unittest.TestCase):
         tobii_helper.adaCoordinates['width'] = 476.64
 
     def testNoneParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__tb2Ada(None)
 
     def testParamWithWrongType(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__tb2Ada([])
 
     def testTupleParamWithWrongLen(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__tb2Ada((12, 11, 10))
 
     def testNoTrackBoxInited(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__tb2Ada((12, 11))
 
     def testNoDisplayAreAInited(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__tb2Ada((12, 11))
 
     def testNoneNormalizedParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         with self.assertRaises(ValueError):
             adaResult = tobii_helper._TobiiHelper__tb2Ada((12, 11))
 
     def testNormalizedCall(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper._TobiiHelper__tb2Ada((0.34, 0.45))
@@ -74,7 +74,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.407, adaResult[1], delta = 0.001)
 
     def testRatioOne(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper._TobiiHelper__tb2Ada((0.34, 0.45))
@@ -82,7 +82,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.45, adaResult[1], delta = 0.001)
 
     def testCallWithPointOne(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper._TobiiHelper__tb2Ada((1.0, 1.0))
@@ -90,7 +90,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.905, adaResult[1], delta = 0.001)
 
     def testCallWithPointZero(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
         adaResult = tobii_helper._TobiiHelper__tb2Ada((0.0, 0.0))
@@ -98,7 +98,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
 
     def testRatioOnePointOne(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper._TobiiHelper__tb2Ada((1.0, 1.0))
@@ -106,7 +106,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(1.0, adaResult[1], delta = 0.001)
 
     def testRatioOnePointZero(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper._TobiiHelper__tb2Ada((0.0, 0.0))
@@ -114,7 +114,7 @@ class tb2AdaTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, adaResult[1], delta = 0.001)
 
     def testRatioOnePointCenter(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         self.initTrackBox(tobii_helper)
         tobii_helper.adaCoordinates = tobii_helper.tbCoordinates
         adaResult = tobii_helper._TobiiHelper__tb2Ada((0.5, 0.5))

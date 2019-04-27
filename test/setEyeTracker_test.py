@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 import tobii_research as tobii
 import time
 
@@ -26,7 +26,7 @@ class setEyeTrackerTest(unittest.TestCase):
         return loop_count < 10
 
     def testNoParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         if self.hasEyeTrackerConnected():
             tobii_helper.setEyeTracker()
         else:
@@ -34,22 +34,22 @@ class setEyeTrackerTest(unittest.TestCase):
                 tobii_helper.setEyeTracker()
 
     def testWrongSerialParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper.setEyeTracker(serialString = [])
 
     def testWrongSerialParam2(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(ValueError):
             tobii_helper.setEyeTracker(serialString = "12345")
 
     def testWrongEyeTrackerParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper.setEyeTracker(eyeTracker = [])
 
     def testRightSerialNumberParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         if self.hasEyeTrackerConnected():
             tobii_helper.setEyeTracker(tobii.find_all_eyetrackers()[0].serial_number)
 

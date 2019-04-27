@@ -6,25 +6,25 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 from psychopy import monitors
 import pyglet
 
 class setMonitorTest(unittest.TestCase):
 
     def testMonitorNotInited(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(ValueError):
             tobii_helper.getMonitorName()            
         with self.assertRaises(ValueError):
             tobii_helper.getMonitorDimensions()
 
     def testNoParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
@@ -32,13 +32,13 @@ class setMonitorTest(unittest.TestCase):
         self.assertEqual((screen.width, screen.height), tobii_helper.getMonitorDimensions())
         
     def testWrongNameParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         with self.assertRaises(TypeError):
             tobii_helper.setMonitor(nameString = (1, 2))
         
     def testCallWithMonitorName(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor(monitors.getAllMonitors()[0])
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
@@ -46,7 +46,7 @@ class setMonitorTest(unittest.TestCase):
         self.assertEqual((screen.width, screen.height), tobii_helper.getMonitorDimensions())
                 
     def testCallWithNonExisitngMonitorName(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         name = monitors.getAllMonitors()[0] + monitors.getAllMonitors()[0]
         tobii_helper.setMonitor(name)
@@ -55,34 +55,34 @@ class setMonitorTest(unittest.TestCase):
         self.assertEqual((screen.width, screen.height), tobii_helper.getMonitorDimensions())
         
     def testWrongDimensionParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper.setMonitor(dimensions = "dim")
             
     def testWrongDimensionParam2(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper.setMonitor(dimensions = ("dim", "dim2"))            
             
     def testWrongDimensionParam3(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(TypeError):
             tobii_helper.setMonitor(dimensions = (1, 2, 3))
             
     def testWrongDimensionParam4(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(ValueError):
             tobii_helper.setMonitor(dimensions = (-100, 2))
             
     def testCallWithIntegerDimensions(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor(dimensions = (1366, 768))
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
         self.assertEqual((1366, 768), tobii_helper.getMonitorDimensions())
             
     def testCallWithFloatDimensions(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor(dimensions = (1366.0, 768.0))
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())

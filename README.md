@@ -1,15 +1,20 @@
-# tobii-calibration
+# tobii_calibration
 
-Derivetive code from tobii-pro-wrapper: https://github.com/oguayasa/. This code is work-in-progress,
-if you would like to use these functionalites you can use the original wrapper code.
+This package contains useful rutines for calibration using a Tobii Pro SDK for Python.
+Three main part of calibration is supported:
+1. Trackbox visualization to allow positioning of the subject to make
+the eyes positioned inside the eye tracker's track box (see runTrackBox).
+2. Displaying calibration points and collection calibraton data (see runFullCalibration).
+3. Validation screen which can be used after calibration to validate that the eye tracker
+records the correct eye positions.
 
-Contains functions for working with with the new Tobii Pro SDK for Python,
-along with essential eye-tracking routines, in a TobiiHelper class.
+Derivetive code from tobii-pro-wrapper: https://github.com/oguayasa/tobii_pro_wrapper.
+This code is in 'work-in-progress' state.
 
 ## Getting Started
 
 ### Prerequisites
-Running tobii_pro_wrapper requires all of the following and their dependencies. 
+Running tobii_calibration requires all of the following and their dependencies.
 
 * [Python 3.5](https://www.python.org/downloads/)
 * [Tobii Pro SDK](https://pypi.org/project/tobii-research/) for Python 3.5
@@ -17,8 +22,9 @@ Running tobii_pro_wrapper requires all of the following and their dependencies.
 ```
 pip install tobii_research
 ```
+
 You will need PsychoPy for using this module. However there is no standalone PsychoPy
-supporting Python 3.5, so you'll need to use the manual installation (see the link bellow).
+supporting Python 3.5, so you'll need to use the [manual installation](https://www.psychopy.org/installation.html#manual-install).
 Other dependencies bellow are also used by PsychoPy, so it's likely you'll have them after
 PsychoPy is installed.
 
@@ -34,6 +40,11 @@ Download or clone the whole project then go into the folder of it and call setup
 python setup.py install
 ```
 
+For installing it with a non english language (only Hungarian translation is supported by now):
+```
+python setup.py install --lang hu
+```
+
 ## Package Details
 
 ### TobiiHelper() *class*
@@ -46,7 +57,7 @@ Sets the self.eyetracker attribute.
 
 ### setMonitor(nameString = None, dimensions = None)
 Creates, selects, and calibrates a psychopy.monitor object. You can select a specific
-monitor with **nameString** and set its dimensions with **dimensions**. If no **nameString** or 
+monitor with **nameString** and set its dimensions with **dimensions**. If no **nameString** or
 **dimensions** are given, it will use the default monitor and that monitors dimensions. Sets the
 self.win attributes
 
@@ -87,15 +98,15 @@ window. Otherwise a new calibration window is created.
 
 ## Examples
 
-To find the eyetracker, determing eyetracker coordinatest, define the experimental monitor, 
-and run a full 5-point calibration routine:
+Init a TobiiHelper object, set the default monitor, set the default eye tracker
+and run a full 5-point calibration:
 
 ```
-# Import the wrapper
-import tobii_pro_wrapper as tpw
+# Import the calibration module
+import tobii_calibration as tc
 
 # Create a TobiiHelper object
-tobii_helper = tpw.TobiiHelper()
+tobii_helper = tc.TobiiHelper()
 
 # Idenfity and define the experimental monitor
 tobii_helper.setMonitor()
@@ -110,9 +121,9 @@ tobii_helper.runFullCalibration(numCalibPoints = 5)
 
 ## Authors
 
-**Olivia Guayasamin** - *Initial work and development* - [oguayasa](https://github.com/oguayasa)
+**Tamás Zolnai** - *Maintaining, module rework* - [tzolnai](https://github.com/tzolnai)
 
-**Tamás Zolnai** - *Reworked this module* - [tzolnai](https://github.com/tzolnai)
+**Olivia Guayasamin** - *Initial work as tobii-pro-wrapper* - [oguayasa](https://github.com/oguayasa)
 
 ## License
 

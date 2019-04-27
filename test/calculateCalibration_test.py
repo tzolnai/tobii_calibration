@@ -6,11 +6,11 @@
 import unittest
 
 import sys
-# Add the local path of the wrapper module,
+# Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_pro_wrapper"] + sys.path
+sys.path = ["../tobii_calibration"] + sys.path
 
-import tobii_pro_wrapper as wrapper
+import tobii_calibration as calibrator
 import tobii_research as tobii
 import math
 
@@ -38,7 +38,7 @@ class calculateCalibrationTest(unittest.TestCase):
         return tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS, calibration_points)
 
     def testWrongParam(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__calculateCalibration(None)
@@ -46,7 +46,7 @@ class calculateCalibrationTest(unittest.TestCase):
             tobii_helper._TobiiHelper__calculateCalibration([])            
 
     def testTwoCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         calibResult = self.initCalibPoints()
@@ -78,7 +78,7 @@ class calculateCalibrationTest(unittest.TestCase):
         self.assertEqual(-368, calibData[1][2][1])
         
     def testTwoCalibPointsOneSample(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
@@ -122,7 +122,7 @@ class calculateCalibrationTest(unittest.TestCase):
         self.assertEqual(-368, calibData[1][2][1])
         
     def testNanSamplePoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
@@ -142,7 +142,7 @@ class calculateCalibrationTest(unittest.TestCase):
             calibData = tobii_helper._TobiiHelper__calculateCalibration(calibResult)
 
     def testInvalidSamplePoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
@@ -162,7 +162,7 @@ class calculateCalibrationTest(unittest.TestCase):
             calibData = tobii_helper._TobiiHelper__calculateCalibration(calibResult)
 
     def testOneCalibPoint(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         
@@ -190,7 +190,7 @@ class calculateCalibrationTest(unittest.TestCase):
         self.assertEqual(322, calibData[0][2][1])
 
     def testFiveCalibPoints(self):
-        tobii_helper = wrapper.TobiiHelper()
+        tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         
