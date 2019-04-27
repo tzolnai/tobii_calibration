@@ -1231,13 +1231,16 @@ class TobiiHelper:
 
 
     # function for running a complete calibration routine
-    def runFullCalibration(self, numCalibPoints = None):
+    def runFullCalibration(self, numCalibPoints = None, calibWin = None):
 
         if numCalibPoints is not None:
             if not isinstance(numCalibPoints, numbers.Number):
                 raise TypeError("numCalibPoints should be a number.")
             if numCalibPoints not in [5, 9]:
                 raise ValueError("Only 5 or 9 points calibration is supported.")
+
+        if calibWin is not None and not isinstance(calibWin, visual.Window):
+            raise TypeError('calibWin should be a valid visual.Window object.')
 
         # check that eyetracker is connected before running
         if self.eyetracker is None:  # eyeTracker
@@ -1267,15 +1270,16 @@ class TobiiHelper:
         calibDict = collections.OrderedDict(pointList)
 
         # create window for calibration
-        calibWin = visual.Window(size = [self.win.getSizePix()[0],
-                                         self.win.getSizePix()[1]],
-                                 pos = [0, 0],
-                                 units = 'pix',
-                                 fullscr = True,
-                                 allowGUI = True,
-                                 monitor = self.win,
-                                 winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
+        if calibWin is None:
+            calibWin = visual.Window(size = [self.win.getSizePix()[0],
+                                             self.win.getSizePix()[1]],
+                                     pos = [0, 0],
+                                     units = 'pix',
+                                     fullscr = True,
+                                     allowGUI = True,
+                                     monitor = self.win,
+                                     winType = 'pyglet',
+                                     color = [0.4, 0.4, 0.4])
         calibWin.mouseVisible = False
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin,

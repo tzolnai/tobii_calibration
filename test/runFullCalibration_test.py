@@ -43,7 +43,6 @@ class runFullCalibrationTest(unittest.TestCase):
         tobii_helper.runTrackBox = DummyFunction # we test this somewhere else
         tobii_helper.runValidation = runValidationDummy # we test this somewhere else
 
-
     def testNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
 
@@ -54,6 +53,10 @@ class runFullCalibrationTest(unittest.TestCase):
         # wrong param
         with self.assertRaises(ValueError):
             tobii_helper.runFullCalibration(13)
+
+        # wrong param
+        with self.assertRaises(TypeError):
+            tobii_helper.runFullCalibration(calibWin = 13)
 
         # missing eye tracker
         with self.assertRaises(ValueError):
@@ -141,6 +144,36 @@ class runFullCalibrationTest(unittest.TestCase):
         self.assertEqual((0.1, 0.9), self.calibDict['7'])
         self.assertEqual((0.5, 0.9), self.calibDict['8'])
         self.assertEqual((0.9, 0.9), self.calibDict['9'])
+
+    def testCallWithWindow(self):
+        tobii_helper = wrapper.TobiiHelper()
+        self.initAll(tobii_helper)
+
+        calibWin = visual.Window(size = [1366, 768],
+                                 pos = [0, 0],
+                                 units = 'pix',
+                                 fullscr = True,
+                                 allowGUI = True,
+                                 monitor = tobii_helper.win,
+                                 winType = 'pyglet',
+                                 color = [0.4, 0.4, 0.4])
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+        tobii_helper.runFullCalibration(calibWin = calibWin)
+        drawing_list = visual_mock.getListOfDrawings()
+
+        self.assertEqual(2, len(drawing_list))
+        message = drawing_list[0]
+        self.assertTrue(isinstance(message, pvm.TextStim))
+        self.assertEqual(str("Please position yourself so that the\n" + \
+                             "eye-tracker can locate your eyes." + \
+                             "\n\nPress 'c' to continue."), message.text)
+
+        message = drawing_list[1]
+        self.assertTrue(isinstance(message, pvm.TextStim))
+        self.assertEqual(str("Finished validating the calibration.\n\n" +\
+                             "Calibration is complete. Closing window."), message.text)
 
 if __name__ == "__main__":
     unittest.main() # run all tests
