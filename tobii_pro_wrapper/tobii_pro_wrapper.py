@@ -68,8 +68,8 @@ class TobiiHelper:
 
         self.gazeData = None
           
-# ----- Functions for initialzing the eyetracker and class attributes -----      
-    
+# ----- Functions for initialzing the eyetracker and class attributes -----
+
     # find and connect to a tobii eyetracker
     def setEyeTracker(self, serialString = None):
 
@@ -256,7 +256,8 @@ class TobiiHelper:
                                          self.__gazeDataCallback)
         self.tracking = False
     
-        
+# ----- Functions for converting coordinates between different coordinate systems -----
+
     # function for converting normalized positions from trackbox coordinate system
     # to normalized active display area coordinates
     def __tb2Ada(self, xyCoor):
@@ -337,7 +338,7 @@ class TobiiHelper:
         return psychoPix
 
 # ----- Functions for collecting eye and gaze data -----
-      
+
     # function for collecting gaze coordinates in tobiis ada coordinate 
     # system. currently written to return the average (x, y) position of both 
     # eyes, but can be easily rewritten to return data from one or both eyes   
@@ -464,6 +465,9 @@ class TobiiHelper:
 
         return self.__getAvgEyePos()[2]
 
+
+# ----- Internal functions for running calibration -----
+
     def __calcMeanOfPointList(self, pointList):
         # we need a non empty list
         assert isinstance(pointList, list)
@@ -503,8 +507,7 @@ class TobiiHelper:
 
         return result
 
-# ----- Functions for running calibration -----
-    
+
     # function for drawing representation of the eyes in virtual trackbox
     def __drawEyePositions(self, psychoWin):
         
@@ -684,48 +687,6 @@ class TobiiHelper:
 
             # clear events not accessed this iteration
             event.clearEvents(eventType='keyboard')
-
-
-    # function for running validation routine post calibration to check 
-    # calibration precision and accuracy
-    def runValidation(self, pointDict = None, valWin = None):
-
-        # check the values of the point dictionary
-        if pointDict is None:
-            print('pointDict has no value. Using 5 point default.')
-            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), 
-                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
-            pointDict = collections.OrderedDict(pointList)
-        if not isinstance(pointDict, dict):
-            raise TypeError('pointDict must be a dictionary with number ' +\
-                            'keys and coordinate values.')
-        if valWin is not None and not isinstance(valWin, visual.Window):
-            raise TypeError('valWin should be a valid visual.Window object.')
-        # check window attribute
-        if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
-        # start eyetracker
-        self.__startGazeData()
-        # let it warm up briefly
-        pcore.wait(0.5)
-
-        # use existing window
-        if valWin is not None:
-            self.__drawValidationScreen(pointDict, valWin)
-        else:
-            # window stimuli
-            with visual.Window(size = [self.win.getSizePix()[0],
-                                       self.win.getSizePix()[1]],
-                                       pos = [0, 0],
-                                       units = 'pix',
-                                       fullscr = True,
-                                       allowGUI = True,
-                                       monitor = self.win,
-                                       winType = 'pyglet',
-                                       color = [0.8, 0.8, 0.8]) as ownValWin:
-                ownValWin.mouseVisible = False
-                self.__drawValidationScreen(pointDict, ownValWin)
 
             
     # function for getting the average left and right gaze position coordinates
@@ -1059,49 +1020,7 @@ class TobiiHelper:
         calibResult = self.calibration.compute_and_apply()        
         # return calibration result
         return calibResult
-    
-    
-    # function for running simple gui to visualize subject eye position. Make 
-    # sure that the eyes are in optimal location for eye tracker
-    def runTrackBox(self, trackWin = None):
-        
-        # check to see that eyetracker is connected
-        if self.eyetracker is None:
-            raise ValueError('There is no eyetracker object. \n' +\
-                             'Try running findTracker().')
-        # check window attribute
-        if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
-        if trackWin is not None and not isinstance(trackWin, visual.Window):
-            raise TypeError('If trackWin parameter is set, then it should be valid visual.Window object')
 
-        # start the eyetracker
-        self.__startGazeData()
-        # wait for it ot warm up
-        pcore.wait(0.5)
-
-        # use the existing window
-        if trackWin is not None:
-            # feedback about eye position
-            self.__drawEyePositions(trackWin)
-            pcore.wait(2)
-        else: # use an own window
-            # create window for visualizing eye position and text
-            with visual.Window(size = [self.win.getSizePix()[0],
-                                       self.win.getSizePix()[1]],
-                                       pos = [0, 0],
-                                       units = 'pix',
-                                       fullscr = True,
-                                       allowGUI = True,
-                                       monitor = self.win,
-                                       winType = 'pyglet',
-                                       color = [0.4, 0.4, 0.4]) as ownTrackWin:
-                ownTrackWin.mouseVisible = False
-
-                # feedback about eye position
-                self.__drawEyePositions(ownTrackWin)
-                pcore.wait(2)
 
     def __drawCalibrationScreen(self, calibDict, calibWin):
 
@@ -1229,6 +1148,49 @@ class TobiiHelper:
         calibWin.flip()
         pcore.wait(3)
 
+# ----- Public calibration rutines -----
+
+    # function for running simple gui to visualize subject eye position. Make
+    # sure that the eyes are in optimal location for eye tracker
+    def runTrackBox(self, trackWin = None):
+
+        # check to see that eyetracker is connected
+        if self.eyetracker is None:
+            raise ValueError('There is no eyetracker object. \n' +\
+                             'Try running findTracker().')
+        # check window attribute
+        if self.win is None:
+            raise ValueError('No experimental monitor has been specified.\n' +\
+                             'Try running setMonitor().')
+        if trackWin is not None and not isinstance(trackWin, visual.Window):
+            raise TypeError('If trackWin parameter is set, then it should be valid visual.Window object')
+
+        # start the eyetracker
+        self.__startGazeData()
+        # wait for it ot warm up
+        pcore.wait(0.5)
+
+        # use the existing window
+        if trackWin is not None:
+            # feedback about eye position
+            self.__drawEyePositions(trackWin)
+            pcore.wait(2)
+        else: # use an own window
+            # create window for visualizing eye position and text
+            with visual.Window(size = [self.win.getSizePix()[0],
+                                       self.win.getSizePix()[1]],
+                                       pos = [0, 0],
+                                       units = 'pix',
+                                       fullscr = True,
+                                       allowGUI = True,
+                                       monitor = self.win,
+                                       winType = 'pyglet',
+                                       color = [0.4, 0.4, 0.4]) as ownTrackWin:
+                ownTrackWin.mouseVisible = False
+
+                # feedback about eye position
+                self.__drawEyePositions(ownTrackWin)
+                pcore.wait(2)
 
     # function for running a complete calibration routine
     def runFullCalibration(self, numCalibPoints = None, calibWin = None):
@@ -1314,16 +1276,45 @@ class TobiiHelper:
         calibWin.flip()
         pcore.wait(3)
         calibWin.close()
-  
 
 
+    # function for running validation routine post calibration to check
+    # calibration precision and accuracy
+    def runValidation(self, pointDict = None, valWin = None):
 
+        # check the values of the point dictionary
+        if pointDict is None:
+            print('pointDict has no value. Using 5 point default.')
+            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
+                         ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
+            pointDict = collections.OrderedDict(pointList)
+        if not isinstance(pointDict, dict):
+            raise TypeError('pointDict must be a dictionary with number ' +\
+                            'keys and coordinate values.')
+        if valWin is not None and not isinstance(valWin, visual.Window):
+            raise TypeError('valWin should be a valid visual.Window object.')
+        # check window attribute
+        if self.win is None:
+            raise ValueError('No experimental monitor has been specified.\n' +\
+                             'Try running setMonitor().')
+        # start eyetracker
+        self.__startGazeData()
+        # let it warm up briefly
+        pcore.wait(0.5)
 
-
-
-
-
-
-
-
-
+        # use existing window
+        if valWin is not None:
+            self.__drawValidationScreen(pointDict, valWin)
+        else:
+            # window stimuli
+            with visual.Window(size = [self.win.getSizePix()[0],
+                                       self.win.getSizePix()[1]],
+                                       pos = [0, 0],
+                                       units = 'pix',
+                                       fullscr = True,
+                                       allowGUI = True,
+                                       monitor = self.win,
+                                       winType = 'pyglet',
+                                       color = [0.8, 0.8, 0.8]) as ownValWin:
+                ownValWin.mouseVisible = False
+                self.__drawValidationScreen(pointDict, ownValWin)
