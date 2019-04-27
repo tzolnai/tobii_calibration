@@ -42,7 +42,7 @@ import gettext
 try:
     dir_path = os.path.dirname(os.path.realpath(__file__))
     locales_dir_path = os.path.join(dir_path, "locales")
-    current_translation = gettext.translation('all_strings', localedir=locales_dir_path, languages=['hu'])
+    current_translation = gettext.translation("all_strings", localedir=locales_dir_path, languages=['hu'])
     current_translation.install()
     _ = current_translation.gettext
 except:
@@ -636,10 +636,10 @@ class TobiiHelper:
 
         # check the values of the point dictionary
         if not isinstance(pointDict, dict):
-            raise TypeError('pointDict must be a dictionary with number ' +\
-                            'keys and coordinate values.')
+            raise TypeError("pointDict must be a dictionary with number " +\
+                            "keys and coordinate values.")
         if not isinstance(valWin, visual.Window):
-            raise TypeError('valWin should be a valid visual.Window object.')
+            raise TypeError("valWin should be a valid visual.Window object.")
 
         # get points from dictionary
         curPoints = pointDict.values()
@@ -656,14 +656,14 @@ class TobiiHelper:
                                  units = 'pix')
         # Make a dummy message
         valMsg = visual.TextStim(valWin,
-                                 text = _('Wait for the experimenter.'),
+                                 text = _("Wait for the experimenter."),
                                  color = [0.4, 0.4, 0.4],  # grey
                                  units = 'norm',
                                  pos = [0.0, -0.5],
                                  height = 0.07)
         # Stimuli for all validation points
         valPoints = visual.Circle(valWin,
-                                  units = "pix",
+                                  units = 'pix',
                                   radius = 20,
                                   lineColor = [1.0, -1.0, -1.0],  # red
                                   fillColor = [1.0, -1.0, -1.0])  # red
@@ -713,7 +713,7 @@ class TobiiHelper:
 
         # check the values of the point dictionary
         if not isinstance(calibResult, tobii.CalibrationResult):
-            raise TypeError('Argument should be a valid tobii_research.CalibResult object')
+            raise TypeError("Argument should be a valid tobii_research.CalibResult object")
 
         #create an empty list to hold values
         calibDrawCoor = []
@@ -759,23 +759,23 @@ class TobiiHelper:
 
         # check argument values
         if self.calibration is None:
-            raise RuntimeError('No calibration object exists.')
+            raise RuntimeError("No calibration object exists.")
         # check values of calibration result
         if not isinstance(calibResult, tobii.CalibrationResult):
-            raise TypeError('calibResult should be a valid tobii_research.CalibrationResult object.')
+            raise TypeError("calibResult should be a valid tobii_research.CalibrationResult object.")
         if not isinstance(calibWin, visual.Window):
-            raise TypeError('calibWin should be a visual.Window object.')
+            raise TypeError("calibWin should be a visual.Window object.")
         # check the values of the point dictionary
         if not isinstance(curDict, dict):
-            raise TypeError('curDict must be a dictionary with number \n' +\
-                            'keys and coordinate values.')
+            raise TypeError("curDict must be a dictionary with number \n" +\
+                            "keys and coordinate values.")
         if len(calibResult.calibration_points) > 0 and\
             calibResult.calibration_points[0].position_on_display_area == (0.0, 0.0): # Tobii SDK adds an extra calib point
             if len(curDict) != len(calibResult.calibration_points) - 1:
-                raise ValueError('Data inconsistency: calibResult and curDict have different amount of items')
+                raise ValueError("Data inconsistency: calibResult and curDict have different amount of items")
         else:
             if len(curDict) != len(calibResult.calibration_points):
-                raise ValueError('Data inconsistency: calibResult and curDict have different amount of items')
+                raise ValueError("Data inconsistency: calibResult and curDict have different amount of items")
 
         # get gaze position results
         points2Draw = self.__calculateCalibration(calibResult)
@@ -812,7 +812,7 @@ class TobiiHelper:
                                     height = 60)
         # Make a dummy message
         checkMsg = visual.TextStim(calibWin,
-                                   text = _('Wait for the experimenter. \nUse number keys to select points for recalibration.'),
+                                   text = _("Wait for the experimenter. \nUse number keys to select points for recalibration."),
                                    color = [1.0, 1.0, 1.0],
                                    units = 'norm',
                                    pos = [0.0, -0.5],
@@ -844,7 +844,7 @@ class TobiiHelper:
                         pointFound = True
 
                 if not pointFound:
-                    raise ValueError('Data inconsistency: calibResult and curDict contains different items.')
+                    raise ValueError("Data inconsistency: calibResult and curDict contains different items.")
 
                 # if current point is selected for recalibrate, make it noticeable
                 if int(pointKey) in holdColorPoints:
@@ -935,13 +935,13 @@ class TobiiHelper:
 
         # check argument values
         if self.calibration is None:
-            raise RuntimeError('No calibration object exists')
+            raise RuntimeError("No calibration object exists")
         # check value of calibration window
         if not isinstance(calibWin, visual.Window):
-            raise TypeError('calibWin should be a visual.Window object.')
+            raise TypeError("calibWin should be a visual.Window object.")
         # check the values of the point dictionary
         if not isinstance(pointList, list):
-            raise TypeError('pointList must be a list of coordinate tuples.')
+            raise TypeError("pointList must be a list of coordinate tuples.")
 
         # defaults
         pointSmallRadius = 5.0  # point radius
@@ -1048,14 +1048,14 @@ class TobiiHelper:
 
         # check the values of the point dictionary
         if not isinstance(calibDict, dict):
-            raise TypeError('calibDict must be a dictionary with number ' +\
-                            'keys and coordinate values.')
+            raise TypeError("calibDict must be a dictionary with number " +\
+                            "keys and coordinate values.")
         if not isinstance(calibWin, visual.Window):
-            raise TypeError('calibWin should be a valid visual.Window object.')
+            raise TypeError("calibWin should be a valid visual.Window object.")
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            raise RuntimeError('There is no eyetracker object. \n' +\
-                               'Try running findTracker().')
+            raise RuntimeError("There is no eyetracker object. \n" +\
+                               "Try running findTracker().")
 
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin,
@@ -1181,14 +1181,14 @@ class TobiiHelper:
 
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            raise RuntimeError('There is no eyetracker object. \n' +\
-                               'Try running findTracker().')
+            raise RuntimeError("There is no eyetracker object. \n" +\
+                               "Try running findTracker().")
         # check window attribute
         if self.win is None:
-            raise RuntimeError('No experimental monitor has been specified.\n' +\
-                               'Try running setMonitor().')
+            raise RuntimeError("No experimental monitor has been specified.\n" +\
+                               "Try running setMonitor().")
         if trackWin is not None and not isinstance(trackWin, visual.Window):
-            raise TypeError('If trackWin parameter is set, then it should be valid visual.Window object')
+            raise TypeError("If trackWin parameter is set, then it should be valid visual.Window object")
 
         # start the eyetracker
         self.__startGazeData()
@@ -1227,7 +1227,7 @@ class TobiiHelper:
                 raise ValueError("Only 5 or 9 points calibration is supported.")
 
         if calibWin is not None and not isinstance(calibWin, visual.Window):
-            raise TypeError('calibWin should be a valid visual.Window object.')
+            raise TypeError("calibWin should be a valid visual.Window object.")
 
         # check that eyetracker is connected before running
         if self.eyetracker is None:  # eyeTracker
@@ -1236,8 +1236,8 @@ class TobiiHelper:
                                "Try running findTracker().")
         # check window attribute
         if self.win is None:
-            raise RuntimeError('No experimental monitor has been specified.\n' +\
-                               'Try running setMonitor().')
+            raise RuntimeError("No experimental monitor has been specified.\n" +\
+                               "Try running setMonitor().")
 
         # create dictionary of calibration points
         # if nothing entered then default is five
@@ -1310,19 +1310,19 @@ class TobiiHelper:
         # check the values of the point dictionary
         if pointDict is None:
             if self.logging:
-                print('pointDict has no value. Using 5 point default.')
+                print("pointDict has no value. Using 5 point default.")
             pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
                          ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
             pointDict = collections.OrderedDict(pointList)
         if not isinstance(pointDict, dict):
-            raise TypeError('pointDict must be a dictionary with number ' +\
-                            'keys and coordinate values.')
+            raise TypeError("pointDict must be a dictionary with number " +\
+                            "keys and coordinate values.")
         if valWin is not None and not isinstance(valWin, visual.Window):
-            raise TypeError('valWin should be a valid visual.Window object.')
+            raise TypeError("valWin should be a valid visual.Window object.")
         # check window attribute
         if self.win is None:
-            raise RuntimeError('No experimental monitor has been specified.\n' +\
-                               'Try running setMonitor().')
+            raise RuntimeError("No experimental monitor has been specified.\n" +\
+                               "Try running setMonitor().")
         # start eyetracker
         self.__startGazeData()
         # let it warm up briefly
