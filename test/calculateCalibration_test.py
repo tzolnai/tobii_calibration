@@ -43,9 +43,9 @@ class calculateCalibrationTest(unittest.TestCase):
     def testWrongParam(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__calculateCalibration(None)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__calculateCalibration([])            
 
     def testTwoCalibPoints(self):

@@ -21,9 +21,9 @@ class setMonitorTest(unittest.TestCase):
 
     def testMonitorNotInited(self):
         tobii_helper = calibrator.TobiiHelper()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.getMonitorName()            
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.getMonitorDimensions()
 
     def testNoParam(self):

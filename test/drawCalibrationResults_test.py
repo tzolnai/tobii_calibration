@@ -96,7 +96,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         # no calibration
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawCalibrationResults(None, None, None)
 
         tobii_helper.calibration = "dummy"

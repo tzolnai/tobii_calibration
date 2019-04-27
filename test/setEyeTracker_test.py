@@ -33,7 +33,7 @@ class setEyeTrackerTest(unittest.TestCase):
         if self.hasEyeTrackerConnected():
             tobii_helper.setEyeTracker()
         else:
-            with self.assertRaises(ValueError):
+            with self.assertRaises(RuntimeError):
                 tobii_helper.setEyeTracker()
 
     def testWrongSerialParam(self):
@@ -43,7 +43,7 @@ class setEyeTrackerTest(unittest.TestCase):
 
     def testWrongSerialParam2(self):
         tobii_helper = calibrator.TobiiHelper()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.setEyeTracker(serialString = "12345")
 
     def testWrongEyeTrackerParam(self):

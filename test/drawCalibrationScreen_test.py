@@ -116,13 +116,13 @@ class drawCalibrationScreenTest(unittest.TestCase):
                                  color = [0.4, 0.4, 0.4])
 
         # no monitor
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
 
         tobii_helper.setMonitor()
 
         # no eyetracker
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
 
         tobii_helper.eyetracker = "dummy"

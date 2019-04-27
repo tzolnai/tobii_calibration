@@ -65,7 +65,7 @@ class getCalibrationDataTest(unittest.TestCase):
         tobii_helper = calibrator.TobiiHelper()
 
         # no calibration
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__getCalibrationData(None, None)
 
         tobii_helper.calibration = DummyCalibration
@@ -90,7 +90,7 @@ class getCalibrationDataTest(unittest.TestCase):
         pointList = [(0.1, 0.1), (0.9, 0.1), (0.5, 0.5), (0.1, 0.9), (0.9, 0.9)]
 
         # no monitor
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__getCalibrationData(calibWin, pointList)
 
         tobii_helper.disableLogging()

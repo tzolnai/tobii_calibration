@@ -54,25 +54,25 @@ class runValidationTest(unittest.TestCase):
         tobii_helper.disableLogging()
 
         # no monitor
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.runValidation()
 
         tobii_helper.setMonitor()
 
         # no eye tracker
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.runValidation()
         
         tobii_helper.eyetracker = "dummy"
 
         # no tracking
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.runValidation()
 
         tobii_helper.tracking = True
 
         # no gaze data
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.runValidation()
             
         tobii_helper.gazeData = {}

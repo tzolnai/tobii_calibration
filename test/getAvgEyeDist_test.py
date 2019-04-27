@@ -22,21 +22,21 @@ class getAvgEyeDistTest(unittest.TestCase):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.tracking = True
         # tobii_helper.eyetracker is None
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__getAvgEyeDist()
 
     def testNoTracking(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         # tobii_helper.tracking is False
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__getAvgEyeDist()
 
     def testNoGazeData(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__getAvgEyeDist()
 
     def testValidGazeData(self):

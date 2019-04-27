@@ -77,7 +77,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
         # no window
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__drawEyePositions([])
 
         # ok init the window
@@ -91,26 +91,26 @@ class runTrackBoxTest(unittest.TestCase):
                                  color = [0.4, 0.4, 0.4])
 
         # now we don't have tracker box coordinates
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
 
         # no eyetracker
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         tobii_helper.eyetracker = "dummy"
 
         # no tracking
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         tobii_helper.tracking = True
 
         # no gaze data
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__drawEyePositions(trackWin)
 
         tobii_helper.gazeData = {}

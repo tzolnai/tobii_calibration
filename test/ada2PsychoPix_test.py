@@ -55,7 +55,7 @@ class ada2PsychoPixTest(unittest.TestCase):
     def testNonInitedMonitor(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper._TobiiHelper__ada2PsychoPix((0.5, 0.5))
             
     def testOriginPoint(self):

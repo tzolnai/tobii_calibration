@@ -61,13 +61,13 @@ class runFullCalibrationTest(unittest.TestCase):
             tobii_helper.runFullCalibration(calibWin = 13)
 
         # missing eye tracker
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.runFullCalibration()
 
         tobii_helper.eyetracker = "dummy"
 
         # no monitor
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             tobii_helper.runFullCalibration()
 
         tobii_helper.setMonitor()

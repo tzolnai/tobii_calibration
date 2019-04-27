@@ -91,7 +91,7 @@ class TobiiHelper:
 
         # if there are no eyetrackers
         if len(allTrackers) < 1:
-            raise ValueError("Cannot find any eyetrackers.")
+            raise RuntimeError("Cannot find any eyetrackers.")
 
         # if there is no serialString specified, use first found eyetracker
         if serialString is None:
@@ -121,7 +121,7 @@ class TobiiHelper:
 
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            raise ValueError("Eyetracker did not connect. Check serial number?")
+            raise RuntimeError("Eyetracker did not connect. Check serial number?")
         elif self.logging:
             print("Eyetracker connected successfully.")
 
@@ -135,7 +135,7 @@ class TobiiHelper:
 
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
 
         # get active display area information in mm as a dictionary
         displayArea = self.eyetracker.get_display_area()
@@ -222,12 +222,12 @@ class TobiiHelper:
 
     def getMonitorName(self):
         if self.monitorName is None:
-            raise ValueError("No monitor was set.")
+            raise RuntimeError("No monitor was set.")
         return self.monitorName
 
     def getMonitorDimensions(self):
         if self.win is None:
-            raise ValueError("No monitor was set.")
+            raise RuntimeError("No monitor was set.")
         return (self.win.getSizePix()[0], self.win.getSizePix()[1])
 
     def enableLogging(self):
@@ -248,7 +248,7 @@ class TobiiHelper:
 
         # check to see if eyetracker is there
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
 
         # if it is, proceed
         if self.logging:
@@ -264,7 +264,7 @@ class TobiiHelper:
 
         # check to see if eyetracker is there
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
         # if it is, proceed
         if self.logging:
             print ("Unsubscribing from eyetracker")
@@ -287,8 +287,8 @@ class TobiiHelper:
             raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
         # check tracker box and ada coordinates
         if self.tbCoordinates is None or self.adaCoordinates is None:
-            raise ValueError("Missing trackbox coordinates. \n" +\
-                             "Try running getTrackerSpace()!")
+            raise RuntimeError("Missing trackbox coordinates. \n" +\
+                               "Try running getTrackerSpace()!")
 
         # get tb and ada values from eyetracker
         tbDict = self.tbCoordinates
@@ -332,7 +332,7 @@ class TobiiHelper:
     def __ada2PsychoPix(self, xyCoor):
 
         if self.win is None:
-            raise ValueError("No monitor was set.")
+            raise RuntimeError("No monitor was set.")
 
         # check argument values
         if not isinstance(xyCoor, tuple):
@@ -362,11 +362,11 @@ class TobiiHelper:
 
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
         if self.tracking is False:
-            raise ValueError("The eyetracker is not turned on.")
+            raise RuntimeError("The eyetracker is not turned on.")
         if self.gazeData is None:
-            raise ValueError("No recorded gaze data was found.")
+            raise RuntimeError("No recorded gaze data was found.")
 
         # access gaze data dictionary to get gaze position tuples
         leftGazeXYZ = self.gazeData['left_gaze_point_on_display_area']
@@ -392,11 +392,11 @@ class TobiiHelper:
 
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
         if self.tracking is False:
-            raise ValueError("The eyetracker is not turned on.")
+            raise RuntimeError("The eyetracker is not turned on.")
         if self.gazeData is None:
-            raise ValueError("No recorded gaze data was found.")
+            raise RuntimeError("No recorded gaze data was found.")
 
         # access gaze data dictionary to get eye position tuples,
         # in trackbox coordinate system
@@ -441,11 +441,11 @@ class TobiiHelper:
 
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
         if self.tracking is False:
-            raise ValueError("The eyetracker is not turned on.")
+            raise RuntimeError("The eyetracker is not turned on.")
         if self.gazeData is None:
-            raise ValueError("No recorded gaze data was found.")
+            raise RuntimeError("No recorded gaze data was found.")
 
         # access gaze data dictionary to get eye position tuples, given in
         # mm in from eyetracker origin
@@ -473,11 +473,11 @@ class TobiiHelper:
 
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
-            raise ValueError("There is no eyetracker.")
+            raise RuntimeError("There is no eyetracker.")
         if self.tracking is False:
-            raise ValueError("The eyetracker is not turned on.")
+            raise RuntimeError("The eyetracker is not turned on.")
         if self.gazeData is None:
-            raise ValueError("No recorded gaze data was found.")
+            raise RuntimeError("No recorded gaze data was found.")
 
         return self.__getAvgEyePos()[2]
 
@@ -529,7 +529,7 @@ class TobiiHelper:
 
         # check that psychopy window exists
         if not isinstance(psychoWin, visual.Window):
-            raise ValueError("psychoWin should be a valid visual.Window object.")
+            raise TypeError("psychoWin should be a valid visual.Window object.")
 
         # Set default colors
         correctColor = [-1.0, 1.0, -1.0]
@@ -713,7 +713,7 @@ class TobiiHelper:
 
         # check the values of the point dictionary
         if not isinstance(calibResult, tobii.CalibrationResult):
-            raise ValueError('Argument should be a valid tobii_research.CalibResult object')
+            raise TypeError('Argument should be a valid tobii_research.CalibResult object')
 
         #create an empty list to hold values
         calibDrawCoor = []
@@ -759,7 +759,7 @@ class TobiiHelper:
 
         # check argument values
         if self.calibration is None:
-            raise ValueError('No calibration object exists.')
+            raise RuntimeError('No calibration object exists.')
         # check values of calibration result
         if not isinstance(calibResult, tobii.CalibrationResult):
             raise TypeError('calibResult should be a valid tobii_research.CalibrationResult object.')
@@ -935,7 +935,7 @@ class TobiiHelper:
 
         # check argument values
         if self.calibration is None:
-            raise ValueError('No calibration object exists')
+            raise RuntimeError('No calibration object exists')
         # check value of calibration window
         if not isinstance(calibWin, visual.Window):
             raise TypeError('calibWin should be a visual.Window object.')
@@ -1054,8 +1054,8 @@ class TobiiHelper:
             raise TypeError('calibWin should be a valid visual.Window object.')
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            raise ValueError('There is no eyetracker object. \n' +\
-                             'Try running findTracker().')
+            raise RuntimeError('There is no eyetracker object. \n' +\
+                               'Try running findTracker().')
 
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin,
@@ -1181,12 +1181,12 @@ class TobiiHelper:
 
         # check to see that eyetracker is connected
         if self.eyetracker is None:
-            raise ValueError('There is no eyetracker object. \n' +\
-                             'Try running findTracker().')
+            raise RuntimeError('There is no eyetracker object. \n' +\
+                               'Try running findTracker().')
         # check window attribute
         if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
+            raise RuntimeError('No experimental monitor has been specified.\n' +\
+                               'Try running setMonitor().')
         if trackWin is not None and not isinstance(trackWin, visual.Window):
             raise TypeError('If trackWin parameter is set, then it should be valid visual.Window object')
 
@@ -1231,13 +1231,13 @@ class TobiiHelper:
 
         # check that eyetracker is connected before running
         if self.eyetracker is None:  # eyeTracker
-            raise ValueError("No eyetracker is specified. " +\
-                             "Aborting calibration.\n" +\
-                             "Try running findTracker().")
+            raise RuntimeError("No eyetracker is specified. " +\
+                               "Aborting calibration.\n" +\
+                               "Try running findTracker().")
         # check window attribute
         if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
+            raise RuntimeError('No experimental monitor has been specified.\n' +\
+                               'Try running setMonitor().')
 
         # create dictionary of calibration points
         # if nothing entered then default is five
@@ -1321,8 +1321,8 @@ class TobiiHelper:
             raise TypeError('valWin should be a valid visual.Window object.')
         # check window attribute
         if self.win is None:
-            raise ValueError('No experimental monitor has been specified.\n' +\
-                             'Try running setMonitor().')
+            raise RuntimeError('No experimental monitor has been specified.\n' +\
+                               'Try running setMonitor().')
         # start eyetracker
         self.__startGazeData()
         # let it warm up briefly
