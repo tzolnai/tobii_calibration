@@ -16,6 +16,9 @@ import time
 
 class setEyeTrackerTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def hasEyeTrackerConnected(self):
         loop_count = 1
         eye_trackers = tobii.find_all_eyetrackers()

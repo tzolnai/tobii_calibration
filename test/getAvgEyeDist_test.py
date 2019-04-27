@@ -15,6 +15,9 @@ import math
 
 class getAvgEyeDistTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def testNotInitedEyeTracker(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.tracking = True

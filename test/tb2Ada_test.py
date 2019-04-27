@@ -14,6 +14,9 @@ import tobii_calibration as calibrator
 
 class tb2AdaTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def initTrackBox(self, tobii_helper):
         tobii_helper.tbCoordinates = {}
         tobii_helper.tbCoordinates['bottomLeft'] = (-150.0, -121.0, 500.0)

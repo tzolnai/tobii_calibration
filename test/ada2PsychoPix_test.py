@@ -14,6 +14,9 @@ import tobii_calibration as calibrator
 
 class ada2PsychoPixTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def testNoneParam(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()

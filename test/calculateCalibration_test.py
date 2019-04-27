@@ -16,6 +16,9 @@ import math
 
 class calculateCalibrationTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def initCalibPoints(self):
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
                                     tobii.CalibrationSample(tobii.CalibrationEyeData((0.0, 0.0), True),

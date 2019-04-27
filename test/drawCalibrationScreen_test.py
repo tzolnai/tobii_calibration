@@ -54,6 +54,9 @@ class drawCalibrationScreenTest(unittest.TestCase):
 
     def setUp(self):
         print ("Current test: ", self.id())
+
+    def setUp(self):
+        print ("Current test: ", self.id())
         self.calibWin = None
 
     def tearDown(self):

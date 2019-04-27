@@ -15,6 +15,9 @@ import math
 
 class getAvgGazePosTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def testNotInitedEyeTracker(self):
         tobii_helper = wrapper.TobiiHelper()
         tobii_helper.tracking = True

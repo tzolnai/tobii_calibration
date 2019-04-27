@@ -16,6 +16,9 @@ import pyglet
 
 class setMonitorTest(unittest.TestCase):
 
+    def setUp(self):
+        print ("Current test: ", self.id())
+
     def testMonitorNotInited(self):
         tobii_helper = calibrator.TobiiHelper()
         with self.assertRaises(ValueError):
