@@ -67,6 +67,8 @@ class TobiiHelper:
         self.monitorName = None
 
         self.gazeData = None
+
+        self.logging = True
           
 # ----- Functions for initialzing the eyetracker and class attributes -----
 
@@ -94,10 +96,11 @@ class TobiiHelper:
         if serialString is None:
             # use first found eyetracker
             eyetracker = allTrackers[0]
-            print("Address: " + eyetracker.address)
-            print("Model: " + eyetracker.model)
-            print("Name: " + eyetracker.device_name)
-            print("Serial number: " + eyetracker.serial_number)
+            if self.logging:
+                print("Address: " + eyetracker.address)
+                print("Model: " + eyetracker.model)
+                print("Name: " + eyetracker.device_name)
+                print("Serial number: " + eyetracker.serial_number)
             # create eyetracker object
             self.eyetracker = eyetracker
         # if serial number is given as a string
@@ -105,11 +108,12 @@ class TobiiHelper:
             # get information about available eyetrackers
             for eyetracker in allTrackers:
                 if eyetracker.serial_number == serialString:
-                    print("Address: " + eyetracker.address)
-                    print("Model: " + eyetracker.model)
-                    # fine if name is empty
-                    print("Name: " + eyetracker.device_name)
-                    print("Serial number: " + eyetracker.serial_number)
+                    if self.logging:
+                        print("Address: " + eyetracker.address)
+                        print("Model: " + eyetracker.model)
+                        # fine if name is empty
+                        print("Name: " + eyetracker.device_name)
+                        print("Serial number: " + eyetracker.serial_number)
 
                     # create eyetracker object
                     self.eyetracker = eyetracker
@@ -117,7 +121,7 @@ class TobiiHelper:
         # check to see that eyetracker is connected
         if self.eyetracker is None:
             raise ValueError("Eyetracker did not connect. Check serial number?")
-        else:
+        elif self.logging:
             print("Eyetracker connected successfully.")
 
         # get track box and active display area coordinates
@@ -175,7 +179,8 @@ class TobiiHelper:
             # use current screen dimensions
             screen = pyglet.window.get_platform().get_default_display().get_default_screen()
             dimensions = (screen.width, screen.height)
-            print ("Current screen size is: " + str(dimensions[0]) + "x" + str(dimensions[1]))
+            if self.logging:
+                print ("Current screen size is: " + str(dimensions[0]) + "x" + str(dimensions[1]))
         # if dimension not given as tuple
         elif not isinstance(dimensions, tuple):
             raise TypeError("Dimensions must be given as tuple.")
@@ -191,7 +196,8 @@ class TobiiHelper:
             # create monitor calibration object 
             self.monitorName = allMonitors[0]
             thisMon = monitors.Monitor(self.monitorName)
-            print ("Current monitor name is: " + self.monitorName)
+            if self.logging:
+                print ("Current monitor name is: " + self.monitorName)
             # set monitor dimensions
             thisMon.setSizePix(dimensions)              
             # save monitor
@@ -204,7 +210,8 @@ class TobiiHelper:
         else:
             # create monitor calibration object 
             thisMon = monitors.Monitor(nameString)
-            print ("Current monitor name is: " + nameString)
+            if self.logging:
+                print ("Current monitor name is: " + nameString)
             self.monitorName = nameString
             # set monitor dimensions
             thisMon.setSizePix(dimensions)              
@@ -222,6 +229,12 @@ class TobiiHelper:
             raise ValueError("No monitor was set.")
         return (self.win.getSizePix()[0], self.win.getSizePix()[1])
 
+    def enableLogging(self):
+        self.logging = True
+
+    def disableLogging(self):
+        self.logging = False
+
 # ----- Functions for starting and stopping eyetracker data collection -----
 
     # function for broadcasting real time gaze data
@@ -237,7 +250,8 @@ class TobiiHelper:
             raise ValueError("There is no eyetracker.")
         
         # if it is, proceed
-        print ("Subscribing to eyetracker.")
+        if self.logging:
+            print ("Subscribing to eyetracker.")
         self.eyetracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, 
                                      self.__gazeDataCallback, 
                                      as_dictionary = True)
@@ -251,7 +265,8 @@ class TobiiHelper:
         if self.eyetracker is None:
             raise ValueError("There is no eyetracker.")
         # if it is, proceed
-        print ("Unsubscribing from eyetracker")
+        if self.logging:
+            print ("Unsubscribing from eyetracker")
         self.eyetracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, 
                                          self.__gazeDataCallback)
         self.tracking = False
@@ -607,7 +622,8 @@ class TobiiHelper:
                 psychoWin.close()
                 pcore.quit()
             elif event.getKeys(keyList=['c']):
-                print("Proceeding to calibration.")
+                if self.logging:
+                    print("Proceeding to calibration.")
                 self.__stopGazeData()
                 psychoWin.flip()
                 return 
@@ -681,7 +697,8 @@ class TobiiHelper:
                 self.__stopGazeData()
                 pcore.quit()
             elif event.getKeys(keyList=['c']):
-                print ("Exiting calibration validation.")
+                if self.logging:
+                    print ("Exiting calibration validation.")
                 self.__stopGazeData()
                 return
 
@@ -889,7 +906,8 @@ class TobiiHelper:
                                 
                 # continue with calibration procedure           
                 elif key in ['c']:
-                    print ("Finished checking. Resuming calibration.")
+                    if self.logging:
+                        print ("Finished checking. Resuming calibration.")
                     checkMsg.pos = (0.0, 0.0)
                     checkMsg.text = _("Finished checking. Resuming calibration.")
                     checkMsg.draw()
@@ -983,14 +1001,16 @@ class TobiiHelper:
             pcore.wait(0.5)  
             
             # conduct calibration of point
-            print ("Collecting data at {0}." .format(i + 1))
+            if self.logging:
+                print ("Collecting data at {0}." .format(i + 1))
             collecting_status = None
             while collecting_status != tobii.CALIBRATION_STATUS_SUCCESS:
                 collecting_status = self.calibration.collect_data(pointList[i][0], pointList[i][1])
 
             # feedback from calibration
-            print ("{0} for data at point {1}."
-                   .format(collecting_status, i + 1))
+            if self.logging:
+                print ("{0} for data at point {1}."
+                       .format(collecting_status, i + 1))
             pcore.wait(0.3)  # wait before continuing
           
             # Return point to original size
@@ -1015,7 +1035,8 @@ class TobiiHelper:
         # clear screen
         calibWin.flip()   
         # print feedback
-        print ("Computing and applying calibration.")
+        if self.logging:
+            print ("Computing and applying calibration.")
         # compute and apply calibration to get calibration result object    
         calibResult = self.calibration.compute_and_apply()        
         # return calibration result
@@ -1111,7 +1132,8 @@ class TobiiHelper:
             # Redo calibration for specific points if necessary 
             if not redoCalDict:  # if no points to redo
             # finish calibration
-                print ("Calibration successful. Moving on to validation mode.")
+                if self.logging:
+                    print ("Calibration successful. Moving on to validation mode.")
                 calibMessage.text = _("Calibration was successful.\n\n" \
                                       "Moving on to validation.")
                 calibMessage.draw()
@@ -1125,8 +1147,9 @@ class TobiiHelper:
                 # convert list to string for feedback
                 printString = " ".join(str(x) for x in redoCalDict.keys())
                 # feedback
-                print ("Still need to calibrate the following points: %s" 
-                       % printString)
+                if self.logging:
+                    print ("Still need to calibrate the following points: %s"
+                            % printString)
                 calibMessage.text = _("Calibration is almost complete.\n\n" \
                                       "Prepare to recalibrate a few points.")
                 calibMessage.draw()
@@ -1139,7 +1162,8 @@ class TobiiHelper:
                 
                 # iterate through list of redo points and remove data from calibration
                 for newPoint in redoCalDict.values():
-                    print (newPoint)
+                    if self.logging:
+                        print (newPoint)
                     self.calibration.discard_data(newPoint[0], newPoint[1])
             
         # Validate calibration
@@ -1284,7 +1308,8 @@ class TobiiHelper:
 
         # check the values of the point dictionary
         if pointDict is None:
-            print('pointDict has no value. Using 5 point default.')
+            if self.logging:
+                print('pointDict has no value. Using 5 point default.')
             pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)),
                          ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
             pointDict = collections.OrderedDict(pointList)

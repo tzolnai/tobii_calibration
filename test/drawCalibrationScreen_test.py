@@ -66,6 +66,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
             return tobii.CalibrationResult(tobii.CALIBRATION_STATUS_SUCCESS, ())
         DummyCalibration.compute_and_apply = returnSuccess
 
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor(dimensions = (1366, 768))
         tobii_helper.eyetracker = "dummy"
 
@@ -97,6 +98,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
 
     def testNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
 
         pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
         calibDict = collections.OrderedDict(pointList)

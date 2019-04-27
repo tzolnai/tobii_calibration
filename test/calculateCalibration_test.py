@@ -39,6 +39,7 @@ class calculateCalibrationTest(unittest.TestCase):
 
     def testWrongParam(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__calculateCalibration(None)
         with self.assertRaises(ValueError):
@@ -46,6 +47,7 @@ class calculateCalibrationTest(unittest.TestCase):
 
     def testTwoCalibPoints(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         calibResult = self.initCalibPoints()
         calibData = tobii_helper._TobiiHelper__calculateCalibration(calibResult)
@@ -77,6 +79,7 @@ class calculateCalibrationTest(unittest.TestCase):
         
     def testTwoCalibPointsOneSample(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
@@ -120,6 +123,7 @@ class calculateCalibrationTest(unittest.TestCase):
         
     def testNanSamplePoints(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
@@ -139,6 +143,7 @@ class calculateCalibrationTest(unittest.TestCase):
 
     def testInvalidSamplePoints(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
@@ -158,6 +163,7 @@ class calculateCalibrationTest(unittest.TestCase):
 
     def testOneCalibPoint(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
@@ -185,6 +191,7 @@ class calculateCalibrationTest(unittest.TestCase):
 
     def testFiveCalibPoints(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(

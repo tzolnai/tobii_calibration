@@ -12,9 +12,12 @@ sys.path = ["../tobii_pro_wrapper"] + sys.path
 
 import tobii_pro_wrapper as wrapper
 import tobii_research as tobii
-from psychopy import visual, event
+from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
 import collections
+
+# ignore warnings comming from psychopy
+logging.console.setLevel(logging.ERROR)
 
 class DummyClass:
     def leave_calibration_mode():
@@ -32,6 +35,7 @@ class drawCalibrationResultTest(unittest.TestCase):
 
     def initAll(self, tobii_helper):
         tobii_helper.calibration = DummyClass
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
         calibration_point0 = tobii.CalibrationPoint((0.0, 0.0),(
@@ -89,6 +93,7 @@ class drawCalibrationResultTest(unittest.TestCase):
 
     def testNotInitedThingOrWrongParam(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         # no calibration
         with self.assertRaises(ValueError):

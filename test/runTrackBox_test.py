@@ -58,6 +58,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.adaCoordinates['width'] = 476.64
 
     def initAll(self, tobii_helper):
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         self.initTrackBox(tobii_helper)
         self.initDisplayArea(tobii_helper)
@@ -74,6 +75,7 @@ class runTrackBoxTest(unittest.TestCase):
 
     def testNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         # no window
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__drawEyePositions([])

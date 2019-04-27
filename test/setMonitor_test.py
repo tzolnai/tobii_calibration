@@ -25,6 +25,7 @@ class setMonitorTest(unittest.TestCase):
 
     def testNoParam(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
         screen = pyglet.window.get_platform().get_default_display().get_default_screen();
@@ -32,11 +33,13 @@ class setMonitorTest(unittest.TestCase):
         
     def testWrongNameParam(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         with self.assertRaises(TypeError):
             tobii_helper.setMonitor(nameString = (1, 2))
         
     def testCallWithMonitorName(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor(monitors.getAllMonitors()[0])
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
         screen = pyglet.window.get_platform().get_default_display().get_default_screen();
@@ -44,6 +47,7 @@ class setMonitorTest(unittest.TestCase):
                 
     def testCallWithNonExisitngMonitorName(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         name = monitors.getAllMonitors()[0] + monitors.getAllMonitors()[0]
         tobii_helper.setMonitor(name)
         self.assertEqual(name, tobii_helper.getMonitorName())
@@ -72,12 +76,14 @@ class setMonitorTest(unittest.TestCase):
             
     def testCallWithIntegerDimensions(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor(dimensions = (1366, 768))
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
         self.assertEqual((1366, 768), tobii_helper.getMonitorDimensions())
             
     def testCallWithFloatDimensions(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor(dimensions = (1366.0, 768.0))
         self.assertEqual(monitors.getAllMonitors()[0], tobii_helper.getMonitorName())
         self.assertEqual((1366.0, 768.0), tobii_helper.getMonitorDimensions())

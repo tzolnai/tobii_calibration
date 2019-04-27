@@ -58,6 +58,12 @@ or get from the default monitor.
 Returns the screen width and height of the selected monitor. This dimensions can be set with setMonitor
 method. If it was not specified, then the code uses the default screen size.
 
+### enableLogging()
+Enables logging messages printed to the command line (enabled by default).
+
+### disableLogging()
+Disables logging messages printed to the command line (enabled by default).
+
 ### runValidation(pointDict = None, valWin = None)
 Shows real time gaze position and draws several reference points (**pointDict** is a dictionary with numbered keys
 and coordinate values for drawing those points) to check calibration quality. If no value for **pointDict** is given,

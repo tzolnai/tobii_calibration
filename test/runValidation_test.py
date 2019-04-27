@@ -35,6 +35,7 @@ class runValidationTest(unittest.TestCase):
         print ("Current test: ", self.id())
 
     def initAll(self, tobii_helper):
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
         tobii_helper.eyetracker = "dummy"
         tobii_helper.tracking = True
@@ -50,6 +51,7 @@ class runValidationTest(unittest.TestCase):
 
     def testNotInitedThings(self):
         tobii_helper = wrapper.TobiiHelper()
+        tobii_helper.disableLogging()
 
         # no monitor
         with self.assertRaises(ValueError):

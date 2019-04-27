@@ -12,10 +12,13 @@ sys.path = ["../tobii_pro_wrapper"] + sys.path
 
 import tobii_pro_wrapper as wrapper
 import tobii_research as tobii
-from psychopy import visual, event
+from psychopy import visual, event, logging
 import psychopy_visual_mock as pvm
 from psychopy import core as pcore
 import collections
+
+# ignore warnings comming from psychopy
+logging.console.setLevel(logging.ERROR)
 
 def DummyFunction(time):
     pass
@@ -44,6 +47,7 @@ class getCalibrationDataTest(unittest.TestCase):
 
     def initAll(self, tobii_helper):
         tobii_helper.calibration = DummyCalibration
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor(dimensions = (1366, 768))
 
         self.calibWin = visual.Window(size = [1366, 768],
@@ -89,6 +93,7 @@ class getCalibrationDataTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__getCalibrationData(calibWin, pointList)
 
+        tobii_helper.disableLogging()
         tobii_helper.setMonitor()
 
         visual_mock = pvm.PsychoPyVisualMock()
