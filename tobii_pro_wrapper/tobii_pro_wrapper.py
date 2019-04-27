@@ -31,9 +31,21 @@ import numpy as np
 import numbers
 import math
 import collections
+import os
 
 import tobii_research as tobii
 
+# localization
+import gettext
+
+try:
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    locales_dir_path = os.path.join(dir_path, "locales")
+    current_translation = gettext.translation('all_strings', localedir=locales_dir_path, languages=['hu'])
+    current_translation.install()
+    _ = current_translation.gettext
+except:
+    _ = gettext.gettext
 
 # -----Class for working with Tobii Eyetrackers -----
 class TobiiHelper:
@@ -575,10 +587,9 @@ class TobiiHelper:
                 rightStim.lineColor = psychoWin.color    
     
             # give distance feedback
-            findmsg.text = "You're currently " + \
-                            str(int(eyeDist/10)) + \
-                            (" cm away from the screen. \n"
-                             "Press 'c' to calibrate or 'q' to abort.")
+
+            findmsg.text = _("You're currently {0} cm away from the screen. \n" \
+                             "Press 'c' to calibrate or 'q' to abort.").format(int(eyeDist/10))
                    
             # update stimuli in window
             eyeArea.draw()
@@ -625,7 +636,7 @@ class TobiiHelper:
                                  units = 'pix')
         # Make a dummy message
         valMsg = visual.TextStim(valWin,
-                                 text = 'Wait for the experimenter.',
+                                 text = _('Wait for the experimenter.'),
                                  color = [0.4, 0.4, 0.4],  # grey
                                  units = 'norm',
                                  pos = [0.0, -0.5],
@@ -822,7 +833,7 @@ class TobiiHelper:
                                     height = 60)
         # Make a dummy message
         checkMsg = visual.TextStim(calibWin,
-                                   text = 'Wait for the experimenter. \nUse number keys to select points for recalibration.',
+                                   text = _('Wait for the experimenter. \nUse number keys to select points for recalibration.'),
                                    color = [1.0, 1.0, 1.0],
                                    units = 'norm',
                                    pos = [0.0, -0.5],
@@ -919,7 +930,7 @@ class TobiiHelper:
                 elif key in ['c']:
                     print ("Finished checking. Resuming calibration.")
                     checkMsg.pos = (0.0, 0.0)
-                    checkMsg.text = ("Finished checking. Resuming calibration.")
+                    checkMsg.text = _("Finished checking. Resuming calibration.")
                     checkMsg.draw()
                     calibWin.flip() 
     
@@ -1124,9 +1135,9 @@ class TobiiHelper:
         # enter calibration mode
         self.calibration.enter_calibration_mode()
         # subject instructions
-        calibMessage.text = ("Please focus your eyes on the red dot " + \
-                             "and follow it with your eyes as closely as " + \
-                             "possible.\n\nPress 'c' to continue.")
+        calibMessage.text = _("Please focus your eyes on the red dot " \
+                              "and follow it with your eyes as closely as " \
+                              "possible.\n\nPress 'c' to continue.")
         calibMessage.draw()
         calibWin.flip()   
             
@@ -1153,12 +1164,12 @@ class TobiiHelper:
             # if calibration was successful, check calibration results
             if calibResult.status == tobii.CALIBRATION_STATUS_SUCCESS:
                 # give feedback
-                calibMessage.text = ("Applying calibration...")
+                calibMessage.text = _("Applying calibration...")
                 calibMessage.draw()
                 calibWin.flip()
                 pcore.wait(2)
                 # moving on to accuracy plot
-                calibMessage.text = ("Calculating calibration accuracy...")
+                calibMessage.text = _("Calculating calibration accuracy...")
                 calibMessage.draw()
                 calibWin.flip()
                 pcore.wait(2)
@@ -1169,8 +1180,8 @@ class TobiiHelper:
                                                           calibDict)
        
             else:  # if calibration was not successful, leave and abort
-                calibMessage.text = ("Calibration was not successful.\n\n" + \
-                                     "Closing the calibration window.")
+                calibMessage.text = _("Calibration was not successful.\n\n" \
+                                      "Closing the calibration window.")
                 calibMessage.draw()
                 calibWin.flip()
                 pcore.wait(3)
@@ -1182,8 +1193,8 @@ class TobiiHelper:
             if not redoCalDict:  # if no points to redo
             # finish calibration
                 print ("Calibration successful. Moving on to validation mode.")
-                calibMessage.text = ("Calibration was successful.\n\n" + \
-                                     "Moving on to validation.")
+                calibMessage.text = _("Calibration was successful.\n\n" \
+                                      "Moving on to validation.")
                 calibMessage.draw()
                 calibWin.flip()
                 pcore.wait(3)
@@ -1197,8 +1208,8 @@ class TobiiHelper:
                 # feedback
                 print ("Still need to calibrate the following points: %s" 
                        % printString)
-                calibMessage.text = ("Calibration is almost complete.\n\n" + \
-                                 "Prepare to recalibrate a few points.")
+                calibMessage.text = _("Calibration is almost complete.\n\n" \
+                                      "Prepare to recalibrate a few points.")
                 calibMessage.draw()
                 calibWin.flip()
                 pcore.wait(3)
@@ -1275,9 +1286,9 @@ class TobiiHelper:
 
         # track box to position participant
         # subject instructions for track box
-        calibMessage.text = ("Please position yourself so that the\n" + \
-                             "eye-tracker can locate your eyes." + \
-                             "\n\nPress 'c' to continue.")
+        calibMessage.text = _("Please position yourself so that the\n" \
+                              "eye-tracker can locate your eyes." \
+                              "\n\nPress 'c' to continue.")
         calibMessage.draw()
         calibWin.flip()
         # turn keyboard reporting on and get subject response
@@ -1293,8 +1304,8 @@ class TobiiHelper:
         # run validation
         self.runValidation(calibDict, calibWin)
         # close window
-        calibMessage.text = ("Finished validating the calibration.\n\n" +\
-                             "Calibration is complete. Closing window.")
+        calibMessage.text = _("Finished validating the calibration.\n\n" \
+                              "Calibration is complete. Closing window.")
         calibMessage.draw()
         calibWin.flip()
         pcore.wait(3)

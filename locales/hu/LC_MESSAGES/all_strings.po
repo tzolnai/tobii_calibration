@@ -1,0 +1,109 @@
+# Copyright (C) 2019
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2019-04-27 01:02+0200\n"
+"PO-Revision-Date: 2019-04-27 01:02+0200\n"
+"Last-Translator: Tamás Zolnai (tamaszolnai2000vgmail.com)\n"
+"Language-Team: Hungarian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1250\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: tobii_pro_wrapper.py:582
+msgid ""
+"You're currently {0} cm away from the screen. \n"
+"Press 'c' to calibrate or 'q' to abort."
+msgstr ""
+"Jelenleg {0} cm a monitortól való távolság. \n"
+"Nyomd meg a 'c' gombot a továbblépéshez vagy a 'q' a program futás megszakításához."
+
+#: tobii_pro_wrapper.py:630
+msgid "Wait for the experimenter."
+msgstr "Várd meg a kísérletvezetőt!"
+
+#: tobii_pro_wrapper.py:827
+msgid ""
+"Wait for the experimenter. \n"
+"Use number keys to select points for recalibration."
+msgstr ""
+"Várd meg a kísérletvezetőt! \n"
+"A szám billentyűk megnyomásával jelölhetsz ki pontokat az újrakalibráláshoz."
+
+#: tobii_pro_wrapper.py:924
+msgid "Finished checking. Resuming calibration."
+msgstr "Az ellenőrzést befejeztük. Folytatjuk a kalibrációt."
+
+#: tobii_pro_wrapper.py:1129
+msgid ""
+"Please focus your eyes on the red dot and follow it with your eyes as closely as possible.\n"
+"\n"
+"Press 'c' to continue."
+msgstr ""
+"Kövesd a szemeddel a képernyőn megjelenő és mozgó piros pontot.\n"
+"\n"
+"A folytatáshoz nyomd meg a 'c' gombot!"
+
+#: tobii_pro_wrapper.py:1158
+msgid "Applying calibration..."
+msgstr "Kalibráció elmentése..."
+
+#: tobii_pro_wrapper.py:1163
+msgid "Calculating calibration accuracy..."
+msgstr "Kalibráció pontosságának kiszámolása..."
+
+#: tobii_pro_wrapper.py:1174
+msgid ""
+"Calibration was not successful.\n"
+"\n"
+"Closing the calibration window."
+msgstr ""
+"A kalibráció sikertelen volt.\n"
+"\n"
+"A kalibrációs ablak bezáródik."
+
+#: tobii_pro_wrapper.py:1187
+msgid ""
+"Calibration was successful.\n"
+"\n"
+"Moving on to validation."
+msgstr ""
+"A kalibráció sikeres volt.\n"
+"\n"
+"A következik a validáció."
+
+#: tobii_pro_wrapper.py:1202
+msgid ""
+"Calibration is almost complete.\n"
+"\n"
+"Prepare to recalibrate a few points."
+msgstr ""
+"A kalibráció majdnem teljese.\n"
+"\n"
+"Néhány pont újra kalibrálása következik."
+
+#: tobii_pro_wrapper.py:1280
+msgid ""
+"Please position yourself so that the\n"
+"eye-tracker can locate your eyes.\n"
+"\n"
+"Press 'c' to continue."
+msgstr ""
+"Vegyél fel olyan poziciót, hogy\n"
+"az eye tracker érzékelje a szemedet.\n"
+"\n"
+"A folytatáshoz nyomd meg a 'c' gombot!"
+
+#: tobii_pro_wrapper.py:1298
+msgid ""
+"Finished validating the calibration.\n"
+"\n"
+"Calibration is complete. Closing window."
+msgstr ""
+"A kalibráció validálása befejeződött.\n"
+"\n"
+"A kalibráció befejeződött."
+
