@@ -19,7 +19,7 @@ msgid ""
 "Press 'c' to calibrate or 'q' to abort."
 msgstr ""
 "Jelenleg {0} cm a monitortól való távolság. \n"
-"Nyomd meg a 'c' gombot a továbblépéshez vagy a 'q' a program futás megszakításához."
+"Nyomd meg a 'c' gombot a továbblépéshez vagy a 'q'-t a program futás megszakításához."
 
 #: tobii_pro_wrapper.py:630
 msgid "Wait for the experimenter."
@@ -73,7 +73,7 @@ msgid ""
 msgstr ""
 "A kalibráció sikeres volt.\n"
 "\n"
-"A következik a validáció."
+"Következik a validáció."
 
 #: tobii_pro_wrapper.py:1202
 msgid ""
@@ -81,7 +81,7 @@ msgid ""
 "\n"
 "Prepare to recalibrate a few points."
 msgstr ""
-"A kalibráció majdnem teljese.\n"
+"A kalibráció majdnem teljes.\n"
 "\n"
 "Néhány pont újra kalibrálása következik."
 
