@@ -1,12 +1,12 @@
 # tobii_calibration
 
 This package contains useful rutines for calibration using a Tobii Pro SDK for Python.
-Three main part of calibration is supported:
-1. Trackbox visualization to allow positioning of the subject to make
-the eyes positioned inside the eye tracker's track box (see runTrackBox).
+Three main parts of calibration are supported:
+1. Trackbox visualization to allow positioning of the subject's eye inside
+the eye tracker's track box (see runTrackBox).
 2. Displaying calibration points and collection calibraton data (see runFullCalibration).
 3. Validation screen which can be used after calibration to validate that the eye tracker
-records the correct eye positions.
+records the eye positions correctly (see runValidation).
 
 Derivetive code from tobii-pro-wrapper: https://github.com/oguayasa/tobii_pro_wrapper.
 This code is in 'work-in-progress' state.
@@ -40,7 +40,9 @@ Download or clone the whole project then go into the folder of it and call setup
 python setup.py install
 ```
 
-For installing it with a non english language (only Hungarian translation is supported by now):
+For installing it with a non english language run the following command
+(only Hungarian translation is supported by now):
+
 ```
 python setup.py install --lang hu
 ```
