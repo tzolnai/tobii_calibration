@@ -55,9 +55,11 @@ class TobiiHelper:
 
         self.eyetracker = None
 
-        self.adaCoordinates = None
-
         self.tbCoordinates = None
+
+        self.virtual_trackbox_width = None
+
+        self.virtual_trackbox_height = None
 
         self.calibration = None
 
@@ -136,16 +138,6 @@ class TobiiHelper:
         # check to see that eyetracker is connected
         if self.eyetracker is None:
             raise RuntimeError("There is no eyetracker.")
-
-        # get active display area information in mm as a dictionary
-        displayArea = self.eyetracker.get_display_area()
-        self.adaCoordinates = {}
-        self.adaCoordinates['bottomLeft'] = displayArea.bottom_left
-        self.adaCoordinates['bottomRight'] = displayArea.bottom_right
-        self.adaCoordinates['topLeft'] = displayArea.top_left
-        self.adaCoordinates['topRight'] = displayArea.top_right
-        self.adaCoordinates['height'] = displayArea.height
-        self.adaCoordinates['width'] = displayArea.width
 
         # get track box information in mm, return only the 2d coordinates
         # of the cube side closest to the eyetracker
@@ -275,55 +267,34 @@ class TobiiHelper:
 # ----- Functions for converting coordinates between different coordinate systems -----
 
     # function for converting normalized positions from trackbox coordinate system
-    # to normalized active display area coordinates
-    def __tb2Ada(self, xyCoor):
+    # to the virtual trackbox coordinates in pixels
+    def __trackBox2VirtualTrackBox(self, xyCoor):
 
         # check argument values
         if not isinstance(xyCoor, tuple):
             raise TypeError("XY coordinates must be given as tuple.")
         elif len(xyCoor) is not 2:
             raise ValueError("Wrong number of coordinate dimensions.")
-        elif xyCoor[0] > 1.0 or xyCoor[0] < 0.0 or xyCoor[1] > 1.0 or xyCoor[1] < 0.0:
-            raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
-        # check tracker box and ada coordinates
-        if self.tbCoordinates is None or self.adaCoordinates is None:
-            raise RuntimeError("Missing trackbox coordinates. \n" +\
-                               "Try running getTrackerSpace()!")
+        elif not isinstance(xyCoor[0], numbers.Number) or not isinstance(xyCoor[1], numbers.Number):
+            raise TypeError("The given coordinates should be numbers.")
 
-        # get tb and ada values from eyetracker
-        tbDict = self.tbCoordinates
-        adaDict = self.adaCoordinates
+        if self.virtual_trackbox_height is None or self.virtual_trackbox_width is None:
+            raise RuntimeError("Virtual trackbox dimensions are not set.")
 
-        # create ratios for x and y coordinates
-        yRatio = tbDict.get('height')/adaDict.get('height')
-        xRatio = tbDict.get('width')/adaDict.get('width')
+        # scale up the normalized coordinates to the virtual trackbox pixel coordinates
+        resultXCoord = xyCoor[0] * self.virtual_trackbox_width
+        resultYCoord = xyCoor[1] * self.virtual_trackbox_height
 
-        # convert and return coordinates
-        adaNorm = (xyCoor[0] * xRatio, xyCoor[1] * yRatio)
-        return adaNorm
+        # move the object to the psychopy origin
+        centerShift = (self.virtual_trackbox_width / 2, self.virtual_trackbox_height / 2)
+        resultXCoord -= centerShift[0]
+        resultYCoord -= centerShift[1]
 
+        # mirror coordinates
+        resultXCoord *= -1
+        resultYCoord *= -1
 
-    # function for converting normalized positions from trackbox coordinate system
-    # to normalized coordinates based on the psychopy window
-    def __tb2PsychoNorm(self, xyCoor):
-
-        # check argument values
-        if not isinstance(xyCoor, tuple):
-            raise TypeError("XY coordinates must be given as tuple.")
-        elif len(xyCoor) is not 2:
-            raise ValueError("Wrong number of coordinate dimensions.")
-        elif xyCoor[0] > 1.0 or xyCoor[0] < 0.0 or xyCoor[1] > 1.0 or xyCoor[1] < 0.0:
-            raise ValueError("The given coordinates should be in normalized form ([0.0,1.0]).")
-
-        # convert track box coordinates to ada coordinates
-        adaCoors = self.__tb2Ada(xyCoor)
-        # correct for psychopy window coordinates
-        centerScale = self.__tb2Ada((1, 1))
-        centerShift = (centerScale[0] / 2, centerScale[1] / 2)
-        psychoNorm = (adaCoors[0] - centerShift[0],
-                      -(adaCoors[1] - centerShift[1]))
-        # return coordinates in psychowin 'norm' units
-        return psychoNorm
+        return (resultXCoord, resultYCoord)
 
 
     # function for converting from tobiis ada coordinate system in normalized
@@ -387,8 +358,8 @@ class TobiiHelper:
 
     # function for finding the avg 3d position of subject's eyes, so that they
     # can be drawn in the virtual track box before calibration. The x and y
-    # coordinates are returned in normalized "tobii track box" units.
-    def __trackboxEyePos(self):
+    # coordinates are returned in the virtual trackbox coordinates system in pixels.
+    def __virtualTrackboxEyePos(self):
 
         # check to see if the eyetracker is connected and turned on
         if self.eyetracker is None:
@@ -412,24 +383,19 @@ class TobiiHelper:
         if leftVal:
             # update the left eye positions if the values are reasonable
             # scale left eye position so that it fits in track box
-            leftTbPos = (-self.__tb2PsychoNorm((lelfTbXYZ[0],
-                                              lelfTbXYZ[1]))[0] * 1.7,
-                          self.__tb2PsychoNorm((lelfTbXYZ[0],
-                                              lelfTbXYZ[1]))[1])
+            leftTbPos = self.__trackBox2VirtualTrackBox((lelfTbXYZ[0], lelfTbXYZ[1]))
         else:
             # hide by drawing in the corner
-            leftTbPos = [0.99, 0.99]
+            leftTbPos = (math.nan, math.nan)
 
         # if right eye is found by the eyetracker
         if rightVal:
             # update the right eye positions if the values are reasonable
             # scale right eye position so that it fits in track box
-            rightTbPos = (-self.__tb2PsychoNorm((rightTbXYZ[0], rightTbXYZ[1]))[0] * 1.7,
-                           self.__tb2PsychoNorm((rightTbXYZ[0],
-                                               rightTbXYZ[1]))[1])
+            rightTbPos = self.__trackBox2VirtualTrackBox((rightTbXYZ[0], rightTbXYZ[1]))
         else:
             # hide by drawing in the corner
-            rightTbPos = [0.99, 0.99]
+            rightTbPos = (math.nan, math.nan)
         # return values for positio in track box
         return leftTbPos, rightTbPos
 
@@ -531,36 +497,56 @@ class TobiiHelper:
         if not isinstance(psychoWin, visual.Window):
             raise TypeError("psychoWin should be a valid visual.Window object.")
 
+        if self.tbCoordinates is None:
+            raise RuntimeError("Missing trackbox coordinates!")
+
         # Set default colors
         correctColor = [-1.0, 1.0, -1.0]
         mediumColor = [1.0, 1.0, 0.0]
         wrongColor = [1.0, -1.0, -1.0]
 
+        # calculate the virtual track box sizes
+        screen_width = psychoWin.size[0]
+        screen_height = psychoWin.size[1]
+
+        trackbox_width = self.tbCoordinates.get("width")
+        trackbox_height = self.tbCoordinates.get("height")
+
+        # which dimension is bigger relative to the screen size
+        if screen_width / trackbox_width >= screen_height / trackbox_height:
+            # make the virtual track box take the 8/3 of the screen
+            self.virtual_trackbox_width = screen_width / 8 * 3
+            # the width/height ration of the virtual trackbox should be the same what the physical track box has
+            self.virtual_trackbox_height = self.virtual_trackbox_width * trackbox_height / trackbox_width
+        else:
+            self.virtual_trackbox_height = screen_height / 8 * 3
+            self.virtual_trackbox_width = self.virtual_trackbox_height * trackbox_width / trackbox_height
+
         # rectangle for viewing eyes
-        rectScale = self.__tb2Ada((1, 1))
         eyeArea = visual.Rect(psychoWin,
                               fillColor = [0.0, 0.0, 0.0],
                               lineColor = [0.0, 0.0, 0.0],
                               pos = [0.0, 0.0],
-                              units = 'norm',
+                              units = 'pix',
                               lineWidth = 3,
-                              width = rectScale[0],
-                              height = rectScale[1])
-         # Make stimuli for the left and right eye
+                              width = self.virtual_trackbox_width,
+                              height = self.virtual_trackbox_height)
+
+        # Make stimuli for the left and right eye
         leftStim = visual.Circle(psychoWin,
                                  fillColor = eyeArea.fillColor,
-                                 units = 'norm',
-                                 radius = 0.07)
+                                 units = 'pix',
+                                 radius = 30)
         rightStim = visual.Circle(psychoWin,
                                   fillColor = eyeArea.fillColor,
-                                  units = 'norm',
-                                  radius = 0.07)
+                                  units = 'pix',
+                                  radius = 30)
         # Make a dummy message
         findmsg = visual.TextStim(psychoWin,
                                   text = " ",
                                   color = [1.0, 1.0, 1.0],
                                   units = 'norm',
-                                  pos = [0.0, -0.65],
+                                  pos = [0.0, -((self.virtual_trackbox_height / screen_height) + 0.10)],
                                   height = 0.07)
 
         eyeDistances = []
@@ -570,50 +556,88 @@ class TobiiHelper:
         # while tracking
         while True:
             # find and update eye positions
-            leftEyePos, rightEyePos = self.__trackboxEyePos()
+            leftEyePos, rightEyePos = self.__virtualTrackboxEyePos()
             eyeDist = self.__getAvgEyeDist()
 
             eyeDist = self.__smoothing(eyeDist, eyeDistances, 0.0, lambda list : sum(list) / len(list))
 
-            leftStim.pos = self.__smoothing(leftEyePos, leftPositions, [0.99, 0.99], self.__calcMeanOfPointList)
+            leftStim.pos = self.__smoothing(leftEyePos, leftPositions, (math.nan, math.nan), self.__calcMeanOfPointList)
 
-            rightStim.pos = self.__smoothing(rightEyePos, rightPositions, [0.99, 0.99], self.__calcMeanOfPointList)
+            rightStim.pos = self.__smoothing(rightEyePos, rightPositions, (math.nan, math.nan), self.__calcMeanOfPointList)
 
             frontDistance = self.tbCoordinates.get('frontDistance')
             backDistance = self.tbCoordinates.get('backDistance')
 
+            medium_left = False
+            medium_right = False
+            wrong_left = False
+            wrong_right = False
+
             # change color depending on distance
-            if eyeDist >= frontDistance + 50 and eyeDist <= backDistance - 50:
-                # correct distance
-                leftStim.fillColor, leftStim.lineColor = correctColor, correctColor
-                rightStim.fillColor, rightStim.lineColor = correctColor, correctColor
-            elif (eyeDist < frontDistance + 50 and eyeDist > frontDistance) or (eyeDist > backDistance - 50 and eyeDist < backDistance):
+            if eyeDist <= frontDistance or eyeDist >= backDistance:
+                wrong_left = True
+                wrong_right = True
+            elif eyeDist <= frontDistance + 50 or eyeDist >= backDistance - 50:
+                medium_left = True
+                medium_right = True
+
+            # change color depending on horizontal position
+            if leftStim.pos[0] >= (self.virtual_trackbox_width / 2) or \
+               leftStim.pos[0] <= -(self.virtual_trackbox_width / 2):
+                wrong_left = True
+            elif leftStim.pos[0] >= (self.virtual_trackbox_width / 2) - (self.virtual_trackbox_width / 6) or \
+                 leftStim.pos[0] <= -(self.virtual_trackbox_width / 2) + (self.virtual_trackbox_width / 6):
+                medium_left = True
+
+            if rightStim.pos[0] >= (self.virtual_trackbox_width / 2) or \
+               rightStim.pos[0] <= -(self.virtual_trackbox_width / 2):
+                wrong_right = True
+            elif rightStim.pos[0] >= (self.virtual_trackbox_width / 2) - (self.virtual_trackbox_width / 6) or \
+                 rightStim.pos[0] <= -(self.virtual_trackbox_width / 2) + (self.virtual_trackbox_width / 6):
+                medium_right = True
+
+            # change color depending on vertical position
+            if leftStim.pos[1] >= (self.virtual_trackbox_height / 2) or \
+               leftStim.pos[1] <= -(self.virtual_trackbox_height / 2):
+                wrong_left = True
+            elif leftStim.pos[1] >= (self.virtual_trackbox_height / 2) - (self.virtual_trackbox_height / 6) or \
+                 leftStim.pos[1] <= -(self.virtual_trackbox_height / 2) + (self.virtual_trackbox_height / 6):
+                medium_left = True
+
+            if rightStim.pos[1] >= (self.virtual_trackbox_height / 2) or \
+               rightStim.pos[1] <= -(self.virtual_trackbox_height / 2):
+                wrong_right = True
+            elif rightStim.pos[1] >= (self.virtual_trackbox_height / 2) - (self.virtual_trackbox_height / 6) or \
+                 rightStim.pos[1] <= -(self.virtual_trackbox_height / 2) + (self.virtual_trackbox_height / 6):
+                medium_right = True
+
+            if wrong_left:
+                leftStim.fillColor, leftStim.lineColor = wrongColor, wrongColor
+            elif medium_left:
                 leftStim.fillColor, leftStim.lineColor = mediumColor, mediumColor
+            else:
+                leftStim.fillColor, leftStim.lineColor = correctColor, correctColor
+
+            if wrong_right:
+                rightStim.fillColor, rightStim.lineColor = wrongColor, wrongColor
+            elif medium_right:
                 rightStim.fillColor, rightStim.lineColor = mediumColor, mediumColor
             else:
-                # not really correct
-                leftStim.fillColor, leftStim.lineColor = wrongColor, wrongColor
-                rightStim.fillColor, rightStim.lineColor = wrongColor, wrongColor
-
-            # if left eye is not found, don't display eye
-            if leftStim.pos[0] == 0.99:
-                leftStim.fillColor = psychoWin.color  # make the same color as bkg
-                leftStim.lineColor = psychoWin.color
-
-            # if right eye is not found, don't display eye
-            if rightStim.pos[0] == 0.99:
-                rightStim.fillColor = psychoWin.color  # make same color as bkg
-                rightStim.lineColor = psychoWin.color
+                rightStim.fillColor, rightStim.lineColor = correctColor, correctColor
 
             # give distance feedback
-
             findmsg.text = _("You're currently {0} cm away from the screen. \n" \
                              "Press 'c' to calibrate or 'q' to abort.").format(int(eyeDist/10))
 
             # update stimuli in window
             eyeArea.draw()
-            leftStim.draw()
-            rightStim.draw()
+
+            if not math.isnan(leftStim.pos[0]):
+                leftStim.draw()
+
+            if not math.isnan(rightStim.pos[0]):
+                rightStim.draw()
+
             findmsg.draw()
             psychoWin.flip()
 
