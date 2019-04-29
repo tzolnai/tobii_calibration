@@ -8,16 +8,17 @@ from psychopy import visual, event
 listOfDrawings = []
 
 # override visual methods, to check the drawing objects without actually drawing
-def RectangleDraw(rectangle):
+def __RectangleDraw(rectangle):
     rect_copy = Rect()
     rect_copy.pos = rectangle.pos
     rect_copy.width = rectangle.width
     rect_copy.height = rectangle.height
+    rect_copy.fillColor = rectangle.fillColor
     listOfDrawings.append(rect_copy)
 
-visual.Rect.draw = RectangleDraw
+visual.Rect.draw = __RectangleDraw
 
-def CircleDraw(circle):
+def __CircleDraw(circle):
     circle_copy = Circle()
     circle_copy.radius = circle.radius
     circle_copy.pos = circle.pos
@@ -25,9 +26,9 @@ def CircleDraw(circle):
     circle_copy.lineColor = circle.lineColor
     listOfDrawings.append(circle_copy)
 
-visual.Circle.draw = CircleDraw
+visual.Circle.draw = __CircleDraw
 
-def LineDraw(line):
+def __LineDraw(line):
     line_copy = Line()
     line_copy.start = line.start
     line_copy.end = line.end
@@ -35,9 +36,9 @@ def LineDraw(line):
     line_copy.lineColor = line.lineColor
     listOfDrawings.append(line_copy)
 
-visual.Line.draw = LineDraw
+visual.Line.draw = __LineDraw
 
-def TextStimDraw(textStim):
+def __TextStimDraw(textStim):
     test_stim_copy = TextStim()
     test_stim_copy.height = textStim.height
     test_stim_copy.pos = textStim.pos
@@ -45,12 +46,24 @@ def TextStimDraw(textStim):
     test_stim_copy.text = textStim.text
     listOfDrawings.append(test_stim_copy)
 
-visual.TextStim.draw = TextStimDraw
+visual.TextStim.draw = __TextStimDraw
 
-def WindowFlip(window):
+def __PolygonDraw(polygon):
+    polygon_copy = Polygon()
+    polygon_copy.fillColor = polygon.fillColor
+    polygon_copy.lineColor = polygon.lineColor
+    polygon_copy.pos = polygon.pos
+    polygon_copy.radius = polygon.radius
+    polygon_copy.lineWidth = polygon.lineWidth
+    polygon_copy.ori = polygon.ori
+    listOfDrawings.append(polygon_copy)
+
+visual.Polygon.draw = __PolygonDraw
+
+def __WindowFlip(window):
     pass
 
-visual.Window.flip = WindowFlip
+visual.Window.flip = __WindowFlip
 
 returnKeyList = []
 
@@ -72,6 +85,7 @@ class Rect:
         pos = None
         width = None
         height = None
+        fillColor = None
 
 class Circle:
 
@@ -96,6 +110,16 @@ class TextStim:
         height = None
         color = None
         text = None
+
+class Polygon:
+
+    def __init__(self):
+        fillColor = None
+        lineColor = None
+        pos = None
+        lineWidth = None
+        radius = None
+        ori = None
 
 
 class PsychoPyVisualMock:

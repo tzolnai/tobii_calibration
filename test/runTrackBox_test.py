@@ -24,11 +24,8 @@ green_color = [-1.0, 1.0, -1.0]
 red_color = [1.0, -1.0, -1.0]
 yellow_color = [1.0, 1.0, 0.0]
 
-def DummyFunction(tobiiHelper):
+def DummyFunction(*args):
     pass
-
-calibrator.TobiiHelper._TobiiHelper__startGazeData = DummyFunction
-calibrator.TobiiHelper._TobiiHelper__stopGazeData = DummyFunction
 
 pcore.wait = DummyFunction
 
@@ -63,9 +60,17 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper.gazeData['left_gaze_origin_validity'] = True
         tobii_helper.gazeData['right_gaze_origin_validity'] = True
 
+        tobii_helper._TobiiHelper__drawDistanceSlider = DummyFunction
+        tobii_helper._TobiiHelper__startGazeData = DummyFunction
+        tobii_helper._TobiiHelper__stopGazeData = DummyFunction
+
     def testNotInitedThings(self):
         tobii_helper = calibrator.TobiiHelper()
         tobii_helper.disableLogging()
+
+        tobii_helper._TobiiHelper__startGazeData = DummyFunction
+        tobii_helper._TobiiHelper__stopGazeData = DummyFunction
+
         # no window
         with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__drawEyePositions([])
@@ -176,7 +181,7 @@ class runTrackBoxTest(unittest.TestCase):
         # color
         self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
-        self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testEyePosInTrackbox(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -233,7 +238,7 @@ class runTrackBoxTest(unittest.TestCase):
         # color
         self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
-        self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testEyeIsTooFar(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -274,7 +279,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 82 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort."), feedback_text.text)
 
     def testEyeIsAlmostTooFar(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -315,7 +320,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 78 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testEyeIsTooNear(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -356,7 +361,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort."), feedback_text.text)
 
     def testEyeIsAlmostTooNear(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -397,7 +402,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 51 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testNoValidEyeData(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -420,7 +425,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[1]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 0 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testDifferentFrontDistance(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -464,7 +469,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 44 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort."), feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort."), feedback_text.text)
 
     def testDifferentBackDistance(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -502,7 +507,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 65 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testOneEyeIsFar(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -543,7 +548,7 @@ class runTrackBoxTest(unittest.TestCase):
         # text
         feedback_text = drawing_list[3]
         self.assertTrue(isinstance(feedback_text, pvm.TextStim))
-        self.assertEqual(str("You're currently 80 cm away from the screen. \nPress 'c' to calibrate or 'q' to abort.") , feedback_text.text)
+        self.assertEqual(str("Press 'c' to calibrate or 'q' to abort.") , feedback_text.text)
 
     def testLeftEyeAlmosOutOnLeft(self):
         tobii_helper = calibrator.TobiiHelper()

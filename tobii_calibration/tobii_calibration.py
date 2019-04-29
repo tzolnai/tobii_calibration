@@ -489,6 +489,115 @@ class TobiiHelper:
 
         return result
 
+    # Function for drawing a slider showing the eye distance from the eye tracker.
+    # The slider is drawn on the right side of the virtual track box.
+    def __drawDistanceSlider(self, drawingWin, eyeDist):
+
+        if not isinstance(drawingWin, visual.Window):
+            raise TypeError("drawingWin should be a valid visual.Window object.")
+
+        if not isinstance(eyeDist, numbers.Number):
+            raise TypeError("eyeDist should be a valid number value.")
+
+        if self.tbCoordinates is None:
+            raise RuntimeError("Missing trackbox coordinates!")
+
+        if self.virtual_trackbox_width is None or self.virtual_trackbox_height is None:
+            raise RuntimeError("Virtual trackbox's dimensions are not inited!")
+
+        # draw the slider to the right side of the trackbox, having a small padding between the two
+        sliderDrawingPos = (self.virtual_trackbox_width / 2 + 50, 0.0)
+
+        # let the slider have the same size as the virtual trackbox
+        sliderHeight = self.virtual_trackbox_height
+
+        # split the slider into 8 pieces
+        drawingUnit = sliderHeight / 8
+
+        sliderWidth = 10
+
+        # red range on the top of the slider (eye is too new)
+        invalidTop = visual.Rect(drawingWin,
+                                  fillColor = [1.0, -1.0, -1.0],
+                                  lineColor = [0.0, 0.0, 0.0],
+                                  pos = (sliderDrawingPos[0], sliderDrawingPos[1] + (3.5 * drawingUnit)),
+                                  units = 'pix',
+                                  lineWidth = 0.1,
+                                  width = sliderWidth,
+                                  height = drawingUnit)
+
+        # yellow range on the top of the slider (eye is near to the front of the trackbox)
+        mediumTop = visual.Rect(drawingWin,
+                                  fillColor = [1.0, 1.0, 0.0],
+                                  lineColor = [0.0, 0.0, 0.0],
+                                  pos = (sliderDrawingPos[0], sliderDrawingPos[1] + (2.5 * drawingUnit)),
+                                  units = 'pix',
+                                  lineWidth = 0.1,
+                                  width = sliderWidth,
+                                  height = drawingUnit)
+
+        # valid distance range
+        validRegion = visual.Rect(drawingWin,
+                                  fillColor = [-1.0, 1.0, -1.0],
+                                  lineColor = [0.0, 0.0, 0.0],
+                                  pos = (sliderDrawingPos[0], sliderDrawingPos[1]),
+                                  units = 'pix',
+                                  lineWidth = 0.1,
+                                  width = sliderWidth,
+                                  height = drawingUnit * 4)
+
+        # yellow range on the bottom of the slider (eye is near to the back of the trackbox)
+        mediumBottom = visual.Rect(drawingWin,
+                                  fillColor = [1.0, 1.0, 0.0],
+                                  lineColor = [0.0, 0.0, 0.0],
+                                  pos = (sliderDrawingPos[0], sliderDrawingPos[1] - (2.5 * drawingUnit)),
+                                  units = 'pix',
+                                  lineWidth = 0.1,
+                                  width = sliderWidth,
+                                  height = drawingUnit)
+
+        # red range on the bottom of the slider (eye is too far)
+        invalidBottom = visual.Rect(drawingWin,
+                                  fillColor = [1.0, -1.0, -1.0],
+                                  lineColor = [0.0, 0.0, 0.0],
+                                  pos = (sliderDrawingPos[0], sliderDrawingPos[1] - (3.5 * drawingUnit)),
+                                  units = 'pix',
+                                  lineWidth = 0.1,
+                                  width = sliderWidth,
+                                  height = drawingUnit)
+
+
+        # eye relative to the front
+        relativeEyeDist = eyeDist - self.tbCoordinates.get("frontDistance")
+        # use the allowed range of distances
+        validDistanceRange = self.tbCoordinates.get("backDistance") - self.tbCoordinates.get("frontDistance")
+        # calculate the position of the marker based on the eye distance
+        markerPos = ((relativeEyeDist / validDistanceRange) * (drawingUnit * 6)) - ((drawingUnit * 6) / 2)
+        markerPos *= -1
+
+        # do not allow to move the marker out of the slider
+        if markerPos > (sliderHeight / 2):
+            markerPos = sliderHeight / 2
+        elif markerPos < -(sliderHeight / 2):
+            markerPos = -(sliderHeight / 2)
+
+        # marker indicating the current eye distance
+        sliderMarker = visual.Polygon(drawingWin,
+                                  fillColor = [-0.8, -0.8, -0.8],
+                                  lineColor = [0.0, 0.0, 0.0],
+                                  pos = (sliderDrawingPos[0] + sliderWidth, markerPos),
+                                  units = 'pix',
+                                  lineWidth = 0.1,
+                                  radius = sliderWidth,
+                                  ori = 270.0)
+
+        invalidTop.draw()
+        mediumTop.draw()
+        validRegion.draw()
+        mediumBottom.draw()
+        invalidBottom.draw()
+        sliderMarker.draw()
+
 
     # function for drawing representation of the eyes in virtual trackbox
     def __drawEyePositions(self, psychoWin):
@@ -626,8 +735,7 @@ class TobiiHelper:
                 rightStim.fillColor, rightStim.lineColor = correctColor, correctColor
 
             # give distance feedback
-            findmsg.text = _("You're currently {0} cm away from the screen. \n" \
-                             "Press 'c' to calibrate or 'q' to abort.").format(int(eyeDist/10))
+            findmsg.text = _("Press 'c' to calibrate or 'q' to abort.")
 
             # update stimuli in window
             eyeArea.draw()
@@ -639,6 +747,7 @@ class TobiiHelper:
                 rightStim.draw()
 
             findmsg.draw()
+            self.__drawDistanceSlider(psychoWin, eyeDist)
             psychoWin.flip()
 
             # depending on response, either abort script or continue to calibration
