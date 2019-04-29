@@ -106,34 +106,34 @@ class drawCalibrationScreenTest(unittest.TestCase):
         pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.1)), ('3',(0.5, 0.5)), ('4',(0.1, 0.9)), ('5',(0.9, 0.9))]
         calibDict = collections.OrderedDict(pointList)
 
-        calibWin = visual.Window(size = [1366, 768],
+        with visual.Window(size = [1366, 768],
                                  pos = [0, 0],
                                  units = 'pix',
                                  fullscr = True,
                                  allowGUI = True,
                                  monitor = tobii_helper.win,
                                  winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
+                                 color = [0.4, 0.4, 0.4]) as calibWin:
 
-        # no monitor
-        with self.assertRaises(RuntimeError):
+            # no monitor
+            with self.assertRaises(RuntimeError):
+                tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
+
+            tobii_helper.setMonitor()
+
+            # no eyetracker
+            with self.assertRaises(RuntimeError):
+                tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
+
+            tobii_helper.eyetracker = "dummy"
+
+            visual_mock = pvm.PsychoPyVisualMock()
+            visual_mock.setReturnKeyList(['c', 'c'])
+
+            # now we are good
             tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
 
-        tobii_helper.setMonitor()
-
-        # no eyetracker
-        with self.assertRaises(RuntimeError):
-            tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
-
-        tobii_helper.eyetracker = "dummy"
-
-        visual_mock = pvm.PsychoPyVisualMock()
-        visual_mock.setReturnKeyList(['c', 'c'])
-
-        # now we are good
-        tobii_helper._TobiiHelper__drawCalibrationScreen(calibDict, calibWin)
-
-        calibWin.close()
+            calibWin.close()
 
     def testNormalExecution(self):
         tobii_helper = calibrator.TobiiHelper()

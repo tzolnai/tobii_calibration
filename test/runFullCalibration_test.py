@@ -81,14 +81,8 @@ class runFullCalibrationTest(unittest.TestCase):
         tobii_helper.runFullCalibration()
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(2, len(drawing_list))
+        self.assertEqual(1, len(drawing_list))
         message = drawing_list[0]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Please position yourself so that the\n" + \
-                             "eye-tracker can locate your eyes." + \
-                             "\n\nPress 'c' to continue."), message.text)
-
-        message = drawing_list[1]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Finished validating the calibration.\n\n" +\
                              "Calibration is complete. Closing window."), message.text)
@@ -115,14 +109,8 @@ class runFullCalibrationTest(unittest.TestCase):
         tobii_helper.runFullCalibration(9)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(2, len(drawing_list))
+        self.assertEqual(1, len(drawing_list))
         message = drawing_list[0]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Please position yourself so that the\n" + \
-                             "eye-tracker can locate your eyes." + \
-                             "\n\nPress 'c' to continue."), message.text)
-
-        message = drawing_list[1]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Finished validating the calibration.\n\n" +\
                              "Calibration is complete. Closing window."), message.text)
@@ -151,31 +139,25 @@ class runFullCalibrationTest(unittest.TestCase):
         tobii_helper = calibrator.TobiiHelper()
         self.initAll(tobii_helper)
 
-        calibWin = visual.Window(size = [1366, 768],
+        with visual.Window(size = [1366, 768],
                                  pos = [0, 0],
                                  units = 'pix',
                                  fullscr = True,
                                  allowGUI = True,
                                  monitor = tobii_helper.win,
                                  winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
+                                 color = [0.4, 0.4, 0.4]) as calibWin:
 
-        visual_mock = pvm.PsychoPyVisualMock()
-        visual_mock.setReturnKeyList(['c'])
-        tobii_helper.runFullCalibration(calibWin = calibWin)
-        drawing_list = visual_mock.getListOfDrawings()
+            visual_mock = pvm.PsychoPyVisualMock()
+            visual_mock.setReturnKeyList(['c'])
+            tobii_helper.runFullCalibration(calibWin = calibWin)
+            drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(2, len(drawing_list))
-        message = drawing_list[0]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Please position yourself so that the\n" + \
-                             "eye-tracker can locate your eyes." + \
-                             "\n\nPress 'c' to continue."), message.text)
-
-        message = drawing_list[1]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("Finished validating the calibration.\n\n" +\
-                             "Calibration is complete. Closing window."), message.text)
+            self.assertEqual(1, len(drawing_list))
+            message = drawing_list[0]
+            self.assertTrue(isinstance(message, pvm.TextStim))
+            self.assertEqual(str("Finished validating the calibration.\n\n" +\
+                                 "Calibration is complete. Closing window."), message.text)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

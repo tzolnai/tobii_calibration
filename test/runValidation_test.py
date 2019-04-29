@@ -335,17 +335,17 @@ class runValidationTest(unittest.TestCase):
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c'])
 
-        valWin = visual.Window(size = [1366, 768],
+        with visual.Window(size = [1366, 768],
                                  pos = [0, 0],
                                  units = 'pix',
                                  fullscr = True,
                                  allowGUI = True,
                                  monitor = tobii_helper.win,
                                  winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
+                                 color = [0.4, 0.4, 0.4]) as valWin:
 
-        tobii_helper.runValidation(valWin = valWin)
-        valWin.close()
+            tobii_helper.runValidation(valWin = valWin)
+            valWin.close()
 
     def testWrongWindowParam(self):
         tobii_helper = calibrator.TobiiHelper()

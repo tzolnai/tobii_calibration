@@ -74,33 +74,33 @@ class drawDistanceSliderTest(unittest.TestCase):
             tobii_helper._TobiiHelper__drawDistanceSlider([], [])
 
         # ok init the window
-        drawingWin = visual.Window(size = [1366, 768],
+        with visual.Window(size = [1366, 768],
                                  pos = [0, 0],
                                  units = 'pix',
                                  fullscr = True,
                                  allowGUI = True,
                                  monitor = tobii_helper.win,
                                  winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
+                                 color = [0.4, 0.4, 0.4]) as drawingWin:
 
-        # now we don't have a valid eye dist
-        with self.assertRaises(TypeError):
-            tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, [])
+            # now we don't have a valid eye dist
+            with self.assertRaises(TypeError):
+                tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, [])
 
-        # trackbox coordinates is not inited
-        with self.assertRaises(RuntimeError):
+            # trackbox coordinates is not inited
+            with self.assertRaises(RuntimeError):
+                tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, 650)
+
+            self.initTrackBox(tobii_helper)
+
+            # no virtual trackbox sizes
+            with self.assertRaises(RuntimeError):
+                tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, 650)
+
+            tobii_helper.virtual_trackbox_width = 512.25
+            tobii_helper.virtual_trackbox_height = 413.214
+
             tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, 650)
-
-        self.initTrackBox(tobii_helper)
-
-        # no virtual trackbox sizes
-        with self.assertRaises(RuntimeError):
-            tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, 650)
-
-        tobii_helper.virtual_trackbox_width = 512.25
-        tobii_helper.virtual_trackbox_height = 413.214
-
-        tobii_helper._TobiiHelper__drawDistanceSlider(drawingWin, 650)
 
     def testEyeInTrackbox(self):
         tobii_helper = calibrator.TobiiHelper()

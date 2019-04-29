@@ -129,42 +129,42 @@ class drawCalibrationResultTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, None, None)
 
-        calibWin = visual.Window(size = [1366, 768],
+        with visual.Window(size = [1366, 768],
                                  pos = [0, 0],
                                  units = 'pix',
                                  fullscr = True,
                                  allowGUI = True,
                                  monitor = tobii_helper.win,
                                  winType = 'pyglet',
-                                 color = [0.4, 0.4, 0.4])
+                                 color = [0.4, 0.4, 0.4]) as calibWin:
 
-        # no calib points
-        with self.assertRaises(TypeError):
-            tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, None)
+            # no calib points
+            with self.assertRaises(TypeError):
+                tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, None)
 
-        pointList = [('1',(0.1, 0.1))]
-        calibDict = collections.OrderedDict(pointList)
+            pointList = [('1',(0.1, 0.1))]
+            calibDict = collections.OrderedDict(pointList)
 
-        # inconsitent data: calibDict has less items as calibResult
-        with self.assertRaises(ValueError):
+            # inconsitent data: calibDict has less items as calibResult
+            with self.assertRaises(ValueError):
+                tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, calibDict)
+
+            pointList = [('1',(0.1, 0.1)), ('2',(0.5, 0.5))]
+            calibDict = collections.OrderedDict(pointList)
+
+            # inconsitent data: calibDict has different items as calibResult
+            with self.assertRaises(ValueError):
+                tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, calibDict)
+
+            pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.9))]
+            calibDict = collections.OrderedDict(pointList)
+
+            # we are good now
+            visual_mock = pvm.PsychoPyVisualMock()
+            visual_mock.setReturnKeyList(['c'])
             tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, calibDict)
 
-        pointList = [('1',(0.1, 0.1)), ('2',(0.5, 0.5))]
-        calibDict = collections.OrderedDict(pointList)
-
-        # inconsitent data: calibDict has different items as calibResult
-        with self.assertRaises(ValueError):
-            tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, calibDict)
-
-        pointList = [('1',(0.1, 0.1)), ('2',(0.9, 0.9))]
-        calibDict = collections.OrderedDict(pointList)
-
-        # we are good now
-        visual_mock = pvm.PsychoPyVisualMock()
-        visual_mock.setReturnKeyList(['c'])
-        tobii_helper._TobiiHelper__drawCalibrationResults(calibResult, calibWin, calibDict)
-
-        calibWin.close()
+            calibWin.close()
 
     def testTwoCalibPoints(self):
         tobii_helper = calibrator.TobiiHelper()

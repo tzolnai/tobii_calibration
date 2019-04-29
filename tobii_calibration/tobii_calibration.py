@@ -609,6 +609,24 @@ class TobiiHelper:
         if self.tbCoordinates is None:
             raise RuntimeError("Missing trackbox coordinates!")
 
+        # stimuli for holding text
+        calibMessage = visual.TextStim(psychoWin,
+                                       color = [1.0, 1.0, 1.0],  # text
+                                       units = 'norm',
+                                       height = 0.08,
+                                       pos = (0.0, 0.1))
+
+        # subject instruction for track box
+        calibMessage.text = _("Please position yourself so that the\n" \
+                              "eye-tracker can locate your eyes." \
+                              "\n\nPress 'c' to continue.")
+        calibMessage.draw()
+        psychoWin.flip()
+
+        # turn keyboard reporting on and get subject response
+        event.waitKeys(maxWait = 10, keyList = ['c'])  # proceed with calibration
+        psychoWin.flip()   # clear previous text
+
         # Set default colors
         correctColor = [-1.0, 1.0, -1.0]
         mediumColor = [1.0, 1.0, 0.0]
@@ -1408,18 +1426,6 @@ class TobiiHelper:
                                        height = 0.08,
                                        pos = (0.0, 0.1))
 
-        # track box to position participant
-        # subject instructions for track box
-        calibMessage.text = _("Please position yourself so that the\n" \
-                              "eye-tracker can locate your eyes." \
-                              "\n\nPress 'c' to continue.")
-        calibMessage.draw()
-        calibWin.flip()
-        # turn keyboard reporting on and get subject response
-        event.waitKeys(maxWait = 10, keyList = ['c'])  # proceed with calibration
-
-        #run track box routine
-        calibWin.flip()   # clear previous text
         self.runTrackBox(calibWin)
 
         # run calibration rutine
