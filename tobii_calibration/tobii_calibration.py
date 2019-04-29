@@ -84,9 +84,9 @@ class TobiiHelper:
         # Sometimes the eyetracker is not identified for the first time. Try more times.
         loopCount = 1
         allTrackers = tobii.find_all_eyetrackers()
-        while not allTrackers and loopCount < 10:
+        while not allTrackers and loopCount < 50:
             allTrackers = tobii.find_all_eyetrackers()
-            pcore.wait(0.01)
+            pcore.wait(0.02)
             loopCount += 1
 
         # if there are no eyetrackers
