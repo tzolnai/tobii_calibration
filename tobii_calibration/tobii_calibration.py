@@ -1236,7 +1236,7 @@ class TobiiHelper:
         # check to see that eyetracker is connected
         if self.eyetracker is None:
             raise RuntimeError("There is no eyetracker object. \n" +\
-                               "Try running findTracker().")
+                               "Try running setEyeTracker().")
 
         # stimuli for holding text
         calibMessage = visual.TextStim(calibWin,
@@ -1349,7 +1349,7 @@ class TobiiHelper:
         # check to see that eyetracker is connected
         if self.eyetracker is None:
             raise RuntimeError("There is no eyetracker object. \n" +\
-                               "Try running findTracker().")
+                               "Try running setEyeTracker().")
         # check window attribute
         if self.win is None:
             raise RuntimeError("No experimental monitor has been specified.\n" +\
@@ -1400,7 +1400,7 @@ class TobiiHelper:
         if self.eyetracker is None:  # eyeTracker
             raise RuntimeError("No eyetracker is specified. " +\
                                "Aborting calibration.\n" +\
-                               "Try running findTracker().")
+                               "Try running setEyeTracker().")
         # check window attribute
         if self.win is None:
             raise RuntimeError("No experimental monitor has been specified.\n" +\
