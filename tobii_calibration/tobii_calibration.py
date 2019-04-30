@@ -821,7 +821,7 @@ class TobiiHelper:
         # Make a dummy message
         valMsg = visual.TextStim(valWin,
                                  text = _("Wait for the experimenter."),
-                                 color = [0.4, 0.4, 0.4],  # grey
+                                 color = [1.0, 1.0, 1.0],
                                  units = 'norm',
                                  pos = [0.0, -0.5],
                                  height = 0.07)
@@ -970,7 +970,7 @@ class TobiiHelper:
         # number for identifying point in dictionary
         pointText = visual.TextStim(calibWin,
                                     text = " ",
-                                    color = [0.8, 0.8, 0.8],  # lighter than bkg
+                                    color = [1.0, 1.0, 1.0],
                                     units = 'pix',
                                     pos = [0.0, 0.0],
                                     height = 60)
@@ -1479,6 +1479,6 @@ class TobiiHelper:
                                        allowGUI = True,
                                        monitor = self.win,
                                        winType = 'pyglet',
-                                       color = [0.8, 0.8, 0.8]) as ownValWin:
+                                       color = [0.4, 0.4, 0.4]) as ownValWin:
                 ownValWin.mouseVisible = False
                 self.__drawValidationScreen(pointDict, ownValWin)

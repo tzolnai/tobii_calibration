@@ -140,7 +140,7 @@ class runValidationTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, feedback_text.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.5, feedback_text.pos[1], delta = 0.001)
         # color
-        self.assertEqual([0.4, 0.4, 0.4], feedback_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
 
@@ -216,7 +216,7 @@ class runValidationTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, feedback_text.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.5, feedback_text.pos[1], delta = 0.001)
         # color
-        self.assertEqual([0.4, 0.4, 0.4], feedback_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
 
@@ -269,7 +269,7 @@ class runValidationTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, feedback_text.pos[0], delta = 0.001)
         self.assertAlmostEqual(-0.5, feedback_text.pos[1], delta = 0.001)
         # color
-        self.assertEqual([0.4, 0.4, 0.4], feedback_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], feedback_text.color.tolist())
         # text
         self.assertEqual(str("Wait for the experimenter.") , feedback_text.text)
 

@@ -221,7 +221,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual(-546, calibPoint1_text.pos[0])
         self.assertEqual(307, calibPoint1_text.pos[1])
         # color
-        self.assertEqual([0.8, 0.8, 0.8], calibPoint1_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], calibPoint1_text.color.tolist())
         # text
         self.assertEqual(str("1") , calibPoint1_text.text)
 
@@ -272,7 +272,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual(546, calibPoint2_text.pos[0])
         self.assertEqual(-307, calibPoint2_text.pos[1])
         # color
-        self.assertEqual([0.8, 0.8, 0.8], calibPoint2_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], calibPoint2_text.color.tolist())
         # text
         self.assertEqual(str("2") , calibPoint2_text.text)
 
@@ -578,7 +578,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual(-546, calibPoint1_text.pos[0])
         self.assertEqual(307, calibPoint1_text.pos[1])
         # color
-        self.assertEqual([0.8, 0.8, 0.8], calibPoint1_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], calibPoint1_text.color.tolist())
         # text
         self.assertEqual(str("1") , calibPoint1_text.text)
 
@@ -629,7 +629,7 @@ class drawCalibrationResultTest(unittest.TestCase):
         self.assertEqual(546, calibPoint2_text.pos[0])
         self.assertEqual(-307, calibPoint2_text.pos[1])
         # color
-        self.assertEqual([0.8, 0.8, 0.8], calibPoint2_text.color.tolist())
+        self.assertEqual([1.0, 1.0, 1.0], calibPoint2_text.color.tolist())
         # text
         self.assertEqual(str("2") , calibPoint2_text.text)
 
