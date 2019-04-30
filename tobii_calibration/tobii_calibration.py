@@ -715,6 +715,8 @@ class TobiiHelper:
         leftPositions = []
         rightPositions = []
 
+        event.clearEvents(eventType='keyboard')
+
         # while tracking
         while True:
             # find and update eye positions
