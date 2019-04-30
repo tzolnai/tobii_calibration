@@ -463,6 +463,7 @@ class TobiiHelper:
         dummyRect.draw()
         window.flip()
 
+    # calculate mean of a point list, handle x and y coordinates separately
     def __calcMeanOfPointList(self, pointList):
         # we need a non empty list
         assert isinstance(pointList, list)
@@ -482,21 +483,26 @@ class TobiiHelper:
 
         return (sumX / len(pointList), sumY / len(pointList))
 
+    # smoothing routine, aggregate the measured data and return with the avarage value
     def __smoothing(self, currentObject, objectList, invalidObject, smoothFunction):
         assert isinstance(objectList, list)
         maxLength = 6
+
+        # we remove one item, when one invalid item was passed as a parameter
+        # if there are enough invalid items passed to this function the list
+        # will be empty which indicated that we have no valid data
         if currentObject == invalidObject:
             if len(objectList) > 0:
                 objectList.pop(0)
-        else:
+        else: # push valid data into the aggregator list
             objectList.append(currentObject)
 
         if len(objectList) == 0: # no valid data
             result = invalidObject
         else:
-            result = smoothFunction(objectList)
+            result = smoothFunction(objectList) # use the specifid function to calculate the smoothed value
 
-        # remove previous position values
+        # remove previous position values if the maximum limit is reached
         if len(objectList) == maxLength:
             objectList.pop(0)
 
