@@ -21,23 +21,23 @@ class getAvgEyeDistTest(unittest.TestCase):
     def testInvalidAverageCall(self):
         tobii_helper = calibrator.TobiiHelper()
         # invalid type
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(TypeError):
             tobii_helper._TobiiHelper__calcMeanOfPointList(1.1)
 
         # empty list
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__calcMeanOfPointList([])
 
         # list of number
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__calcMeanOfPointList([1.2])
 
         # list of tupple with wrong len
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__calcMeanOfPointList([(1.1)])
 
         # list of tupple of str pairs
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError):
             tobii_helper._TobiiHelper__calcMeanOfPointList([("2", "1")])
 
     def testOneItemAverage(self):

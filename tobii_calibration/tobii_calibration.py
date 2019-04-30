@@ -477,17 +477,21 @@ class TobiiHelper:
     # calculate mean of a point list, handle x and y coordinates separately
     def __calcMeanOfPointList(self, pointList):
         # we need a non empty list
-        assert isinstance(pointList, list)
-        assert len(pointList) != 0
+        if not isinstance(pointList, list):
+            raise TypeError("pointList is expected to be a list.")
+        if len(pointList) == 0:
+            raise ValueError("Can not calculate avarage of an empty list.")
 
         sumX = 0.0
         sumY = 0.0
         for i in range(len(pointList)):
 
-            assert isinstance(pointList[i], tuple)
-            assert len(pointList[i]) == 2
-            assert isinstance(pointList[i][0], numbers.Number)
-            assert isinstance(pointList[i][1], numbers.Number)
+            if not isinstance(pointList[i], tuple):
+                raise ValueError("pointList needs to contain points as two length tuple.")
+            if len(pointList[i]) != 2:
+                raise ValueError("pointList needs to contain points as two length tuple.")
+            if not isinstance(pointList[i][0], numbers.Number) or not isinstance(pointList[i][1], numbers.Number):
+                raise ValueError("pointList contains non number items.")
 
             sumX += pointList[i][0]
             sumY += pointList[i][1]
@@ -496,7 +500,8 @@ class TobiiHelper:
 
     # smoothing routine, aggregate the measured data and return with the avarage value
     def __smoothing(self, currentObject, objectList, invalidObject, smoothFunction):
-        assert isinstance(objectList, list)
+        if not isinstance(objectList, list):
+            raise TypeError("objectList is expected to be a list.")
         maxLength = 6
 
         # we remove one item, when one invalid item was passed as a parameter
@@ -637,7 +642,7 @@ class TobiiHelper:
             raise TypeError("psychoWin should be a valid visual.Window object.")
 
         if self.tbCoordinates is None:
-            raise RuntimeError("Missing trackbox coordinates!")
+            raise RuntimeError("Missing trackbox coordinates! Try running setEyeTracker().")
 
         # stimuli for holding text
         calibMessage = visual.TextStim(psychoWin,
