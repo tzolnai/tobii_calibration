@@ -86,6 +86,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
                                      color = [0.4, 0.4, 0.4])
 
         calibrator.TobiiHelper._TobiiHelper__drawCalibrationResults = DummyFunction # we tested this somewhere else
+        tobii_helper._TobiiHelper__clearScreen = DummyFunction
 
 
     def testWrongParam(self):
@@ -144,7 +145,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(5 * 150 + 6, len(drawing_list))
+        self.assertEqual(5 * 150 + 4, len(drawing_list))
         # 5 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -153,30 +154,22 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("Please focus your eyes on the red dot " + \
                              "and follow it with your eyes as closely as " + \
                              "possible.\n\nPress 'c' to continue."), message.text)
-        # fix cross
-        fixCross = drawing_list[1]
-        self.assertTrue(isinstance(fixCross, pvm.TextStim))
-        self.assertEqual(str("+"), fixCross.text)
 
         # doing __getCalibrationData()
 
         # then more messages
-        message = drawing_list[752]
+        message = drawing_list[751]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Applying calibration..."), message.text)
 
-        message = drawing_list[753]
+        message = drawing_list[752]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calculating calibration accuracy..."), message.text)
 
-        message = drawing_list[754]
+        message = drawing_list[753]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calibration was successful.\n\n" + \
                              "Moving on to validation."), message.text)
-
-        message = drawing_list[755]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("+"), message.text)
 
     def testWithRedoPoints(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -198,7 +191,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(7 * 150 + 10, len(drawing_list))
+        self.assertEqual(7 * 150 + 7, len(drawing_list))
         # 7 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -207,40 +200,28 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("Please focus your eyes on the red dot " + \
                              "and follow it with your eyes as closely as " + \
                              "possible.\n\nPress 'c' to continue."), message.text)
-        # fix cross
-        fixCross = drawing_list[1]
-        self.assertTrue(isinstance(fixCross, pvm.TextStim))
-        self.assertEqual(str("+"), fixCross.text)
 
         # doing __getCalibrationData()
 
         # then more messages
-        message = drawing_list[752]
+        message = drawing_list[751]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Applying calibration..."), message.text)
 
-        message = drawing_list[753]
+        message = drawing_list[752]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calculating calibration accuracy..."), message.text)
 
         # need one more round of calibration
-        message = drawing_list[754]
+        message = drawing_list[753]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calibration is almost complete.\n\n" + \
                              "Prepare to recalibrate a few points."), message.text)
 
-        message = drawing_list[755]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("+"), message.text)
-
-        message = drawing_list[1058]
+        message = drawing_list[1056]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calibration was successful.\n\n" + \
                              "Moving on to validation."), message.text)
-
-        message = drawing_list[1059]
-        self.assertTrue(isinstance(message, pvm.TextStim))
-        self.assertEqual(str("+"), message.text)
 
     def testFailedCalibration(self):
         tobii_helper = calibrator.TobiiHelper()
@@ -258,7 +239,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(5 * 150 + 3, len(drawing_list))
+        self.assertEqual(5 * 150 + 2, len(drawing_list))
         # 5 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -267,15 +248,11 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("Please focus your eyes on the red dot " + \
                              "and follow it with your eyes as closely as " + \
                              "possible.\n\nPress 'c' to continue."), message.text)
-        # fix cross
-        fixCross = drawing_list[1]
-        self.assertTrue(isinstance(fixCross, pvm.TextStim))
-        self.assertEqual(str("+"), fixCross.text)
 
         # doing __getCalibrationData()
 
         # then message about the failure
-        message = drawing_list[752]
+        message = drawing_list[751]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calibration was not successful.\n\n" + \
                              "Closing the calibration window."), message.text)
@@ -295,7 +272,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(5 * 150 + 3, len(drawing_list))
+        self.assertEqual(5 * 150 + 2, len(drawing_list))
         # 5 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -304,15 +281,11 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("Please focus your eyes on the red dot " + \
                              "and follow it with your eyes as closely as " + \
                              "possible.\n\nPress 'c' to continue."), message.text)
-        # fix cross
-        fixCross = drawing_list[1]
-        self.assertTrue(isinstance(fixCross, pvm.TextStim))
-        self.assertEqual(str("+"), fixCross.text)
 
         # doing __getCalibrationData()
 
         # then message about the failure
-        message = drawing_list[752]
+        message = drawing_list[751]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calibration was not successful.\n\n" + \
                              "Closing the calibration window."), message.text)
@@ -331,7 +304,7 @@ class drawCalibrationScreenTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawCalibrationScreen(self.calibDict, self.calibWin)
         drawing_list = visual_mock.getListOfDrawings()
 
-        self.assertEqual(5 * 150 + 3, len(drawing_list))
+        self.assertEqual(5 * 150 + 2, len(drawing_list))
         # 5 * 150 is drawn by __getCalibrationData() (tested in another test)
 
         # calibration message
@@ -340,15 +313,11 @@ class drawCalibrationScreenTest(unittest.TestCase):
         self.assertEqual(str("Please focus your eyes on the red dot " + \
                              "and follow it with your eyes as closely as " + \
                              "possible.\n\nPress 'c' to continue."), message.text)
-        # fix cross
-        fixCross = drawing_list[1]
-        self.assertTrue(isinstance(fixCross, pvm.TextStim))
-        self.assertEqual(str("+"), fixCross.text)
 
         # doing __getCalibrationData()
 
         # then message about the failure
-        message = drawing_list[752]
+        message = drawing_list[751]
         self.assertTrue(isinstance(message, pvm.TextStim))
         self.assertEqual(str("Calibration was not successful.\n\n" + \
                              "Closing the calibration window."), message.text)

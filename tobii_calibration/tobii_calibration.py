@@ -450,6 +450,19 @@ class TobiiHelper:
 
 # ----- Internal functions for running calibration -----
 
+    # a rutine to workaround issues with clearing the screen using window.flip()
+    def __clearScreen(self, window):
+        # draw a dummy rectangle on the screen, otherwise window background will change
+        dummyRect = visual.Rect(window,
+                          fillColor = [1.0, 1.0, 1.0],
+                          lineColor = [1.0, 1.0, 1.0],
+                          pos = (0.99, 0.99),
+                          units = 'norm',
+                          width = 0.01,
+                          height = 0.01)
+        dummyRect.draw()
+        window.flip()
+
     def __calcMeanOfPointList(self, pointList):
         # we need a non empty list
         assert isinstance(pointList, list)
@@ -625,7 +638,7 @@ class TobiiHelper:
 
         # turn keyboard reporting on and get subject response
         event.waitKeys(maxWait = 10, keyList = ['c'])  # proceed with calibration
-        psychoWin.flip()   # clear previous text
+        self.__clearScreen(psychoWin)   # clear previous text
 
         # Set default colors
         correctColor = [-1.0, 1.0, -1.0]
@@ -777,7 +790,7 @@ class TobiiHelper:
                 if self.logging:
                     print("Proceeding to calibration.")
                 self.__stopGazeData()
-                psychoWin.flip()
+                self.__clearScreen(psychoWin)
                 return
 
             # clear events not accessed this iteration
@@ -1185,7 +1198,7 @@ class TobiiHelper:
             event.clearEvents(eventType='keyboard')
 
         # clear screen
-        calibWin.flip()
+        self.__clearScreen(calibWin)
         # print feedback
         if self.logging:
             print ("Computing and applying calibration.")
@@ -1214,13 +1227,6 @@ class TobiiHelper:
                                        units = 'norm',
                                        height = 0.08,
                                        pos = (0.0, 0.1))
-        # stimuli for fixation cross
-        fixCross = visual.TextStim(calibWin,
-                                   color = [1.0, 1.0, 1.0],
-                                   units = 'norm',
-                                   height = 0.1,
-                                   pos = (0.0, 0.0),
-                                   text = "+")
 
         # initialize calibration
         self.calibration = tobii.ScreenBasedCalibration(self.eyetracker)  # calib object
@@ -1235,10 +1241,7 @@ class TobiiHelper:
 
         # turn keyboard reporting on and get subject response
         event.waitKeys(maxWait = 10, keyList = ['c'])  # proceed with calibration
-
-        # draw a fixation cross
-        fixCross.draw()
-        calibWin.flip()
+        self.__clearScreen(calibWin)
         pcore.wait(3)
 
         # create dictionary for holding points to be recalibrated
@@ -1307,9 +1310,7 @@ class TobiiHelper:
                 calibMessage.draw()
                 calibWin.flip()
                 pcore.wait(3)
-                # draw fixation cross
-                fixCross.draw()
-                calibWin.flip()
+                self.__clearScreen(calibWin)
                 pcore.wait(3)
 
                 # iterate through list of redo points and remove data from calibration
@@ -1319,9 +1320,7 @@ class TobiiHelper:
                     self.calibration.discard_data(newPoint[0], newPoint[1])
 
         # Validate calibration
-        # draw fixation cross
-        fixCross.draw()
-        calibWin.flip()
+        self.__clearScreen(calibWin)
         pcore.wait(3)
 
 # ----- Public calibration rutines -----

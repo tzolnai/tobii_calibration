@@ -63,6 +63,7 @@ class runTrackBoxTest(unittest.TestCase):
         tobii_helper._TobiiHelper__drawDistanceSlider = DummyFunction
         tobii_helper._TobiiHelper__startGazeData = DummyFunction
         tobii_helper._TobiiHelper__stopGazeData = DummyFunction
+        tobii_helper._TobiiHelper__clearScreen = DummyFunction
 
     def testNotInitedThings(self):
         tobii_helper = calibrator.TobiiHelper()

@@ -61,6 +61,8 @@ class getCalibrationDataTest(unittest.TestCase):
 
         self.pointList = [(0.1, 0.1), (0.9, 0.1), (0.5, 0.5), (0.1, 0.9), (0.9, 0.9)]
 
+        tobii_helper._TobiiHelper__clearScreen = DummyFunction
+
     def testNotInitedThingOrWrongParam(self):
         tobii_helper = calibrator.TobiiHelper()
 
