@@ -77,6 +77,13 @@ Enables logging messages printed to the command line (enabled by default).
 ### disableLogging()
 Disables logging messages printed to the command line (enabled by default).
 
+### setAccuracy(accuracyInPixel)
+Sets the used accuracy in pixel unit. This accuracy value is used during calibration to draw the acceptance
+circle on the calibration result window. This circle indicates that whether we managed to record accurate
+data during calibration. If not there is the option to recalibrate some of the calibration points.
+The same accuracy value is used to draw the acceptance circle on the validation screen. So the user /
+experimenter can decide whether the calibration was successful.
+
 ### runValidation(pointDict = None, valWin = None)
 Shows real time gaze position and draws several reference points (**pointDict** is a dictionary with numbered keys
 and coordinate values for drawing those points) to check calibration quality. If no value for **pointDict** is given,

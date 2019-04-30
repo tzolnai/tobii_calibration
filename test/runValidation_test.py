@@ -62,7 +62,7 @@ class runValidationTest(unittest.TestCase):
         # no eye tracker
         with self.assertRaises(RuntimeError):
             tobii_helper.runValidation()
-        
+
         tobii_helper.eyetracker = "dummy"
 
         # no tracking
@@ -74,7 +74,7 @@ class runValidationTest(unittest.TestCase):
         # no gaze data
         with self.assertRaises(RuntimeError):
             tobii_helper.runValidation()
-            
+
         tobii_helper.gazeData = {}
         tobii_helper.gazeData['left_gaze_point_on_display_area'] = (0.34, 0.56)
         tobii_helper.gazeData['right_gaze_point_on_display_area'] = (0.32, 0.6)
@@ -110,7 +110,7 @@ class runValidationTest(unittest.TestCase):
             calib_point = drawing_list[i]
             self.assertTrue(isinstance(calib_point, pvm.Circle))
             # size
-            self.assertAlmostEqual(20, calib_point.radius, delta = 0.001)
+            self.assertAlmostEqual(15, calib_point.radius, delta = 0.001)
              # pos
             if i == 1:
                 self.assertAlmostEqual(-546.00, calib_point.pos[0], delta = 0.001)
@@ -174,7 +174,7 @@ class runValidationTest(unittest.TestCase):
             calib_point = drawing_list[i]
             self.assertTrue(isinstance(calib_point, pvm.Circle))
             # size
-            self.assertAlmostEqual(20, calib_point.radius, delta = 0.001)
+            self.assertAlmostEqual(15, calib_point.radius, delta = 0.001)
              # pos
             if i == 1:
                 self.assertAlmostEqual(-546.00, calib_point.pos[0], delta = 0.001)
@@ -248,7 +248,7 @@ class runValidationTest(unittest.TestCase):
             calib_point = drawing_list[i]
             self.assertTrue(isinstance(calib_point, pvm.Circle))
             # size
-            self.assertAlmostEqual(20, calib_point.radius, delta = 0.001)
+            self.assertAlmostEqual(15, calib_point.radius, delta = 0.001)
              # pos
             if i == 1:
                 self.assertAlmostEqual(-341.00, calib_point.pos[0], delta = 0.001)
@@ -354,6 +354,22 @@ class runValidationTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             tobii_helper.runValidation(valWin = [])
 
+    def testCustomAccuracy(self):
+        tobii_helper = calibrator.TobiiHelper()
+        self.initAll(tobii_helper)
+        tobii_helper.setAccuracy(30)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+        tobii_helper.runValidation()
+        drawing_list = visual_mock.getListOfDrawings()
+
+        self.assertEqual(7, len(drawing_list))
+
+        # first object is the gaze point
+        eye_circle = drawing_list[0]
+        self.assertTrue(isinstance(eye_circle, pvm.Circle))
+        self.assertAlmostEqual(30, eye_circle.radius, delta = 0.001)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

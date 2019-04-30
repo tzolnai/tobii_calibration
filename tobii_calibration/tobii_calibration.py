@@ -73,6 +73,8 @@ class TobiiHelper:
 
         self.logging = True
 
+        self.accuracyInPixel = 50
+
 # ----- Functions for initialzing the eyetracker and class attributes -----
 
     # find and connect to a tobii eyetracker
@@ -227,6 +229,15 @@ class TobiiHelper:
 
     def disableLogging(self):
         self.logging = False
+
+    def setAccuracy(self, accuracyInPixel):
+        if not isinstance(accuracyInPixel, numbers.Number):
+            raise TypeError("A number is expected to be passed as accuracyInPixel parameter.")
+
+        if accuracyInPixel <= 0 or accuracyInPixel >= 1000:
+            raise ValueError("Strange value for accuracy.")
+
+        self.accuracyInPixel = accuracyInPixel
 
 # ----- Functions for starting and stopping eyetracker data collection -----
 
@@ -819,7 +830,7 @@ class TobiiHelper:
 
         # stimuli for showing point of gaze
         gazeStim = visual.Circle(valWin,
-                                 radius = 50,
+                                 radius = self.accuracyInPixel,
                                  lineColor = [1.0, 0.95, 0.0],  # yellow circle
                                  fillColor = [1.0, 1.0, 0.55],  # light interior
                                  lineWidth = 40,
@@ -834,7 +845,7 @@ class TobiiHelper:
         # Stimuli for all validation points
         valPoints = visual.Circle(valWin,
                                   units = 'pix',
-                                  radius = 20,
+                                  radius = 15,
                                   lineColor = [1.0, -1.0, -1.0],  # red
                                   fillColor = [1.0, -1.0, -1.0])  # red
 
@@ -953,7 +964,7 @@ class TobiiHelper:
         # create stimuli objects for drawing
         # outlined empty circle object for showing calibration point
         calibPoint = visual.Circle(calibWin,
-                                   radius = 50,
+                                   radius = self.accuracyInPixel,
                                    lineColor = [1.0, 1.0, 1.0],  # white
                                    lineWidth = 10,
                                    fillColor = calibWin.color,

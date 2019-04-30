@@ -679,5 +679,25 @@ class drawCalibrationResultTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
 
+    def testCustomAccuracy(self):
+        tobii_helper = calibrator.TobiiHelper()
+        self.initAll(tobii_helper)
+        tobii_helper.setAccuracy(30)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c'])
+        tobii_helper._TobiiHelper__drawCalibrationResults(self.calibResult, self.calibWin, self.calibDict)
+        drawing_list = visual_mock.getListOfDrawings()
+
+        self.assertEqual(22, len(drawing_list))
+
+        for i in range(0,5):
+            index = i * 4
+            # calib point's circle
+            calibPoint_circle = drawing_list[index]
+            self.assertTrue(isinstance(calibPoint_circle, pvm.Circle))
+            self.assertEqual(30, calibPoint_circle.radius)
+
+
 if __name__ == "__main__":
     unittest.main() # run all tests
