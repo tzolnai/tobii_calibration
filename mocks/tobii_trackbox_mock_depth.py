@@ -1,3 +1,8 @@
+# Authors:
+# Tamás Zolnai (zolnaitamas2000@gmail.com)
+
+# License: Apache License 2.0, see LICENSE.txt for more details.
+
 import sys
 # Add the local path of the calibrator module,
 # use that instead of the system installed one.
