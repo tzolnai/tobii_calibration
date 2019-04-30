@@ -5,73 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-27 01:02+0200\n"
+"POT-Creation-Date: 2019-05-01 00:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=cp1250\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: tobii_pro_wrapper.py:582
-msgid ""
-"You're currently {0} cm away from the screen. \n"
-"Press 'c' to calibrate or 'q' to abort."
-msgstr ""
-
-#: tobii_pro_wrapper.py:630
-msgid "Wait for the experimenter."
-msgstr ""
-
-#: tobii_pro_wrapper.py:827
-msgid ""
-"Wait for the experimenter. \n"
-"Use number keys to select points for recalibration."
-msgstr ""
-
-#: tobii_pro_wrapper.py:924
-msgid "Finished checking. Resuming calibration."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1129
-msgid ""
-"Please focus your eyes on the red dot and follow it with your eyes as closely as possible.\n"
-"\n"
-"Press 'c' to continue."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1158
-msgid "Applying calibration..."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1163
-msgid "Calculating calibration accuracy..."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1174
-msgid ""
-"Calibration was not successful.\n"
-"\n"
-"Closing the calibration window."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1187
-msgid ""
-"Calibration was successful.\n"
-"\n"
-"Moving on to validation."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1202
-msgid ""
-"Calibration is almost complete.\n"
-"\n"
-"Prepare to recalibrate a few points."
-msgstr ""
-
-#: tobii_pro_wrapper.py:1280
+#: tobii_calibration.py:653
 msgid ""
 "Please position yourself so that the\n"
 "eye-tracker can locate your eyes.\n"
@@ -79,7 +23,61 @@ msgid ""
 "Press 'c' to continue."
 msgstr ""
 
-#: tobii_pro_wrapper.py:1298
+#: tobii_calibration.py:799
+msgid "Press 'c' to calibrate or 'q' to abort."
+msgstr ""
+
+#: tobii_calibration.py:848
+msgid "Wait for the experimenter."
+msgstr ""
+
+#: tobii_calibration.py:1004
+msgid ""
+"Wait for the experimenter. \n"
+"Use number keys to select points for recalibration."
+msgstr ""
+
+#: tobii_calibration.py:1102
+msgid "Finished checking. Resuming calibration."
+msgstr ""
+
+#: tobii_calibration.py:1261
+msgid ""
+"Please focus your eyes on the red dot and follow it with your eyes as closely as possible.\n"
+"\n"
+"Press 'c' to continue."
+msgstr ""
+
+#: tobii_calibration.py:1287
+msgid "Applying calibration..."
+msgstr ""
+
+#: tobii_calibration.py:1292
+msgid "Calculating calibration accuracy..."
+msgstr ""
+
+#: tobii_calibration.py:1303
+msgid ""
+"Calibration was not successful.\n"
+"\n"
+"Closing the calibration window."
+msgstr ""
+
+#: tobii_calibration.py:1317
+msgid ""
+"Calibration was successful.\n"
+"\n"
+"Moving on to validation."
+msgstr ""
+
+#: tobii_calibration.py:1333
+msgid ""
+"Calibration is almost complete.\n"
+"\n"
+"Prepare to recalibrate a few points."
+msgstr ""
+
+#: tobii_calibration.py:1461
 msgid ""
 "Finished validating the calibration.\n"
 "\n"
