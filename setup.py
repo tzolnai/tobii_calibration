@@ -19,7 +19,8 @@ class OverriddenInstallCommand(install):
         if self.lang == 'hu':
             source_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "locales", "hu", "LC_MESSAGES")
             target_dir = os.path.join(self.install_lib, package_name, "locales", "hu", "LC_MESSAGES")
-            os.makedirs(target_dir)
+            if not os.path.isdir(target_dir):
+                os.makedirs(target_dir)
             shutil.copyfile(os.path.join(source_dir, "all_strings.mo"), os.path.join(target_dir, "all_strings.mo")) 
         install.run(self)
 
