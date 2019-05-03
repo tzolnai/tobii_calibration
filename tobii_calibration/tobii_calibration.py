@@ -749,30 +749,30 @@ class TobiiHelper:
             if leftStim.pos[0] >= (self.virtual_trackbox_width / 2) or \
                leftStim.pos[0] <= -(self.virtual_trackbox_width / 2):
                 wrong_left = True
-            elif leftStim.pos[0] >= (self.virtual_trackbox_width / 2) - (self.virtual_trackbox_width / 6) or \
-                 leftStim.pos[0] <= -(self.virtual_trackbox_width / 2) + (self.virtual_trackbox_width / 6):
+            elif leftStim.pos[0] >= (self.virtual_trackbox_width / 2) - (self.virtual_trackbox_width / 5) or \
+                 leftStim.pos[0] <= -(self.virtual_trackbox_width / 2) + (self.virtual_trackbox_width / 5):
                 medium_left = True
 
             if rightStim.pos[0] >= (self.virtual_trackbox_width / 2) or \
                rightStim.pos[0] <= -(self.virtual_trackbox_width / 2):
                 wrong_right = True
-            elif rightStim.pos[0] >= (self.virtual_trackbox_width / 2) - (self.virtual_trackbox_width / 6) or \
-                 rightStim.pos[0] <= -(self.virtual_trackbox_width / 2) + (self.virtual_trackbox_width / 6):
+            elif rightStim.pos[0] >= (self.virtual_trackbox_width / 2) - (self.virtual_trackbox_width / 5) or \
+                 rightStim.pos[0] <= -(self.virtual_trackbox_width / 2) + (self.virtual_trackbox_width / 5):
                 medium_right = True
 
             # change color depending on vertical position
             if leftStim.pos[1] >= (self.virtual_trackbox_height / 2) or \
                leftStim.pos[1] <= -(self.virtual_trackbox_height / 2):
                 wrong_left = True
-            elif leftStim.pos[1] >= (self.virtual_trackbox_height / 2) - (self.virtual_trackbox_height / 6) or \
-                 leftStim.pos[1] <= -(self.virtual_trackbox_height / 2) + (self.virtual_trackbox_height / 6):
+            elif leftStim.pos[1] >= (self.virtual_trackbox_height / 2) - (self.virtual_trackbox_height / 5) or \
+                 leftStim.pos[1] <= -(self.virtual_trackbox_height / 2) + (self.virtual_trackbox_height / 5):
                 medium_left = True
 
             if rightStim.pos[1] >= (self.virtual_trackbox_height / 2) or \
                rightStim.pos[1] <= -(self.virtual_trackbox_height / 2):
                 wrong_right = True
-            elif rightStim.pos[1] >= (self.virtual_trackbox_height / 2) - (self.virtual_trackbox_height / 6) or \
-                 rightStim.pos[1] <= -(self.virtual_trackbox_height / 2) + (self.virtual_trackbox_height / 6):
+            elif rightStim.pos[1] >= (self.virtual_trackbox_height / 2) - (self.virtual_trackbox_height / 5) or \
+                 rightStim.pos[1] <= -(self.virtual_trackbox_height / 2) + (self.virtual_trackbox_height / 5):
                 medium_right = True
 
             if wrong_left:
