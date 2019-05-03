@@ -154,5 +154,20 @@ class getAvgEyeDistTest(unittest.TestCase):
         self.assertAlmostEqual(0.99, result[0], delta = 0.001)
         self.assertAlmostEqual(0.99, result[1], delta = 0.001)
 
+    def testSmoothingInvalidItemNan(self):
+        tobii_helper = calibrator.TobiiHelper()
+        point_list = []
+        result = tobii_helper._TobiiHelper__smoothing((1.0, 1.0), point_list, (math.nan, math.nan), tobii_helper._TobiiHelper__calcMeanOfPointList)
+        result = tobii_helper._TobiiHelper__smoothing((1.1, 1.3), point_list, (math.nan, math.nan), tobii_helper._TobiiHelper__calcMeanOfPointList)
+        result = tobii_helper._TobiiHelper__smoothing((0.8, 0.7), point_list, (math.nan, math.nan), tobii_helper._TobiiHelper__calcMeanOfPointList)
+        self.assertEqual([(1.0, 1.0), (1.1, 1.3), (0.8, 0.7)], point_list)
+        self.assertAlmostEqual(0.966, result[0], delta = 0.001)
+        self.assertAlmostEqual(1.0, result[1], delta = 0.001)
+
+        result = tobii_helper._TobiiHelper__smoothing((math.nan, math.nan), point_list, (math.nan, math.nan), tobii_helper._TobiiHelper__calcMeanOfPointList)
+        self.assertEqual([(1.1, 1.3), (0.8, 0.7)], point_list) # one item is removed
+        self.assertAlmostEqual(0.950, result[0], delta = 0.001)
+        self.assertAlmostEqual(1.0, result[1], delta = 0.001)
+
 if __name__ == "__main__":
     unittest.main() # run all tests
