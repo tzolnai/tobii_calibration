@@ -57,7 +57,7 @@ class EyeTrackerMock:
 
 def on_move(x, y):
     xCoord = 1 - (x / 1366)
-    yCoord = 1 - (y / 768)
+    yCoord = (y / 768)
     gazeData = {}
     gazeData['left_gaze_origin_in_trackbox_coordinate_system'] = (xCoord + 0.1, yCoord, 0.0)
     gazeData['right_gaze_origin_in_trackbox_coordinate_system'] = (xCoord - 0.1, yCoord, 0.0)
