@@ -21,7 +21,12 @@ class OverriddenInstallCommand(install):
             target_dir = os.path.join(self.install_lib, package_name, "locales", "hu", "LC_MESSAGES")
             if not os.path.isdir(target_dir):
                 os.makedirs(target_dir)
-            shutil.copyfile(os.path.join(source_dir, "all_strings.mo"), os.path.join(target_dir, "all_strings.mo")) 
+            shutil.copyfile(os.path.join(source_dir, "all_strings.mo"), os.path.join(target_dir, "all_strings.mo"))
+        else:
+            target_dir = os.path.join(self.install_lib, package_name, "locales")
+            if os.path.isdir(target_dir):
+                shutil.rmtree(target_dir)
+
         install.run(self)
 
 setup(
