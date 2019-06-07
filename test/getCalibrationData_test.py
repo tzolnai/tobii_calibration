@@ -8,7 +8,7 @@ import unittest
 import sys
 # Add the local path of the calibrator module,
 # test that instead of the system installed one.
-sys.path = ["../tobii_calibration"] + sys.path
+sys.path = ["../tobii_calibration"] + ["../externals/psychopy_mock"] + sys.path
 
 import tobii_calibration as calibrator
 import tobii_research as tobii
